@@ -5,12 +5,20 @@
     android:layout_margin="16dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <fragment
+        android:name="com.detons97gmail.progetto_embedded.SpeciesListFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/species_list_fragment" />
+
+    <!--
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/species_list_recycler_view"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:scrollbars="vertical">
     </androidx.recyclerview.widget.RecyclerView>
+    -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

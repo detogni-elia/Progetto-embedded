@@ -18,7 +18,7 @@ public class SpeciesListItemViewHolder extends RecyclerView.ViewHolder implement
     }
     void setImage(Drawable image){
         ImageView im = card.findViewById(R.id.image_view);
-        im.setImageDrawable(image);
+        im.setImageDrawable(image);z
     }
     void setName(String name){
         TextView tx = card.findViewById(R.id.text_view);
