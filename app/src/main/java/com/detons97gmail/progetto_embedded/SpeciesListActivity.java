@@ -9,8 +9,6 @@ import android.view.Menu;
  */
 
 public class SpeciesListActivity extends AppCompatActivity {
-    private static final int REQUEST_READ_EXTERNAL_STORAGE_TO_LOAD_DATA = 2;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

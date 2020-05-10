@@ -14,10 +14,13 @@ import java.io.File;
 import java.util.ArrayList;
 
 /**
- * Adapter used in SpeciesListFragment loads
+ * Adapter used in SpeciesListFragment loads implements filterable in order to filter the data displayed
  */
 
 public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemViewHolder> implements Filterable {
+    /**
+     * Private class wraps the data in order to bind species name with relative image for the purpose of filtering the data
+     */
     private static class DataWrapper{
         private Drawable image;
         private String name;
@@ -26,12 +29,6 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
             image = img;
             name = n;
         }
-        private void setImage(Drawable newImg){
-            image = newImg;
-        }
-        private void setName(String newName){
-            name = newName;
-        }
         private Drawable getImage(){
             return image;
         }
@@ -39,18 +36,27 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
             return name;
         }
     }
-    private ArrayList<DataWrapper> fullData = new ArrayList<>();
-    private ArrayList<DataWrapper> filteredData = new ArrayList<>();
-    private Context context;
-    private onSpeciesSelectedListener clickListener;
 
-    SpeciesListAdapter(Context c, ArrayList<File> images, ArrayList<String> names, onSpeciesSelectedListener listener){
-        //context = c;
+    //Store all the data loaded
+    private ArrayList<DataWrapper> fullData = new ArrayList<>();
+    //Store the filtered data, this will be the data passed to the RecyclerView
+    private ArrayList<DataWrapper> filteredData = new ArrayList<>();
+    //Listener fo clicks on the elements
+    private OnSpeciesSelectedListener clickListener;
+
+    /**
+     * Interface defines method to handle click of an item in the RecyclerView
+     */
+
+    public interface OnSpeciesSelectedListener {
+        void onSpeciesListItemClick(int position);
+    }
+
+    SpeciesListAdapter(Context c, ArrayList<File> images, ArrayList<String> names, OnSpeciesSelectedListener listener){
+        //If not all files are available show placeholder informations
         if(images == null || names == null || names.size() != images.size()) {
-            //this.images = new ArrayList<>();
-            //this.names = new ArrayList<>();
             for(int i = 0; i < 20; i++)
-                fullData.add(new DataWrapper(c.getResources().getDrawable(R.drawable.ic_placeholder_icon_vector), "Nome placeholder " + i));
+                fullData.add(new DataWrapper(c.getResources().getDrawable(R.drawable.ic_placeholder_icon_vector), "Nome placeholder "));
 
             filteredData.addAll(fullData);
 
@@ -61,8 +67,8 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
             }
             filteredData.addAll(fullData);
         }
+        //Listener passed will be the SpeciesListFragment that implements the interface
         clickListener = listener;
-
     }
     @Override
     public SpeciesListItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -95,7 +101,10 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
         return filter;
     }
 
+    //We define a filter for the data
     private Filter filter = new Filter() {
+        //This method will be automatically executed in background thread so that the ui won't slow down
+        //Checks the text filter passed and returns only the items containing the filter text in their names
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             ArrayList<DataWrapper> filteredData = new ArrayList<>();
@@ -113,7 +122,7 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
             filterResults.values = filteredData;
             return filterResults;
         }
-
+        //This method will be executed on UI thread
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             filteredData.clear();
@@ -121,8 +130,4 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
             notifyDataSetChanged();
         }
     };
-
-    public interface onSpeciesSelectedListener {
-        void onSpeciesListItemClick(int position);
-    }
 }

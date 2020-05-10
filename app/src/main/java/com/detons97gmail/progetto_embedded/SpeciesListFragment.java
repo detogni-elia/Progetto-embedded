@@ -25,10 +25,10 @@ import java.util.Arrays;
 
 /**
  * Fragment will be attached to SpeciesListActivity and will show the species requested
- * Implements interface onSpeciesSelectedListener of SpeciesListAdapter to enable onClickListener for every element
+ * Implements interface OnSpeciesSelectedListener of SpeciesListAdapter to enable onClickListener for every element
  */
 
-public class SpeciesListFragment extends Fragment implements SpeciesListAdapter.onSpeciesSelectedListener{
+public class SpeciesListFragment extends Fragment implements SpeciesListAdapter.OnSpeciesSelectedListener {
     private static final String TAG = "SpeciesListFragment";
     //Static variables for permission requests
     //Variables to store UI objects
@@ -153,7 +153,7 @@ public class SpeciesListFragment extends Fragment implements SpeciesListAdapter.
             images = imagesFolder.listFiles();
         }
         //If no images were found load default list with placeholder data
-        if(images == null)
+        if(images == null || images.length == 0)
             adapter = new SpeciesListAdapter(context, null, null, this);
 
         else{
