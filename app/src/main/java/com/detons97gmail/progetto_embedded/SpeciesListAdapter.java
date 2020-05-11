@@ -53,7 +53,7 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
         void onSpeciesListItemClick(int position);
     }
 
-    SpeciesListAdapter(Context c, ArrayList<File> images, ArrayList<String> names, OnSpeciesSelectedListener listener){
+    SpeciesListAdapter(ArrayList<File> images, ArrayList<String> names, OnSpeciesSelectedListener listener){
         //If not all files are available show placeholder informations
         if(images == null || names == null || names.size() != images.size()) {
             for(int i = 0; i < 20; i++)
@@ -69,7 +69,6 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
         }
         //Listener passed will be the SpeciesListFragment that implements the interface
         clickListener = listener;
-        Log.v("SpeciesListAdapter", "Called constructor");
     }
     @Override
     public SpeciesListItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -81,7 +80,6 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
     public void onBindViewHolder(SpeciesListItemViewHolder holder, int position) {
         holder.setImage(filteredData.get(position).getImage());
         holder.setName(filteredData.get(position).getName());
-        Log.v("SpeciesListAdapter", "Called onBindViewHolder");
     }
 
     @Override

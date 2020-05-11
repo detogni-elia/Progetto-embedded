@@ -155,7 +155,7 @@ public class SpeciesListFragment extends Fragment implements SpeciesListAdapter.
         }
         //If no images were found load default list with placeholder data
         if(images == null || images.length == 0)
-            adapter = new SpeciesListAdapter(context, null, null, this);
+            adapter = new SpeciesListAdapter(null, null, this);
 
         else{
             ArrayList<String> speciesNames = new ArrayList<>();
@@ -164,7 +164,7 @@ public class SpeciesListFragment extends Fragment implements SpeciesListAdapter.
             for (File image : images) {
                 speciesNames.add(image.getName());
             }
-            adapter = new SpeciesListAdapter(context, new ArrayList<>(Arrays.asList(images)), speciesNames, this);
+            adapter = new SpeciesListAdapter(new ArrayList<>(Arrays.asList(images)), speciesNames, this);
         }
     }
 
