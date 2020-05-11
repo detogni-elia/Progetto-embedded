@@ -1,9 +1,9 @@
 package com.detons97gmail.progetto_embedded;
 
-import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.provider.ContactsContract;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
+import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.Filter;
@@ -44,6 +44,10 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
     private ArrayList<DataWrapper> filteredData = new ArrayList<>();
     //Listener fo clicks on the elements
     private OnSpeciesSelectedListener clickListener;
+    //Cache for images
+    private LruCache<String, Bitmap> imageCache;
+    //Tag for logging
+    private static final String TAG = "SpeciesListAdapter";
 
     /**
      * Interface defines method to handle click of an item in the RecyclerView
@@ -54,10 +58,10 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
     }
 
     SpeciesListAdapter(ArrayList<File> images, ArrayList<String> names, OnSpeciesSelectedListener listener){
-        //If not all files are available show placeholder informations
+        //Load default list of placeholder items if something went wrong
         if(images == null || names == null || names.size() != images.size()) {
             for(int i = 0; i < 20; i++)
-                fullData.add(new DataWrapper(null, "Nome placeholder " + i));
+                fullData.add(new DataWrapper("", "Placeholder item n. " + i));
 
             filteredData.addAll(fullData);
         }
@@ -69,6 +73,16 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
         }
         //Listener passed will be the SpeciesListFragment that implements the interface
         clickListener = listener;
+        //50 Mb of cache
+        int cacheSize = 1024 * 1024 * 50;
+        //LruCache takes cacheSize in Kb
+        imageCache = new LruCache<String, Bitmap>(cacheSize / 1024){
+            @Override
+            protected int sizeOf(String key, Bitmap bitmap){
+                return bitmap.getByteCount() / 1024;
+            }
+        };
+
     }
     @Override
     public SpeciesListItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -78,7 +92,29 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
 
     @Override
     public void onBindViewHolder(SpeciesListItemViewHolder holder, int position) {
-        holder.setImage(filteredData.get(position).getImage());
+        Bitmap cachedImage = imageCache.get(filteredData.get(position).getImage());
+        //Load image from storage if not in cache
+        if(cachedImage == null){
+            //TODO: Load image in background thread instead of UI thread, AsyncTask deprecated in api level R
+            //https://android-developers.googleblog.com/2009/05/painless-threading.html  contains threading solutions
+            Bitmap loadedImage = BitmapFactory.decodeFile(filteredData.get(position).getImage());
+            //If image not available set placeholder image
+            if(loadedImage == null)
+                holder.setPlaceholderImage();
+
+            else {
+                holder.setImage(loadedImage);
+                //Save image to cache
+                imageCache.put(filteredData.get(position).getImage(), loadedImage);
+                Log.v(TAG, "Added image to cache: " + filteredData.get(position).getImage());
+            }
+        }
+        else {
+            holder.setImage(cachedImage);
+            Log.v(TAG, "Loaded image from cache: " + filteredData.get(position).getImage());
+        }
+
+        //holder.setImage(filteredData.get(position).getImage());
         holder.setName(filteredData.get(position).getName());
     }
 
@@ -86,15 +122,6 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
     public int getItemCount() {
         return filteredData.size();
     }
-
-    /*
-    void testChange(int position){
-        images.set(position, context.getResources().getDrawable(R.drawable.ic_placeholder_icon_vector));
-        names.set(position, "MODIFIED");
-        notifyDataSetChanged();
-    }
-
-     */
 
     @Override
     public Filter getFilter() {

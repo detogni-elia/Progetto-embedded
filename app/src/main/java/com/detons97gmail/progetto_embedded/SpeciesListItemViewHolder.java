@@ -1,6 +1,5 @@
 package com.detons97gmail.progetto_embedded;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
+import android.graphics.Bitmap;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,11 +24,11 @@ public class SpeciesListItemViewHolder extends RecyclerView.ViewHolder implement
         //Sets click listener for the card, which will be called when a click is detected
         itemView.setOnClickListener(this);
     }
-    void setImage(String image){
-        if(image == null)
-            imageView.setImageResource(R.drawable.ic_placeholder_icon_vector);
-        else
-            imageView.setImageURI(Uri.parse(image));
+    void setImage(Bitmap image){
+        imageView.setImageBitmap(image);
+    }
+    void setPlaceholderImage(){
+        imageView.setImageResource(R.drawable.ic_placeholder_icon_vector);
     }
     void setName(String name){
         textView.setText(name);
