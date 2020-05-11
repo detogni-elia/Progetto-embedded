@@ -25,8 +25,11 @@ public class SpeciesListItemViewHolder extends RecyclerView.ViewHolder implement
         //Sets click listener for the card, which will be called when a click is detected
         itemView.setOnClickListener(this);
     }
-    void setImage(Drawable image){
-        imageView.setImageDrawable(image);
+    void setImage(String image){
+        if(image == null)
+            imageView.setImageResource(R.drawable.ic_placeholder_icon_vector);
+        else
+            imageView.setImageURI(Uri.parse(image));
     }
     void setName(String name){
         textView.setText(name);

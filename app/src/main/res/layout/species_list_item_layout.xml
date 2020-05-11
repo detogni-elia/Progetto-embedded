@@ -13,8 +13,7 @@
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:padding="8dp"
-        android:background="@drawable/species_item_background_ripple"
-        tools:ignore="UseCompoundDrawables">
+        android:background="@drawable/species_item_background_ripple">
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
