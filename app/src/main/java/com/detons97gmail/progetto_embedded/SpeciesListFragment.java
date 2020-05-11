@@ -104,6 +104,7 @@ public class SpeciesListFragment extends Fragment implements SpeciesListAdapter.
         }
 
         recyclerView.setAdapter(adapter);
+        recyclerView.setHasFixedSize(true);
     }
 
     @Override
