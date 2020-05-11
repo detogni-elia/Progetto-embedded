@@ -1,12 +1,11 @@
 package com.detons97gmail.progetto_embedded;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.Toast;
-
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,14 +21,14 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
      * Private class wraps the data in order to bind species name with relative image for the purpose of filtering the data
      */
     private static class DataWrapper{
-        private String image;
+        private Drawable image;
         private String name;
 
-        DataWrapper(String img, String n){
+        DataWrapper(Drawable img, String n){
             image = img;
             name = n;
         }
-        private String getImage(){
+        private Drawable getImage(){
             return image;
         }
         private String getName(){
@@ -56,14 +55,14 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
         //If not all files are available show placeholder informations
         if(images == null || names == null || names.size() != images.size()) {
             for(int i = 0; i < 20; i++)
-                fullData.add(new DataWrapper("", "Nome placeholder "));
+                fullData.add(new DataWrapper(c.getResources().getDrawable(R.drawable.ic_placeholder_icon_vector), "Nome placeholder "));
 
             filteredData.addAll(fullData);
 
         }
         else {
             for(int i = 0; i < images.size(); i++){
-                fullData.add(new DataWrapper((images.get(i).getAbsolutePath()), names.get(i)));
+                fullData.add(new DataWrapper(Drawable.createFromPath(images.get(i).getAbsolutePath()), names.get(i)));
             }
             filteredData.addAll(fullData);
         }
