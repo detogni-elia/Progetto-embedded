@@ -4,4 +4,5 @@
     <string name="species_item_imageview_placeholder_description">Descrizione standard</string>
     <string name="menu_search_title">Ricerca</string>
     <string name="menu_search_tooltip">Cerca per nome della specie</string>
+    <string name="image_details_animal_content_descriptor">Immagine per il dettaglio</string>
 </resources>
