@@ -5,4 +5,6 @@
     <string name="menu_search_title">Ricerca</string>
     <string name="menu_search_tooltip">Cerca per nome della specie</string>
     <string name="image_details_animal_content_descriptor">Immagine per il dettaglio</string>
+    <string name="menu_details_title">Dettagli</string>
+    <string name="menu_details_button_name">GPS</string>
 </resources>

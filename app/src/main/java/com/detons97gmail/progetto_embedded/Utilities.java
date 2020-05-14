@@ -56,7 +56,7 @@ class AnimalDetails
 
     String getAttributeContent(int position)
     {
-        //position-1 perchè il primo elemento èp sempre un' immagine
+        //position-1 perchè il primo elemento è sempre un' immagine
         return attributeContent.get(position-1);
     }
 
