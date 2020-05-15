@@ -142,6 +142,8 @@ public class SpeciesListFragment extends Fragment implements SpeciesListAdapter.
     /**
      * Initialize adapter loading data from memory (we don't need to ask for permissions if we load from application specific storage)
      */
+    //private final ArrayList<SpeciesListAdapter.DataWrapper> wrap = new ArrayList<>();
+
     private void initiliazeAdapter(){
         //Root path to our application specific storage (the "Files" directory)
         File rootPath = context.getExternalFilesDir(null);
@@ -167,6 +169,16 @@ public class SpeciesListFragment extends Fragment implements SpeciesListAdapter.
                 speciesNames.add(image.getName());
             }
             adapter = new SpeciesListAdapter(new ArrayList<>(Arrays.asList(images)), speciesNames, this);
+            /*
+            ArrayList<File> imagesList = new ArrayList<>(Arrays.asList(images));
+            adapter = new SpeciesListAdapter(wrap,this);
+            wrap.add(new SpeciesListAdapter.DataWrapper(imagesList.get(0).getAbsolutePath(), speciesNames.get(0)));
+            adapter.myNotifyDataSetChanged();
+            wrap.add(new SpeciesListAdapter.DataWrapper(imagesList.get(1).getAbsolutePath(), speciesNames.get(1)));
+            wrap.add(new SpeciesListAdapter.DataWrapper(imagesList.get(2).getAbsolutePath(), speciesNames.get(2)));
+            adapter.myNotifyDataSetChanged();
+
+             */
         }
     }
 

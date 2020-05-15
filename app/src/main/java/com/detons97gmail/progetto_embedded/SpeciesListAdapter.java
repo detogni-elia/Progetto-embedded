@@ -22,7 +22,7 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
     /**
      * Private class wraps the data in order to bind species name with relative image for the purpose of filtering the data
      */
-    private static class DataWrapper{
+    static class DataWrapper{
         private String image;
         private String name;
 
@@ -84,6 +84,24 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
         };
 
     }
+    //TODO: Implement constructor with DataWrapper to listen to changes on dataset, should also implement custom notifyDataSetChanged
+    /*
+    SpeciesListAdapter(ArrayList<DataWrapper> wrappedData, OnSpeciesSelectedListener listener) {
+        fullData = wrappedData;
+        //filteredData.addAll(fullData);
+        filteredData.addAll(fullData);
+        clickListener = listener;
+    }
+
+    //Notify dataset changed after applying changes to filteredData
+    public void myNotifyDataSetChanged(){
+        filteredData.clear();
+        filteredData.addAll(fullData);
+        notifyDataSetChanged();
+    }
+
+     */
+
     @Override
     public SpeciesListItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         CardView item = (CardView) LayoutInflater.from(parent.getContext()).inflate(R.layout.species_list_item_layout, parent, false);
@@ -102,6 +120,7 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
             if(loadedImage == null)
                 holder.setPlaceholderImage();
 
+            //Cache image only if it's not placeholder
             else {
                 holder.setImage(loadedImage);
                 //Save image to cache
@@ -114,7 +133,6 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
             Log.v(TAG, "Loaded image from cache: " + filteredData.get(position).getImage());
         }
 
-        //holder.setImage(filteredData.get(position).getImage());
         holder.setName(filteredData.get(position).getName());
     }
 
@@ -130,7 +148,7 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
 
     //We define a filter for the data
     private Filter filter = new Filter() {
-        //This method will be automatically executed in background thread so that the ui won't slow down
+        //This method will be automatically executed in a background thread so that the ui won't slow down
         //Checks the text filter passed and returns only the items containing the filter text in their names
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
