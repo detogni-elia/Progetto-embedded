@@ -9,6 +9,7 @@ import android.view.Menu;
  */
 
 public class SpeciesListActivity extends AppCompatActivity {
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

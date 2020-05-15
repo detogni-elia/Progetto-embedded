@@ -3,4 +3,11 @@
     <string name="species_item_imageview_placeholder_description">Placeholder description</string>
     <string name="menu_search_title">Search</string>
     <string name="menu_search_tooltip">Search for specific name</string>
+    <string name="animals">Animals</string>
+    <string name="insects">Insects</string>
+    <string name="plants">Plants</string>
+    <string name="countries_prompt">Countries</string>
+    <string name="it">Italy</string>
+    <string name="in">India</string>
+    <string name="cn">China</string>
 </resources>

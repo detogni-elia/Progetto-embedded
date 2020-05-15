@@ -10,4 +10,8 @@
 
     <color name="species_list_card_background">#67eb77</color>
     <color name="species_list_card_ripple">#2b8a4f</color>
+    <color name="colorAnimals">#1E7321</color>
+    <color name="colorInsects">#956438</color>
+    <color name="colorPlants">#A83C34</color>
+
 </resources>

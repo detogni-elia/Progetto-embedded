@@ -4,4 +4,11 @@
     <string name="species_item_imageview_placeholder_description">Descrizione standard</string>
     <string name="menu_search_title">Ricerca</string>
     <string name="menu_search_tooltip">Cerca per nome della specie</string>
+    <string name="animals">Animali</string>
+    <string name="insects">Insetti</string>
+    <string name="plants">Piante</string>
+    <string name="countries_prompt">Paesi</string>
+    <string name="it">Italia</string>
+    <string name="in">India</string>
+    <string name="cn">Cina</string>
 </resources>
