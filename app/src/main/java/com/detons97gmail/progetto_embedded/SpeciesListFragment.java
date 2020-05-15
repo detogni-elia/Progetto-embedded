@@ -2,6 +2,7 @@ package com.detons97gmail.progetto_embedded;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.SearchView;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
+import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -104,6 +106,7 @@ public class SpeciesListFragment extends Fragment implements SpeciesListAdapter.
         }
 
         recyclerView.setAdapter(adapter);
+        //recyclerView.setHasFixedSize(true);
     }
 
     @Override
@@ -139,6 +142,8 @@ public class SpeciesListFragment extends Fragment implements SpeciesListAdapter.
     /**
      * Initialize adapter loading data from memory (we don't need to ask for permissions if we load from application specific storage)
      */
+    //private final ArrayList<SpeciesListAdapter.DataWrapper> wrap = new ArrayList<>();
+
     private void initiliazeAdapter(){
         //Root path to our application specific storage (the "Files" directory)
         File rootPath = context.getExternalFilesDir(null);
@@ -154,7 +159,7 @@ public class SpeciesListFragment extends Fragment implements SpeciesListAdapter.
         }
         //If no images were found load default list with placeholder data
         if(images == null || images.length == 0)
-            adapter = new SpeciesListAdapter(context, null, null, this);
+            adapter = new SpeciesListAdapter(null, null, this);
 
         else{
             ArrayList<String> speciesNames = new ArrayList<>();
@@ -163,7 +168,17 @@ public class SpeciesListFragment extends Fragment implements SpeciesListAdapter.
             for (File image : images) {
                 speciesNames.add(image.getName());
             }
-            adapter = new SpeciesListAdapter(context, new ArrayList<>(Arrays.asList(images)), speciesNames, this);
+            adapter = new SpeciesListAdapter(new ArrayList<>(Arrays.asList(images)), speciesNames, this);
+            /*
+            ArrayList<File> imagesList = new ArrayList<>(Arrays.asList(images));
+            adapter = new SpeciesListAdapter(wrap,this);
+            wrap.add(new SpeciesListAdapter.DataWrapper(imagesList.get(0).getAbsolutePath(), speciesNames.get(0)));
+            adapter.myNotifyDataSetChanged();
+            wrap.add(new SpeciesListAdapter.DataWrapper(imagesList.get(1).getAbsolutePath(), speciesNames.get(1)));
+            wrap.add(new SpeciesListAdapter.DataWrapper(imagesList.get(2).getAbsolutePath(), speciesNames.get(2)));
+            adapter.myNotifyDataSetChanged();
+
+             */
         }
     }
 

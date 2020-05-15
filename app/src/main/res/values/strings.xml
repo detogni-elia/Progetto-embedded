@@ -10,4 +10,7 @@
     <string name="it">Italy</string>
     <string name="in">India</string>
     <string name="cn">China</string>
+    <string name="image_details_animal_content_descriptor">Immagine per il dettaglio</string>
+    <string name="menu_details_title">Details</string>
+    <string name="menu_details_button_name">GPS</string>
 </resources>

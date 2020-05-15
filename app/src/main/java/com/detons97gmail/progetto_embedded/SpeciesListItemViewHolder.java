@@ -1,5 +1,5 @@
 package com.detons97gmail.progetto_embedded;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -12,24 +12,28 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 
 public class SpeciesListItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    private CardView card;
+    private TextView textView;
+    private ImageView imageView;
     private SpeciesListAdapter.OnSpeciesSelectedListener clickListener;
     SpeciesListItemViewHolder(CardView itemView, SpeciesListAdapter.OnSpeciesSelectedListener listener) {
         super(itemView);
-        card = itemView;
+        textView = itemView.findViewById(R.id.text_view);
+        imageView = itemView.findViewById(R.id.image_view);
         //Gets the SpeciesListAdapter reference (in which is declared the interface OnSpeciesSelectedListener)
         clickListener = listener;
         //Sets click listener for the card, which will be called when a click is detected
-        card.setOnClickListener(this);
+        itemView.setOnClickListener(this);
     }
-    void setImage(Drawable image){
-        ImageView im = card.findViewById(R.id.image_view);
-        im.setImageDrawable(image);
+    void setImage(Bitmap image){
+        imageView.setImageBitmap(image);
+    }
+    void setPlaceholderImage(){
+        imageView.setImageResource(R.drawable.ic_placeholder_icon_vector);
     }
     void setName(String name){
-        TextView tx = card.findViewById(R.id.text_view);
-        tx.setText(name);
+        textView.setText(name);
     }
+    //Calls method onSpeciesListItemClick implemented in SpeciesListFragment
     @Override
     public void onClick(View v) {
         clickListener.onSpeciesListItemClick(getAdapterPosition());
