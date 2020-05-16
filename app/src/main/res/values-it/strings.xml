@@ -14,4 +14,5 @@
     <string name="it">Italia</string>
     <string name="in">India</string>
     <string name="cn">Cina</string>
+    <string name="images_load_error">Si è verificato un problema nel caricamento delle immagini. Prova a riscaricarle.</string>
 </resources>

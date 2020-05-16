@@ -1,4 +1,4 @@
-package com.detons97gmail.progetto_embedded;
+package com.detons97gmail.progetto_embedded.Adapters;
 import android.graphics.Bitmap;
 import android.view.View;
 import android.widget.ImageView;
@@ -6,6 +6,8 @@ import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.detons97gmail.progetto_embedded.R;
 
 /**
  * ViewHolder for SpeciesListAdapter

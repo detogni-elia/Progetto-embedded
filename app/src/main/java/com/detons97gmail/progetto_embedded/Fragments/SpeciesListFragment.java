@@ -1,4 +1,4 @@
-package com.detons97gmail.progetto_embedded;
+package com.detons97gmail.progetto_embedded.Fragments;
 
 import android.content.Context;
 import android.content.res.Configuration;
@@ -18,6 +18,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.detons97gmail.progetto_embedded.IntentsExtras;
+import com.detons97gmail.progetto_embedded.R;
+import com.detons97gmail.progetto_embedded.Adapters.SpeciesListAdapter;
+import com.detons97gmail.progetto_embedded.Utilities;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -39,6 +44,8 @@ public class SpeciesListFragment extends Fragment implements SpeciesListAdapter.
     private SpeciesListAdapter adapter;
     //Application context
     private Context context;
+
+    private ArrayList<SpeciesListAdapter.DataWrapper> data;
 
     //State variables
     /**
@@ -67,14 +74,15 @@ public class SpeciesListFragment extends Fragment implements SpeciesListAdapter.
         //We want to retain fragment instance on configuration changes such as screen rotation
         //in order to maintain the adapter created as to not load all the data and images again.
         setRetainInstance(true);
+        //Get path and
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //Initialize new adapter if necessary
-        if(adapter ==  null) {
+        if(adapter ==  null && getArguments() != null) {
             Log.v(TAG, "Adapter was null in method onCreateView");
-            initiliazeAdapter();
+            initiliazeAdapter(getArguments().getString(IntentsExtras.EXTRA_COUNTRY), getArguments().getString(IntentsExtras.EXTRA_CATEGORY));
         }
         //Not null when instance was retained.
         else {
@@ -82,7 +90,7 @@ public class SpeciesListFragment extends Fragment implements SpeciesListAdapter.
         }
         //Inflate layout
         //Views must always be inflated even if instance was retained.
-        return inflater.inflate(R.layout.species_list_fragment, container, false);
+        return inflater.inflate(R.layout.species_list_fragment_layout, container, false);
     }
 
     @Override
@@ -142,22 +150,33 @@ public class SpeciesListFragment extends Fragment implements SpeciesListAdapter.
      */
     //private final ArrayList<SpeciesListAdapter.DataWrapper> wrap = new ArrayList<>();
 
-    private void initiliazeAdapter(){
+    private void initiliazeAdapter(String country, String category){
         //Root path to our application specific storage (the "Files" directory)
         File rootPath = context.getExternalFilesDir(null);
+        /**
+         * We should use getFilesDir() in the final version so that only our app has access to the resources
+         * The main difference is the absolute path of the folders, where getExternalFilesDir returns the path
+         * for the external storage, even when it's emulated.
+         * For now thought, since we need to move images and databases in and out of the devices, we should use the external path
+         */
+        //File rootPath = context.getFilesDir();
         File[] images = null;
         if(rootPath != null) {
             //Get path to required images
-            //TODO: Here we will need to modify the path depending on the species requested and the region
-            String imagesPath = rootPath.getPath() + "/images";
+            //Example path: files/India/Images/Animals/
+            String imagesPath = rootPath.getPath() + "/" + country + "/Images/" + category;
+            Log.v(TAG, imagesPath);
             File imagesFolder = new File(imagesPath);
             //Get list of all images in folder
             //TODO: Images paths should be stored in a database
             images = imagesFolder.listFiles();
         }
-        //If no images were found load default list with placeholder data
-        if(images == null || images.length == 0)
-            adapter = new SpeciesListAdapter(null, null, this);
+        //If no images were found initialize dummy adapter as to not show error message every time the method onCreateView is called
+        //TODO: Show AlertDialog instead of Toast
+        if(images == null || images.length == 0) {
+            adapter = new SpeciesListAdapter(null, this, getContext());
+            Utilities.showToast(context, context.getString(R.string.images_load_error), Toast.LENGTH_SHORT);
+        }
 
         else{
             ArrayList<String> speciesNames = new ArrayList<>();
@@ -166,17 +185,8 @@ public class SpeciesListFragment extends Fragment implements SpeciesListAdapter.
             for (File image : images) {
                 speciesNames.add(image.getName());
             }
-            adapter = new SpeciesListAdapter(new ArrayList<>(Arrays.asList(images)), speciesNames, this);
-            /*
-            ArrayList<File> imagesList = new ArrayList<>(Arrays.asList(images));
-            adapter = new SpeciesListAdapter(wrap,this);
-            wrap.add(new SpeciesListAdapter.DataWrapper(imagesList.get(0).getAbsolutePath(), speciesNames.get(0)));
-            adapter.myNotifyDataSetChanged();
-            wrap.add(new SpeciesListAdapter.DataWrapper(imagesList.get(1).getAbsolutePath(), speciesNames.get(1)));
-            wrap.add(new SpeciesListAdapter.DataWrapper(imagesList.get(2).getAbsolutePath(), speciesNames.get(2)));
-            adapter.myNotifyDataSetChanged();
-
-             */
+            data = SpeciesListAdapter.DataWrapper.fromArrayList(new ArrayList<>(Arrays.asList(images)), speciesNames);
+            adapter = new SpeciesListAdapter(data, this, getContext());
         }
     }
 

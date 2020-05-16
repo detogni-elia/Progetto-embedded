@@ -1,4 +1,4 @@
-package com.detons97gmail.progetto_embedded;
+package com.detons97gmail.progetto_embedded.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,9 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.detons97gmail.progetto_embedded.Utilities.AnimalDetails;
+import com.detons97gmail.progetto_embedded.R;
+
 
 public class AnimalDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
@@ -17,7 +20,7 @@ public class AnimalDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
     private static int TYPE_IMAGE=1;
     private static int TYPE_TEXT=2;
 
-    AnimalDetailsAdapter(Context context, AnimalDetails ai)
+    public AnimalDetailsAdapter(Context context, AnimalDetails ai)
     {
         this.animalInfo=ai;
         inflater=LayoutInflater.from(context);

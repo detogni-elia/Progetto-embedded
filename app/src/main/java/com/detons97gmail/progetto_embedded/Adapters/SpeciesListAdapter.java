@@ -1,15 +1,22 @@
-package com.detons97gmail.progetto_embedded;
+package com.detons97gmail.progetto_embedded.Adapters;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.Toast;
+
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.detons97gmail.progetto_embedded.R;
+import com.detons97gmail.progetto_embedded.Utilities;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -22,7 +29,7 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
     /**
      * Private class wraps the data in order to bind species name with relative image for the purpose of filtering the data
      */
-    static class DataWrapper{
+    public static class DataWrapper{
         private String image;
         private String name;
 
@@ -30,6 +37,24 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
             image = img;
             name = n;
         }
+
+        /**
+         * Build ArrayList of DataWrapper objects from 2 ArrayList containing Strings
+         * @param paths List of paths for the images
+         * @param names List of names for each entry
+         * @return The ArrayList of DataWrapper objects
+         */
+        public static ArrayList<DataWrapper> fromArrayList(ArrayList<File> paths, ArrayList<String> names){
+            if(paths.size() != names.size())
+                return null;
+
+            ArrayList<DataWrapper> toReturn = new ArrayList<>();
+            for(int i = 0; i < paths.size(); i++)
+                toReturn.add(new DataWrapper(paths.get(i).getAbsolutePath(), names.get(i)));
+
+            return toReturn;
+        }
+
         private String getImage(){
             return image;
         }
@@ -57,40 +82,23 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
         void onSpeciesListItemClick(int position);
     }
 
-    SpeciesListAdapter(ArrayList<File> images, ArrayList<String> names, OnSpeciesSelectedListener listener){
-        //Load default list of placeholder items if something went wrong
-        if(images == null || names == null || names.size() != images.size()) {
-            for(int i = 0; i < 20; i++)
-                fullData.add(new DataWrapper("", "Placeholder item n. " + i));
-
+    public SpeciesListAdapter(ArrayList<DataWrapper> wrappedData, OnSpeciesSelectedListener listener, Context context) {
+        if(wrappedData != null) {
+            fullData = wrappedData;
+            //filteredData.addAll(fullData);
             filteredData.addAll(fullData);
-        }
-        else {
-            for(int i = 0; i < images.size(); i++){
-                fullData.add(new DataWrapper(images.get(i).getAbsolutePath(), names.get(i)));
-            }
-            filteredData.addAll(fullData);
-        }
-        //Listener passed will be the SpeciesListFragment that implements the interface
-        clickListener = listener;
-        //50 Mb of cache
-        int cacheSize = 1024 * 1024 * 50;
-        //LruCache takes cacheSize in Kb
-        imageCache = new LruCache<String, Bitmap>(cacheSize / 1024){
-            @Override
-            protected int sizeOf(String key, Bitmap bitmap){
-                return bitmap.getByteCount() / 1024;
-            }
-        };
+            clickListener = listener;
 
-    }
-    //TODO: Implement constructor with DataWrapper to listen to changes on dataset, should also implement custom notifyDataSetChanged
-    /*
-    SpeciesListAdapter(ArrayList<DataWrapper> wrappedData, OnSpeciesSelectedListener listener) {
-        fullData = wrappedData;
-        //filteredData.addAll(fullData);
-        filteredData.addAll(fullData);
-        clickListener = listener;
+            //50 Mb of cache
+            int cacheSize = 1024 * 1024 * 50;
+            //LruCache takes cacheSize in Kb
+            imageCache = new LruCache<String, Bitmap>(cacheSize / 1024){
+                @Override
+                protected int sizeOf(String key, Bitmap bitmap){
+                    return bitmap.getByteCount() / 1024;
+                }
+            };
+        }
     }
 
     //Notify dataset changed after applying changes to filteredData
@@ -99,8 +107,6 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
         filteredData.addAll(fullData);
         notifyDataSetChanged();
     }
-
-     */
 
     @Override
     public SpeciesListItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

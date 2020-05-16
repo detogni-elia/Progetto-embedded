@@ -1,4 +1,4 @@
-package com.detons97gmail.progetto_embedded;
+package com.detons97gmail.progetto_embedded.Activities;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -6,14 +6,15 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
+
+import com.detons97gmail.progetto_embedded.R;
+import com.detons97gmail.progetto_embedded.Fragments.SpeciesListFragment;
 
 /**
  * Activity to show a list of species with relative name and image
  */
 
 public class SpeciesListActivity extends AppCompatActivity {
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +26,16 @@ public class SpeciesListActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if(actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
+
+        //Initialize and insert SpeciesListFragment
+        //If we are restoring from a previous state, do nothing as to not overlap fragments
+        if(savedInstanceState != null)
+            return;
+
+        Bundle fragBundle = getIntent().getExtras();
+        SpeciesListFragment speciesListFragment = new SpeciesListFragment();
+        speciesListFragment.setArguments(fragBundle);
+        getSupportFragmentManager().beginTransaction().add(R.id.species_list_fragment_container, speciesListFragment).commit();
     }
 
     @Override

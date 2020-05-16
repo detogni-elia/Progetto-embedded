@@ -1,4 +1,4 @@
-package com.detons97gmail.progetto_embedded;
+package com.detons97gmail.progetto_embedded.Activities;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,9 +8,13 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.detons97gmail.progetto_embedded.Utilities.AnimalDetails;
+import com.detons97gmail.progetto_embedded.Adapters.AnimalDetailsAdapter;
+import com.detons97gmail.progetto_embedded.R;
+import com.detons97gmail.progetto_embedded.Utilities;
 
 
 public class AnimalDetailsActivity extends AppCompatActivity
@@ -33,7 +37,7 @@ public class AnimalDetailsActivity extends AppCompatActivity
 
         //Initialize RecycleView
         animalDetailsRecyclerView=findViewById(R.id.detailsRecyclerView);
-        adapter=new AnimalDetailsAdapter(this, animalInfo);
+        adapter = new AnimalDetailsAdapter(this, animalInfo);
         animalDetailsRecyclerView.setAdapter(adapter);
         animalDetailsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
