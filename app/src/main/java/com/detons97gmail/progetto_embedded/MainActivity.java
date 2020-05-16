@@ -17,17 +17,18 @@ public class MainActivity extends AppCompatActivity {
 
     Spinner mSpinnerCountries;
 
-    // An array containing list of Country Names
-    String[] countries = new String[] {
-            getString(R.string.it),
-            getString(R.string.in),
-            getString(R.string.cn),
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // An array containing list of Country Names
+        String[] countries = new String[] {
+                getString(R.string.it),
+                getString(R.string.in),
+                getString(R.string.cn),
+        };
+
 
         mBtAnimals= findViewById(R.id.animals_button);
         mBtInsects=findViewById(R.id.insects_button);
