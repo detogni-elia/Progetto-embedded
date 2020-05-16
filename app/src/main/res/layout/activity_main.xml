@@ -20,7 +20,8 @@
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:onClick="onClickCategory"/>
 
     <Button
         android:id="@+id/insects_button"
@@ -37,7 +38,8 @@
         app:layout_constraintBottom_toTopOf="@id/plants_button"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/animals_button" />
+        app:layout_constraintTop_toBottomOf="@id/animals_button"
+        android:onClick="onClickCategory"/>
 
     <Button
         android:id="@+id/plants_button"
@@ -54,7 +56,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/insects_button" />
+        app:layout_constraintTop_toBottomOf="@id/insects_button"
+        android:onClick="onClickCategory"/>
 
     <Spinner
         android:id="@+id/countries_spinner"

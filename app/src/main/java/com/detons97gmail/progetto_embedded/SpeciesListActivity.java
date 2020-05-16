@@ -2,6 +2,8 @@ package com.detons97gmail.progetto_embedded;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,9 +20,11 @@ public class SpeciesListActivity extends AppCompatActivity {
         //TODO: Load different layouts in relation to memory available
         //TODO: Insert fragment programmatically in order to pass information about which data to show
         setContentView(R.layout.activity_species_list_layout);
-        ActionBar bar = getSupportActionBar();
-        if(bar != null)
-            bar.setDisplayHomeAsUpEnabled(true);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null)
+            actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -30,6 +34,7 @@ public class SpeciesListActivity extends AppCompatActivity {
         return true;
     }
 
+    /*
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         int id = item.getItemId();
@@ -41,4 +46,6 @@ public class SpeciesListActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+     */
 }

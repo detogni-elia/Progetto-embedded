@@ -2,6 +2,7 @@ package com.detons97gmail.progetto_embedded;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -41,7 +42,10 @@ public class MainActivity extends AppCompatActivity {
 
         // Setting the array adapter containing country list to the spinner widget
         mSpinnerCountries.setAdapter(adapter);
-
+    }
+    public void onClickCategory(View v){
+        Intent startIntent = new Intent(this, SpeciesListActivity.class);
+        startActivity(startIntent);
     }
 }
 
