@@ -1,6 +1,7 @@
 package com.detons97gmail.progetto_embedded;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,13 +24,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Toolbar toolbar= findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         // An array containing list of Country Names
         String[] countries = new String[] {
                 getString(R.string.it),
                 getString(R.string.in),
                 getString(R.string.cn),
         };
-
 
         mBtAnimals= findViewById(R.id.animals_button);
         mBtInsects=findViewById(R.id.insects_button);

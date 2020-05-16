@@ -8,5 +8,5 @@
     android:elevation="4dp"
     app:title="@string/app_name"
     app:titleTextColor="#ffffff"
-    android:theme="@style/toolbar_theme"
+    android:theme="@style/app_theme"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>

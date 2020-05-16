@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color-->
-
-    <color name="colorPrimary">#21b032</color>
-    <color name="colorPrimaryDark">#00610b</color>
-    <color name="colorAccent">#67eb77</color>
-
+    <color name="colorPrimary">#4caf50</color>
+    <color name="colorPrimaryDark">#087f23</color>
+    <color name="colorAccent">#80e27e</color>
     <color name="species_list_card_background">#67eb77</color>
     <color name="species_list_card_ripple">#2b8a4f</color>
     <color name="colorAnimals">#1E7321</color>
