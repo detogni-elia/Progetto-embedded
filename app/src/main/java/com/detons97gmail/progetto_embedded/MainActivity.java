@@ -43,8 +43,5 @@ public class MainActivity extends AppCompatActivity {
         mSpinnerCountries.setAdapter(adapter);
 
     }
-
-
-
 }
 
