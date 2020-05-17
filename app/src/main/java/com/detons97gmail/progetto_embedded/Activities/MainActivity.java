@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import com.detons97gmail.progetto_embedded.IntentsExtras;
@@ -17,13 +18,7 @@ import java.io.File;
 import java.io.FileFilter;
 
 public class MainActivity extends AppCompatActivity {
-
-    Button mBtAnimals;
-    Button mBtInsects;
-    Button mBtPlants;
-
     private String[] countriesFoldersNames;
-
 
     Spinner mSpinnerCountries;
 
@@ -41,9 +36,8 @@ public class MainActivity extends AppCompatActivity {
         String[] countries;
         //countriesFoldesrNames will contain the actual folder name in order to pass the intent to the SpeciesListActivity
         //Get supported countries by parsing the folders in the app FilesDir
-        /**
-         * We should use getFilesDir() in the final version SEE EXPLANATION ON SpeciesListFragment
-         */
+
+         //We should use getFilesDir() in the final version SEE EXPLANATION ON SpeciesListFragment
         File appRootPath = getExternalFilesDir(null);
         if(appRootPath != null) {
             //Get directories in app FilesDir
@@ -96,8 +90,9 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, countries);
         // Setting the array adapter containing country list to the spinner widget
         mSpinnerCountries.setAdapter(adapter);
+
     }
-    public void onClickCategory(View v){
+        public void onClickCategory(View v){
         String country = countriesFoldersNames[mSpinnerCountries.getSelectedItemPosition()];
         String category;
         switch (v.getId()){

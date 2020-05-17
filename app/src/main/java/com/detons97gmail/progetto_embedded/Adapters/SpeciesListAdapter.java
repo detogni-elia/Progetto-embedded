@@ -55,10 +55,10 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
             return toReturn;
         }
 
-        private String getImage(){
+        public String getImage(){
             return image;
         }
-        private String getName(){
+        public String getName(){
             return name;
         }
     }

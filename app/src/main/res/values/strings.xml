@@ -14,4 +14,15 @@
     <string name="menu_details_title">Details</string>
     <string name="menu_details_button_name">GPS</string>
     <string name="images_load_error">There was an error loading the images. Try downloading the resources again</string>
+    <string name="details_name">COMMON NAME</string>
+    <string name="details_species">SPECIES NAME</string>
+    <string name="details_diet">DIET</string>
+    <string name="details_symptoms">SYMPTOMS</string>
+    <string name="details_symptom_bite">BITE</string>
+    <string name="details_symptom_contact">CONTACT</string>
+    <string name="details_symptom_ingested">INGESTED</string>
+    <string name="details_symptom_stung">STUNG</string>
+    <string name="details_symptom_inhalation">INHALATION</string>
+    <string name="details_toolbar_title">Details</string>
+    <string name="species_list_toolbar_title">List of species</string>
 </resources>

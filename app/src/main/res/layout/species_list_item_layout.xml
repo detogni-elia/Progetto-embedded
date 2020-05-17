@@ -8,7 +8,8 @@
     app:cardCornerRadius="8dp"
     app:cardElevation="4dp"
     app:cardPreventCornerOverlap="false">
-    <LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
+        android:id="@+id/prova"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:orientation="horizontal"
@@ -18,7 +19,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:cardCornerRadius="60dp"
-            android:background="@drawable/species_item_background_ripple"
             app:cardPreventCornerOverlap="false">
         <ImageView
             android:id="@+id/image_view"

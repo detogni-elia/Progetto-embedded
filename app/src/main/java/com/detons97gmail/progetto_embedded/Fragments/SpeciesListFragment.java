@@ -196,6 +196,14 @@ public class SpeciesListFragment extends Fragment implements SpeciesListAdapter.
     @Override
     public void onSpeciesListItemClick(int position) {
         Intent startIntent = new Intent(getContext(), AnimalDetailsActivity.class);
+        startIntent.putExtra(IntentsExtras.EXTRA_IMAGE_PATH, data.get(position).getImage());
+        startIntent.putExtra(IntentsExtras.EXTRA_NAME, data.get(position).getName());
+        //TODO: WE SHOULD GET THIS EXTRA INFO ONLY WHEN REQUESTED, QUERYING THE DATABASE.
+        startIntent.putExtra(IntentsExtras.EXTRA_SPECIES, "Nome della specie");
+        startIntent.putExtra(IntentsExtras.EXTRA_DIET, "Tipo di dieta");
+        //TODO: ADD VARIOUS SYMPTOMS AND LOCALIZATION
+        //TODO: ADD SYSTEM TO LOCALIZE ON MAP (FOR EXAMPLE, CENTER AND RADIUS TO DESCRIBE AN AREA WHERE THE ANIMAL, PLANT, INSECT CAN BE FOUND)
+        startIntent.putExtra(IntentsExtras.EXTRA_SYMPTOMS, getString(R.string.details_symptom_bite) + ": Gonfiore, bruciore, dolore, sanguinamento, intorpidimento");
         startActivity(startIntent);
         //Utilities.showToast(context, "Click on element n. " + position, Toast.LENGTH_SHORT);
     }

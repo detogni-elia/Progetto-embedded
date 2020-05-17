@@ -15,4 +15,15 @@
     <string name="in">India</string>
     <string name="cn">Cina</string>
     <string name="images_load_error">Si è verificato un problema nel caricamento delle immagini. Prova a riscaricarle.</string>
+    <string name="details_name">NOME COMUNE</string>
+    <string name="details_species">NOME SPECIE</string>
+    <string name="details_diet">DIETA</string>
+    <string name="details_symptoms">SINTOMI</string>
+    <string name="details_symptom_bite">MORSO</string>
+    <string name="details_symptom_contact">CONTATTO</string>
+    <string name="details_symptom_ingested">INGESTIONE</string>
+    <string name="details_symptom_stung">PUNTURA</string>
+    <string name="details_symptom_inhalation">INALAZIONE</string>
+    <string name="details_toolbar_title">Dettagli</string>
+    <string name="species_list_toolbar_title">Lista delle specie</string>
 </resources>

@@ -1,9 +1,12 @@
 package com.detons97gmail.progetto_embedded.Activities;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.detons97gmail.progetto_embedded.IntentsExtras;
 import com.detons97gmail.progetto_embedded.Utilities.AnimalDetails;
 import com.detons97gmail.progetto_embedded.Adapters.AnimalDetailsAdapter;
 import com.detons97gmail.progetto_embedded.R;
@@ -21,9 +25,11 @@ import com.detons97gmail.progetto_embedded.Utilities;
 
 public class AnimalDetailsActivity extends AppCompatActivity
 {
-    private AnimalDetails animalInfo;
-    private RecyclerView animalDetailsRecyclerView;
-    private AnimalDetailsAdapter adapter;
+    private ImageView imageView;
+    private LinearLayout nameEntry;
+    private LinearLayout speciesEntry;
+    private LinearLayout dietEntry;
+    private LinearLayout symptomsEntry;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -31,22 +37,34 @@ public class AnimalDetailsActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_species_details);
 
+        Intent intent = getIntent();
+
         ImageView v = findViewById(R.id.detailsImage);
-        v.setImageResource(R.drawable.taz);
-        TextView t1 = findViewById(R.id.animal_name);
-        t1.setText("Tazmania");
-        TextView t2 = findViewById(R.id.species_name);
-        t2.setText("Diavolo della Tasmania");
-        TextView t3 = findViewById(R.id.diet_type);
-        t3.setText("Onnivora");
-        TextView t4 = findViewById(R.id.aggressiveness);
-        t4.setText("Estrema");
+        v.setImageURI(Uri.parse(intent.getStringExtra(IntentsExtras.EXTRA_IMAGE_PATH)));
+
+        nameEntry = findViewById(R.id.nameEntry);
+        speciesEntry = findViewById(R.id.speciesEntry);
+        dietEntry = findViewById(R.id.dietEntry);
+        symptomsEntry = findViewById(R.id.symptomsEntry);
+
+
+        ((TextView)nameEntry.findViewById(R.id.layoutLabel)).setText(R.string.details_name);
+        ((TextView)speciesEntry.findViewById(R.id.layoutLabel)).setText(R.string.details_species);
+        ((TextView)dietEntry.findViewById(R.id.layoutLabel)).setText(R.string.details_diet);
+        ((TextView)symptomsEntry.findViewById(R.id.layoutLabel)).setText(R.string.details_symptoms);
+
+        ((TextView)nameEntry.findViewById(R.id.layoutEntry)).setText(intent.getStringExtra(IntentsExtras.EXTRA_NAME));
+        ((TextView)speciesEntry.findViewById(R.id.layoutEntry)).setText(intent.getStringExtra(IntentsExtras.EXTRA_SPECIES));
+        ((TextView)dietEntry.findViewById(R.id.layoutEntry)).setText(intent.getStringExtra(IntentsExtras.EXTRA_DIET));
+        ((TextView)symptomsEntry.findViewById(R.id.layoutEntry)).setText(intent.getStringExtra(IntentsExtras.EXTRA_SYMPTOMS));
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null)
+        if(actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(R.string.details_toolbar_title);
+        }
 
         /*
         //Set ActionBar

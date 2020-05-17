@@ -25,8 +25,10 @@ public class SpeciesListActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null)
+        if(actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(R.string.species_list_toolbar_title);
+        }
 
         //Initialize and insert SpeciesListFragment
         //If we are restoring from a previous state, do nothing as to not overlap fragments
