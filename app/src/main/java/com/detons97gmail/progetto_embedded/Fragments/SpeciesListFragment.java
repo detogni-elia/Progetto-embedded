@@ -1,6 +1,7 @@
 package com.detons97gmail.progetto_embedded.Fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
@@ -19,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.detons97gmail.progetto_embedded.Activities.AnimalDetailsActivity;
 import com.detons97gmail.progetto_embedded.IntentsExtras;
 import com.detons97gmail.progetto_embedded.R;
 import com.detons97gmail.progetto_embedded.Adapters.SpeciesListAdapter;
@@ -193,6 +195,8 @@ public class SpeciesListFragment extends Fragment implements SpeciesListAdapter.
     //Implement adapter interface method
     @Override
     public void onSpeciesListItemClick(int position) {
-        Utilities.showToast(context, "Click on element n. " + position, Toast.LENGTH_SHORT);
+        Intent startIntent = new Intent(getContext(), AnimalDetailsActivity.class);
+        startActivity(startIntent);
+        //Utilities.showToast(context, "Click on element n. " + position, Toast.LENGTH_SHORT);
     }
 }

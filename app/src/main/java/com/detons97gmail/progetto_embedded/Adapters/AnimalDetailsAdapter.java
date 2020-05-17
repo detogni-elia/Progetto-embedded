@@ -76,7 +76,7 @@ public class AnimalDetailsAdapter extends RecyclerView.Adapter<RecyclerView.View
         if(viewType==TYPE_IMAGE)
         {
             //Create a imageLayout
-            view=inflater.inflate(R.layout.image_details_animal_layout, parent, false);
+            view=inflater.inflate(R.layout.activity_species_details, parent, false);
             return new DetailsImageViewHolder(view, this);
         }
         //Create a text Layout

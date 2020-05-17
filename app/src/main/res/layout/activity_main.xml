@@ -8,7 +8,7 @@
 
     <include
         android:id="@+id/include"
-        layout="@layout/app_toolbar" />
+        layout="@layout/default_toolbar" />
 
     <Button
         android:id="@+id/animals_button"

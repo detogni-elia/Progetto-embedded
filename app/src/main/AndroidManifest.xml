@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.detons97gmail.progetto_embedded">
 
     <!--uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/-->
@@ -11,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/app_theme">
-        <activity android:name=".Activities.MainActivity">
+        <activity android:name=".Activities.MainActivity"
+            tools:ignore="InnerclassSeparator">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -19,8 +21,13 @@
         </activity>
 
         <activity android:name=".Activities.SpeciesListActivity"
-            android:parentActivityName=".Activities.MainActivity">
+            tools:ignore="InnerclassSeparator">
         </activity>
+
+        <activity android:name=".Activities.AnimalDetailsActivity"
+            tools:ignore="InnerclassSeparator">
+        </activity>
+
     </application>
 
 </manifest>

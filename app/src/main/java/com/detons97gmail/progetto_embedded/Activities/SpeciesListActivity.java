@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 
 import com.detons97gmail.progetto_embedded.R;
 import com.detons97gmail.progetto_embedded.Fragments.SpeciesListFragment;
@@ -20,7 +21,7 @@ public class SpeciesListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //TODO: Load different layouts in relation to memory available
         //TODO: Insert fragment programmatically in order to pass information about which data to show
-        setContentView(R.layout.activity_species_list_layout);
+        setContentView(R.layout.activity_species_list);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -45,7 +46,7 @@ public class SpeciesListActivity extends AppCompatActivity {
         return true;
     }
 
-    /*
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         int id = item.getItemId();
@@ -57,6 +58,4 @@ public class SpeciesListActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-     */
 }
