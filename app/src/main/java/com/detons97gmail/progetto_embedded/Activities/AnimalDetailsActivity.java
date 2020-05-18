@@ -14,33 +14,35 @@ import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.detons97gmail.progetto_embedded.IntentsExtras;
-import com.detons97gmail.progetto_embedded.Utilities.AnimalDetails;
-import com.detons97gmail.progetto_embedded.Adapters.AnimalDetailsAdapter;
 import com.detons97gmail.progetto_embedded.R;
 import com.detons97gmail.progetto_embedded.Utilities;
 
 
 public class AnimalDetailsActivity extends AppCompatActivity
 {
-    private ImageView imageView;
-    private LinearLayout nameEntry;
-    private LinearLayout speciesEntry;
-    private LinearLayout dietEntry;
-    private LinearLayout symptomsEntry;
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        ImageView imageView;
+        LinearLayout nameEntry;
+        LinearLayout speciesEntry;
+        LinearLayout dietEntry;
+        LinearLayout symptomsEntry;
+        TextView speciesDescription;
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_species_details);
 
         Intent intent = getIntent();
+        imageView = findViewById(R.id.detailsImage);
+        imageView.setImageURI(Uri.parse(intent.getStringExtra(IntentsExtras.EXTRA_IMAGE_PATH)));
 
-        ImageView v = findViewById(R.id.detailsImage);
-        v.setImageURI(Uri.parse(intent.getStringExtra(IntentsExtras.EXTRA_IMAGE_PATH)));
+        speciesDescription = findViewById(R.id.speciesDescription);
+        speciesDescription.setText(R.string.lorem_ipsum);
+
+        if(findViewById(R.id.nameEntry) == null)
+            return;
 
         nameEntry = findViewById(R.id.nameEntry);
         speciesEntry = findViewById(R.id.speciesEntry);
@@ -65,22 +67,6 @@ public class AnimalDetailsActivity extends AppCompatActivity
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(R.string.details_toolbar_title);
         }
-
-        /*
-        //Set ActionBar
-        ActionBar ab=getSupportActionBar();
-        ab.setDisplayHomeAsUpEnabled(true);
-        ab.setTitle(R.string.menu_details_title);
-
-        animalInfo=new AnimalDetails();
-
-        //Initialize RecycleView
-        animalDetailsRecyclerView=findViewById(R.id.detailsRecyclerView);
-        adapter = new AnimalDetailsAdapter(this, animalInfo);
-        animalDetailsRecyclerView.setAdapter(adapter);
-        animalDetailsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-         */
     }
 
     @Override

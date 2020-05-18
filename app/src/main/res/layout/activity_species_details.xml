@@ -103,6 +103,7 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/speciesDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout"
@@ -110,12 +111,7 @@
                 android:textSize="24sp"
                 android:textIsSelectable="true"
                 android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-Duis aute irure dolor in
-reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."/>
+                android:paddingEnd="16dp"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -187,6 +187,7 @@ public class SpeciesListFragment extends Fragment implements SpeciesListAdapter.
             for (File image : images) {
                 speciesNames.add(image.getName());
             }
+
             data = SpeciesListAdapter.DataWrapper.fromArrayList(new ArrayList<>(Arrays.asList(images)), speciesNames);
             adapter = new SpeciesListAdapter(data, this, getContext());
         }
