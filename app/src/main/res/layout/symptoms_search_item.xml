@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="16dp"
+    android:layout_margin="8dp"
     android:background="@drawable/symptoms_item_background"
     android:padding="16dp">
 
@@ -19,7 +19,7 @@
         android:textStyle="bold" />
 
     <Switch
-        android:id="@+id/switchWidget"
+        android:id="@+id/symptomSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -35,9 +35,9 @@
     <View
         android:id="@+id/divider"
         android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/switchWidget"
-        android:layout_alignTop="@+id/switchWidget"
-        android:layout_alignBottom="@+id/switchWidget"
+        android:layout_toStartOf="@+id/symptomSwitch"
+        android:layout_alignTop="@+id/symptomSwitch"
+        android:layout_alignBottom="@+id/symptomSwitch"
         style="@style/vertical_divider"
         android:background="@color/colorPrimary" />
 

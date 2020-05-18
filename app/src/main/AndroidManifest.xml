@@ -14,10 +14,7 @@
         android:theme="@style/app_theme">
         <activity android:name=".Activities.MainActivity"
             tools:ignore="InnerclassSeparator">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
 
         <activity android:name=".Activities.SpeciesListActivity"
@@ -27,7 +24,14 @@
         <activity android:name=".Activities.AnimalDetailsActivity"
             tools:ignore="InnerclassSeparator">
         </activity>
-        <activity android:name=".Activities.SymptomsSearchActivity" />
+        <activity android:name=".Activities.SymptomsSearchActivity"
+            tools:ignore="InnerclassSeparator" >
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
     </application>
 
