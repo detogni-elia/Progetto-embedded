@@ -14,7 +14,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import com.detons97gmail.progetto_embedded.IntentsExtras;
+import com.detons97gmail.progetto_embedded.Values;
 import com.detons97gmail.progetto_embedded.R;
 import com.detons97gmail.progetto_embedded.Utilities;
 
@@ -36,10 +36,18 @@ public class AnimalDetailsActivity extends AppCompatActivity
 
         Intent intent = getIntent();
         imageView = findViewById(R.id.detailsImage);
-        imageView.setImageURI(Uri.parse(intent.getStringExtra(IntentsExtras.EXTRA_IMAGE_PATH)));
+        imageView.setImageURI(Uri.parse(intent.getStringExtra(Values.EXTRA_IMAGE_PATH)));
 
         speciesDescription = findViewById(R.id.speciesDescription);
         speciesDescription.setText(R.string.lorem_ipsum);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(R.string.details_toolbar_title);
+        }
 
         if(findViewById(R.id.nameEntry) == null)
             return;
@@ -55,18 +63,10 @@ public class AnimalDetailsActivity extends AppCompatActivity
         ((TextView)dietEntry.findViewById(R.id.layoutLabel)).setText(R.string.details_diet);
         ((TextView)symptomsEntry.findViewById(R.id.layoutLabel)).setText(R.string.details_symptoms);
 
-        ((TextView)nameEntry.findViewById(R.id.layoutEntry)).setText(intent.getStringExtra(IntentsExtras.EXTRA_NAME));
-        ((TextView)speciesEntry.findViewById(R.id.layoutEntry)).setText(intent.getStringExtra(IntentsExtras.EXTRA_SPECIES));
-        ((TextView)dietEntry.findViewById(R.id.layoutEntry)).setText(intent.getStringExtra(IntentsExtras.EXTRA_DIET));
-        ((TextView)symptomsEntry.findViewById(R.id.layoutEntry)).setText(intent.getStringExtra(IntentsExtras.EXTRA_SYMPTOMS));
-
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.details_toolbar_title);
-        }
+        ((TextView)nameEntry.findViewById(R.id.layoutEntry)).setText(intent.getStringExtra(Values.EXTRA_NAME));
+        ((TextView)speciesEntry.findViewById(R.id.layoutEntry)).setText(intent.getStringExtra(Values.EXTRA_SPECIES));
+        ((TextView)dietEntry.findViewById(R.id.layoutEntry)).setText(intent.getStringExtra(Values.EXTRA_DIET));
+        ((TextView)symptomsEntry.findViewById(R.id.layoutEntry)).setText(intent.getStringExtra(Values.EXTRA_SYMPTOMS));
     }
 
     @Override

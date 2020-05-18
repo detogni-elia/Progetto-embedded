@@ -27,6 +27,7 @@
         <activity android:name=".Activities.AnimalDetailsActivity"
             tools:ignore="InnerclassSeparator">
         </activity>
+        <activity android:name=".Activities.SymptomsSearchActivity" />
 
     </application>
 

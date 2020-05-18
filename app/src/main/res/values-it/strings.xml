@@ -27,4 +27,26 @@
     <string name="details_toolbar_title">Dettagli</string>
     <string name="species_list_toolbar_title">Lista delle specie</string>
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
+    <string name="symptom_swelling">Gonfiore</string>
+    <string name="symptom_pain">Dolore nella zona di contatto/morso</string>
+    <string name="symptom_breathing">Difficoltà respiratorie</string>
+    <string name="symptom_vomiting">Nausea/vomito</string>
+    <string name="symptom_blurred">Visione sfocata</string>
+    <string name="symptom_sweating">Sudorazione</string>
+    <string name="symptom_salivating">Salivazione eccessiva</string>
+    <string name="symptom_numbness">Intorpidimento alla faccia/muscoli</string>
+    <string name="symptom_itching">Prurito</string>
+    <string name="symptom_rash">Eruzioni cutanee</string>
+    <string name="symptom_headache">Forte mal di testa</string>
+    <string name="symptom_cramping">Crampi/dolori muscolari</string>
+    <string name="symptom_fever">Febbre alta</string>
+    <string name="sympton_chills">Brividi</string>
+    <string name="symptoms_swollen_lymph_glands">Gonfiore alle ghiandole</string>
+    <string name="weakess">Debolezza generale</string>
+    <string name="symptom_burning">Bruciore/dolore pulsante</string>
+    <string name="irregular_heartbeat">Battito irregolare</string>
+    <string name="contact_bite">Morso</string>
+    <string name="contact_stung">Puntura</string>
+    <string name="contact_eaten">Ingestione</string>
+    <string name="contact_contact">Contatto con la pelle</string>
 </resources>

@@ -21,7 +21,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.detons97gmail.progetto_embedded.Activities.AnimalDetailsActivity;
-import com.detons97gmail.progetto_embedded.IntentsExtras;
+import com.detons97gmail.progetto_embedded.Values;
 import com.detons97gmail.progetto_embedded.R;
 import com.detons97gmail.progetto_embedded.Adapters.SpeciesListAdapter;
 import com.detons97gmail.progetto_embedded.Utilities;
@@ -76,20 +76,20 @@ public class SpeciesListFragment extends Fragment implements SpeciesListAdapter.
         //We want to retain fragment instance on configuration changes such as screen rotation
         //in order to maintain the adapter created as to not load all the data and images again.
         setRetainInstance(true);
-        //Get path and
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //Initialize new adapter if necessary
         if(adapter ==  null && getArguments() != null) {
             Log.v(TAG, "Adapter was null in method onCreateView");
-            initiliazeAdapter(getArguments().getString(IntentsExtras.EXTRA_COUNTRY), getArguments().getString(IntentsExtras.EXTRA_CATEGORY));
+            initiliazeAdapter(getArguments().getString(Values.EXTRA_COUNTRY), getArguments().getString(Values.EXTRA_CATEGORY), getArguments().getStringArray(Values.EXTRA_SYMPTOMS));
         }
         //Not null when instance was retained.
         else {
             Log.v(TAG, "Adapter was not null in method onCreateView");
         }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         //Inflate layout
         //Views must always be inflated even if instance was retained.
         return inflater.inflate(R.layout.species_list_fragment_layout, container, false);
@@ -148,11 +148,15 @@ public class SpeciesListFragment extends Fragment implements SpeciesListAdapter.
     }
 
     /**
-     * Initialize adapter loading data from memory (we don't need to ask for permissions if we load from application specific storage)
+     * Initialize adapter loading data from database (we don't need to ask for permissions if we load from application specific storage)
+     * @param country The string of the country in the database
+     * @param category The string of the species category in the database
+     * @param symptoms The array containing the list of symptoms to filter the query result
      */
-    //private final ArrayList<SpeciesListAdapter.DataWrapper> wrap = new ArrayList<>();
-
-    private void initiliazeAdapter(String country, String category){
+    private void initiliazeAdapter(String country, String category, String[] symptoms){
+        if(symptoms == null)
+            //Adapter will have to query all elements
+            ;
         //Root path to our application specific storage (the "Files" directory)
         File rootPath = context.getExternalFilesDir(null);
         /**
@@ -197,14 +201,14 @@ public class SpeciesListFragment extends Fragment implements SpeciesListAdapter.
     @Override
     public void onSpeciesListItemClick(int position) {
         Intent startIntent = new Intent(getContext(), AnimalDetailsActivity.class);
-        startIntent.putExtra(IntentsExtras.EXTRA_IMAGE_PATH, data.get(position).getImage());
-        startIntent.putExtra(IntentsExtras.EXTRA_NAME, data.get(position).getName());
+        startIntent.putExtra(Values.EXTRA_IMAGE_PATH, data.get(position).getImage());
+        startIntent.putExtra(Values.EXTRA_NAME, data.get(position).getName());
         //TODO: WE SHOULD GET THIS EXTRA INFO ONLY WHEN REQUESTED, QUERYING THE DATABASE.
-        startIntent.putExtra(IntentsExtras.EXTRA_SPECIES, "Nome della specie");
-        startIntent.putExtra(IntentsExtras.EXTRA_DIET, "Tipo di dieta");
+        startIntent.putExtra(Values.EXTRA_SPECIES, "Nome della specie");
+        startIntent.putExtra(Values.EXTRA_DIET, "Tipo di dieta");
         //TODO: ADD VARIOUS SYMPTOMS AND LOCALIZATION
         //TODO: ADD SYSTEM TO LOCALIZE ON MAP (FOR EXAMPLE, CENTER AND RADIUS TO DESCRIBE AN AREA WHERE THE ANIMAL, PLANT, INSECT CAN BE FOUND)
-        startIntent.putExtra(IntentsExtras.EXTRA_SYMPTOMS, getString(R.string.details_symptom_bite) + ": Gonfiore, bruciore, dolore, sanguinamento, intorpidimento");
+        startIntent.putExtra(Values.EXTRA_SYMPTOMS, getString(R.string.details_symptom_bite) + ": Gonfiore, bruciore, dolore, sanguinamento, intorpidimento");
         startActivity(startIntent);
         //Utilities.showToast(context, "Click on element n. " + position, Toast.LENGTH_SHORT);
     }

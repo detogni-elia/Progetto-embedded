@@ -7,17 +7,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 
-import com.detons97gmail.progetto_embedded.IntentsExtras;
+import com.detons97gmail.progetto_embedded.Values;
 import com.detons97gmail.progetto_embedded.R;
 
 import java.io.File;
 import java.io.FileFilter;
 
 public class MainActivity extends AppCompatActivity {
+    //Contains the folders names of the resources stored
     private String[] countriesFoldersNames;
 
     Spinner mSpinnerCountries;
@@ -32,10 +31,10 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         mSpinnerCountries = findViewById(R.id.countries_spinner);
-        //countries will contain translated country name to populate the spinner
-        String[] countries;
+        //localizedCountries will contain translated country name to populate the spinner
+        String[] localizedCountries;
         //countriesFoldesrNames will contain the actual folder name in order to pass the intent to the SpeciesListActivity
-        //Get supported countries by parsing the folders in the app FilesDir
+        //Get supported localizedCountries by parsing the folders in the app FilesDir
 
          //We should use getFilesDir() in the final version SEE EXPLANATION ON SpeciesListFragment
         File appRootPath = getExternalFilesDir(null);
@@ -48,30 +47,28 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
             if(resFolders != null) {
-                countries = new String[resFolders.length];
+                //countriesNames contains the english name of all supported countries
+                //The resFolders will always use the english names of the countries
+                String[] countriesNames = Values.SUPPORTED_COUNTRIES_NAMES;
+                localizedCountries = new String[resFolders.length];
                 countriesFoldersNames = new String[resFolders.length];
                 //Get folder name and translate country name
                 for(int i = 0; i < resFolders.length; i++) {
                     String[] folderPath = resFolders[i].getAbsolutePath().split("/");
                     String folderName = folderPath[folderPath.length - 1];
-                    switch (folderName){
-                        case "India":
-                            countries[i] = getString(R.string.in);
+                    for(int j = 0; j < countriesNames.length; j++){
+                        if(folderName.equals(countriesNames[j])) {
+                            localizedCountries[i] = getString(Values.COUNTRIES_IDS[j]);
+                            countriesFoldersNames[i] = folderName;
                             break;
-                        case "China":
-                            countries[i] = getString(R.string.cn);
-                            break;
-                        case "Italy":
-                            countries[i] = getString(R.string.it);
-                        default:
-                            countries[i] = getString(R.string.it);
+                        }
                     }
-                    countriesFoldersNames[i] = folderName;
                 }
             }
+            //TODO: IF RESOURCES NOT PRESENT, ASK TO DOWNLOAD
             //If resource folders not present, display default values
             else{
-                countries = new String[] {
+                localizedCountries = new String[] {
                         getString(R.string.it),
                         getString(R.string.in),
                         getString(R.string.cn),
@@ -80,14 +77,14 @@ public class MainActivity extends AppCompatActivity {
         }
         //If could not get app's FilesDir, display default values
         else{
-            countries = new String[] {
+            localizedCountries = new String[] {
                     getString(R.string.it),
                     getString(R.string.in),
                     getString(R.string.cn),
             };
         }
         // Array adapter to set data in Spinner Widget
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, countries);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, localizedCountries);
         // Setting the array adapter containing country list to the spinner widget
         mSpinnerCountries.setAdapter(adapter);
 
@@ -97,20 +94,20 @@ public class MainActivity extends AppCompatActivity {
         String category;
         switch (v.getId()){
             case R.id.animals_button:
-                category = "Animals";
+                category = Values.CATEGORY_ANIMALS;
                 break;
             case R.id.insects_button:
-                category = "Insects";
+                category = Values.CATEGORY_INSECTS;
                 break;
             case R.id.plants_button:
-                category = "Plants";
+                category = Values.CATEGORY_PLANTS;
                 break;
             default:
-                category = "Animals";
+                category = Values.CATEGORY_ANIMALS;
         }
         Intent startIntent = new Intent(this, SpeciesListActivity.class);
-        startIntent.putExtra(IntentsExtras.EXTRA_COUNTRY, country);
-        startIntent.putExtra(IntentsExtras.EXTRA_CATEGORY, category);
+        startIntent.putExtra(Values.EXTRA_COUNTRY, country);
+        startIntent.putExtra(Values.EXTRA_CATEGORY, category);
         startActivity(startIntent);
     }
 }
