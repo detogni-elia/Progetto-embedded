@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.RelativeLayout;
@@ -35,9 +36,14 @@ public class SymptomsSearchAdapter extends RecyclerView.Adapter<SymptomsSearchAd
 
     @Override
     public void onBindViewHolder(SymptomsViewHolder holder, int position) {
-        holder.symptom.setText(filteredData.get(position).symptom);
+        int absolutePos = filteredData.get(position).absolutePos;
+        boolean sel = filteredData.get(position).selected;
+        holder.symptomSwitch.setTag(false);
         holder.symptomSwitch.setChecked(filteredData.get(position).selected);
-        holder.symptomAbsolutePosition = filteredData.get(position).absolutePos;
+        holder.symptomSwitch.setTag(true);
+        holder.symptom.setText(filteredData.get(position).symptom);
+        holder.symptomAbsolutePosition = absolutePos;
+        Log.v("ADAPTER", "Pos: " + position + " Abs: " + absolutePos + " Sel: " +sel);
     }
 
     @Override
@@ -123,15 +129,18 @@ public class SymptomsSearchAdapter extends RecyclerView.Adapter<SymptomsSearchAd
             super(root);
             symptom = root.findViewById(R.id.textView);
             symptomSwitch = root.findViewById(R.id.symptomSwitch);
+            symptomSwitch.setTag(true);
             symptomAbsolutePosition = position;
             listener = toDefineListener;
-            symptomSwitch.setOnClickListener(new View.OnClickListener() {
+            symptomSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
-                public void onClick(View v) {
-                    Log.v("ViewHolder", "CLICCATO");
-                    boolean isChecked = symptomSwitch.isChecked();
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(!(boolean)symptomSwitch.getTag())
+                        return;
                     fullData.get(symptomAbsolutePosition).selected = isChecked;
+                    filteredData.get(getAdapterPosition()).selected = isChecked;
                     listener.onSwitchClicked(symptomAbsolutePosition, isChecked);
+                    Log.v("ViewHolder", "SWITCH ATTIVO: " + isChecked + " ABS: " + symptomAbsolutePosition + " POS: " + getAdapterPosition());
                 }
             });
         }
