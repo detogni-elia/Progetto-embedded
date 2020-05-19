@@ -3,12 +3,66 @@ package com.detons97gmail.progetto_embedded;
 import android.content.Context;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileFilter;
 import java.util.LinkedList;
 
 public class Utilities {
     public static void showToast(Context context, String message, int duration){
         Toast.makeText(context, message, duration).show();
     }
+
+    public static String[] getDownloadedCountries(Context context){
+        String[] downloadedCountries;
+        File appRootPath = context.getExternalFilesDir(null);
+        if(appRootPath != null){
+            //Get directories in app FilesDir
+            File[] resFolders = appRootPath.listFiles(new FileFilter() {
+                @Override
+                public boolean accept(File pathname) {
+                    return pathname.isDirectory();
+                }
+            });
+            if(resFolders != null){
+                //countriesNames contains the english name of all supported countries
+                //The resFolders will always use the english names of the countries
+                String[] countriesNames = Values.SUPPORTED_COUNTRIES_NAMES;
+                downloadedCountries = new String[resFolders.length];
+                //Get folder name and translate country name
+                for(int i = 0; i < resFolders.length; i++) {
+                    String[] folderPath = resFolders[i].getAbsolutePath().split("/");
+                    String folderName = folderPath[folderPath.length - 1];
+                    for (String countriesName : countriesNames) {
+                        //If found folder with name matching one country, add it to the list
+                        if (folderName.equals(countriesName)) {
+                            downloadedCountries[i] = folderName;
+                            break;
+                        }
+                    }
+                }
+                return downloadedCountries;
+            }
+            else
+                return null;
+        }
+
+        return null;
+    }
+
+    public static String[] getLocalizationForCountries(Context context, String[] downloadedCountries){
+        String[] localizedCountries = new String[downloadedCountries.length];
+        int i = 0;
+            for(String country: downloadedCountries){
+                for(int j = 0; j < Values.SUPPORTED_COUNTRIES_NAMES.length; j++){
+                    if(country.equals(Values.SUPPORTED_COUNTRIES_NAMES[j])) {
+                        localizedCountries[i++] = context.getString(Values.COUNTRIES_IDS[j]);
+                        break;
+                    }
+                }
+            }
+        return localizedCountries;
+    }
+
     public static class AnimalDetails {
         private int imageRef;
         private LinkedList<String> attributeName;

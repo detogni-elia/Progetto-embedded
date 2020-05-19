@@ -18,16 +18,18 @@ import java.util.ArrayList;
 public class SymptomsSearchAdapter extends RecyclerView.Adapter<SymptomsSearchAdapter.SymptomsViewHolder> implements Filterable {
     private ArrayList<DataWrapper> fullData;
     private ArrayList<DataWrapper> filteredData = new ArrayList<>();
+    private OnSymptomCheckListener listener;
 
-    public SymptomsSearchAdapter(ArrayList<DataWrapper> data){
+    public SymptomsSearchAdapter(ArrayList<DataWrapper> data, OnSymptomCheckListener listener){
         fullData = data;
         filteredData.addAll(data);
+        this.listener = listener;
     }
 
     @Override
     public SymptomsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RelativeLayout item = (RelativeLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.symptoms_search_item, parent, false);
-        return new SymptomsViewHolder(item, -1);
+        return new SymptomsViewHolder(item, -1, listener);
     }
 
     @Override
@@ -98,16 +100,17 @@ public class SymptomsSearchAdapter extends RecyclerView.Adapter<SymptomsSearchAd
         public String getSymptom(){
             return symptom;
         }
-        public boolean getSelected(){
+        public boolean isSelected(){
             return selected;
         }
         public int getAbsolutePos(){
             return absolutePos;
         }
-        public static ArrayList<DataWrapper> getWrappedData(String[] symptomsList){
+        public static ArrayList<DataWrapper> wrapData(String[] symptomsList, boolean[] selections){
             ArrayList<DataWrapper> toReturn = new ArrayList<>();
+            int i = 0;
             for(String symptom: symptomsList){
-                toReturn.add(new DataWrapper(symptom, false, toReturn.size()));
+                toReturn.add(new DataWrapper(symptom, selections[i++], toReturn.size()));
             }
             return toReturn;
         }
@@ -116,12 +119,14 @@ public class SymptomsSearchAdapter extends RecyclerView.Adapter<SymptomsSearchAd
     class SymptomsViewHolder extends RecyclerView.ViewHolder {
         private TextView symptom;
         private Switch symptomSwitch;
+        private OnSymptomCheckListener listener;
         private int symptomAbsolutePosition = -1;
 
-        SymptomsViewHolder(RelativeLayout root, int position){
+        SymptomsViewHolder(RelativeLayout root, int position, final OnSymptomCheckListener listener){
             super(root);
             symptom = root.findViewById(R.id.textView);
             symptomSwitch = root.findViewById(R.id.symptomSwitch);
+            this.listener = listener;
             //Tag specifies if we have to ignore the onCheckedChanged callback
             symptomSwitch.setTag(true);
             //We save the absolute position of the element in fullData so that we can communicate the checked symptoms to the listener
@@ -135,8 +140,13 @@ public class SymptomsSearchAdapter extends RecyclerView.Adapter<SymptomsSearchAd
                     //Update both filtered and complete data, to store the changes
                     fullData.get(symptomAbsolutePosition).selected = isChecked;
                     filteredData.get(getAdapterPosition()).selected = isChecked;
+                    listener.onSymptomChecked(symptomAbsolutePosition, isChecked);
                 }
             });
         }
+    }
+
+    public interface OnSymptomCheckListener{
+        void onSymptomChecked(int position, boolean checked);
     }
 }

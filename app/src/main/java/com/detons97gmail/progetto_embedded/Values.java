@@ -10,6 +10,8 @@ public class Values {
     public static final String EXTRA_SPECIES = BASE + "Species";
     public static final String EXTRA_DIET = BASE + "Diet";
     public static final String EXTRA_SYMPTOMS = BASE + "Symptoms";
+    public static final String EXTRA_SYMPTOMS_SELECTIONS = BASE + "SymptomsSelection";
+    public static final String EXTRA_N_CHECKED_SYMPTOMS = BASE + "NCheckedSymptoms";
 
     //Ids of countries for localization
     public static final int[] COUNTRIES_IDS = {
@@ -18,7 +20,7 @@ public class Values {
             R.string.it
     };
 
-    //Countries default values for database queries
+    //Countries english names for database queries
     public static final String[] SUPPORTED_COUNTRIES_NAMES = {
             "India",
             "China",

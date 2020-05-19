@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
                 };
             }
         }
-        //If could not get app's FilesDir, display default values
+        //TODO: IF RESOURCES NOT PRESENT, ASK TO DOWNLOAD
         else{
             localizedCountries = new String[] {
                     getString(R.string.it),
