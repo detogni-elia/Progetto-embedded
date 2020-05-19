@@ -18,8 +18,9 @@ import com.detons97gmail.progetto_embedded.Values;
 import java.util.ArrayList;
 
 //TODO: USE FRAGMENT TO RETAIN ADAPTER AND CLEAN CODE
-public class SymptomsSearchActivity extends AppCompatActivity implements SymptomsSearchAdapter.ToDefineListener {
+public class SymptomsSearchActivity extends AppCompatActivity{
     private String[] symptoms;
+    private ArrayList<SymptomsSearchAdapter.DataWrapper> data;
     private SymptomsSearchAdapter adapter;
 
     @Override
@@ -31,8 +32,8 @@ public class SymptomsSearchActivity extends AppCompatActivity implements Symptom
         for(int i = 0; i < symptoms.length; i++)
             symptoms[i] = getString(symptomsIds[i]);
 
-        ArrayList<SymptomsSearchAdapter.DataWrapper> data = SymptomsSearchAdapter.DataWrapper.getWrappedData(symptoms);
-        adapter = new SymptomsSearchAdapter(data, this);
+        data = SymptomsSearchAdapter.DataWrapper.getWrappedData(symptoms);
+        adapter = new SymptomsSearchAdapter(data);
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         RecyclerView.LayoutManager manager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(manager);
@@ -59,10 +60,5 @@ public class SymptomsSearchActivity extends AppCompatActivity implements Symptom
             }
         });
         return true;
-    }
-
-    @Override
-    public void onSwitchClicked(int symptomPosition, boolean selected) {
-        Log.v("SymptomsSearchActivity", "SWITCH DI SINTOMO: " + symptoms[symptomPosition] + " ORA VALE " + selected);
     }
 }

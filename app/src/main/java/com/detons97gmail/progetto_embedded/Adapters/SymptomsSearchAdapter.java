@@ -1,8 +1,6 @@
 package com.detons97gmail.progetto_embedded.Adapters;
 
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Filter;
@@ -20,30 +18,26 @@ import java.util.ArrayList;
 public class SymptomsSearchAdapter extends RecyclerView.Adapter<SymptomsSearchAdapter.SymptomsViewHolder> implements Filterable {
     private ArrayList<DataWrapper> fullData;
     private ArrayList<DataWrapper> filteredData = new ArrayList<>();
-    private ToDefineListener listener;
 
-    public SymptomsSearchAdapter(ArrayList<DataWrapper> data, ToDefineListener listener){
+    public SymptomsSearchAdapter(ArrayList<DataWrapper> data){
         fullData = data;
         filteredData.addAll(data);
-        this.listener = listener;
     }
 
     @Override
     public SymptomsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RelativeLayout item = (RelativeLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.symptoms_search_item, parent, false);
-        return new SymptomsViewHolder(item, -1, listener);
+        return new SymptomsViewHolder(item, -1);
     }
 
     @Override
     public void onBindViewHolder(SymptomsViewHolder holder, int position) {
         int absolutePos = filteredData.get(position).absolutePos;
-        boolean sel = filteredData.get(position).selected;
         holder.symptomSwitch.setTag(false);
         holder.symptomSwitch.setChecked(filteredData.get(position).selected);
         holder.symptomSwitch.setTag(true);
         holder.symptom.setText(filteredData.get(position).symptom);
         holder.symptomAbsolutePosition = absolutePos;
-        Log.v("ADAPTER", "Pos: " + position + " Abs: " + absolutePos + " Sel: " +sel);
     }
 
     @Override
@@ -123,30 +117,26 @@ public class SymptomsSearchAdapter extends RecyclerView.Adapter<SymptomsSearchAd
         private TextView symptom;
         private Switch symptomSwitch;
         private int symptomAbsolutePosition = -1;
-        private ToDefineListener listener;
 
-        SymptomsViewHolder(RelativeLayout root, int position, ToDefineListener toDefineListener){
+        SymptomsViewHolder(RelativeLayout root, int position){
             super(root);
             symptom = root.findViewById(R.id.textView);
             symptomSwitch = root.findViewById(R.id.symptomSwitch);
+            //Tag specifies if we have to ignore the onCheckedChanged callback
             symptomSwitch.setTag(true);
+            //We save the absolute position of the element in fullData so that we can communicate the checked symptoms to the listener
             symptomAbsolutePosition = position;
-            listener = toDefineListener;
             symptomSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    //If tag is set to false then we ignore the callback (callback is invoked even when we set the switch programmatically)
                     if(!(boolean)symptomSwitch.getTag())
                         return;
+                    //Update both filtered and complete data, to store the changes
                     fullData.get(symptomAbsolutePosition).selected = isChecked;
                     filteredData.get(getAdapterPosition()).selected = isChecked;
-                    listener.onSwitchClicked(symptomAbsolutePosition, isChecked);
-                    Log.v("ViewHolder", "SWITCH ATTIVO: " + isChecked + " ABS: " + symptomAbsolutePosition + " POS: " + getAdapterPosition());
                 }
             });
         }
-    }
-
-    public interface ToDefineListener{
-        void onSwitchClicked(int symptomPosition, boolean selected);
     }
 }
