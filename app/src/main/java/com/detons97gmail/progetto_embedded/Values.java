@@ -10,45 +10,79 @@ public class Values {
     public static final String EXTRA_SPECIES = BASE + "Species";
     public static final String EXTRA_DIET = BASE + "Diet";
     public static final String EXTRA_SYMPTOMS = BASE + "Symptoms";
-    public static final String EXTRA_SYMPTOMS_SELECTIONS = BASE + "SymptomsSelection";
-    public static final String EXTRA_N_CHECKED_SYMPTOMS = BASE + "NCheckedSymptoms";
 
     //Ids of countries for localization
-    public static final int[] COUNTRIES_IDS = {
+    private static final int[] COUNTRIES_IDS = {
             R.string.in,
             R.string.cn,
             R.string.it
     };
 
+    static int[] getCountriesIds(){
+        return COUNTRIES_IDS;
+    }
+
     //Countries english names for database queries
-    public static final String[] SUPPORTED_COUNTRIES_NAMES = {
+    private static final String[] COUNTRIES_DEFAULT_NAMES = {
             "India",
             "China",
             "Italy"
     };
 
+    public static String[] getCountriesDefaultNames(){
+        return COUNTRIES_DEFAULT_NAMES;
+    }
+
     //Ids of contact type for localization
-    public static final int[] CONTACTS_IDS = {
+    private static final int[] CONTACTS_IDS = {
             R.string.contact_bite,
             R.string.contact_stung,
             R.string.contact_eaten,
             R.string.contact_contact
     };
 
+    public static int[] getContactsTypeIds(){
+        return CONTACTS_IDS;
+    }
+
     //Contacts default values for database queries
-    public static final String[] CONTACTS_STRINGS = {
+    private static final String[] CONTACTS_STRINGS = {
             "bite",
             "stung",
             "eaten",
             "contact"
     };
 
+    public static String[] getContactTypesDefaultNames(){
+        return CONTACTS_STRINGS;
+    }
+
     public static final String CATEGORY_ANIMALS = "Animals";
     public static final String CATEGORY_PLANTS = "Plants";
     public static final String CATEGORY_INSECTS = "Insects";
 
+    private static final int[] SPECIES_IDS = {
+            R.string.animals,
+            R.string.insects,
+            R.string.plants
+    };
+
+    static int[] getSpeciesIds(){
+        return SPECIES_IDS;
+    }
+
+    private static final String[] SPECIES_STRINGS = {
+            "Animals",
+            "Insects",
+            "Plants"
+    };
+
+    public static String[] getSpeciesDefaultNames(){
+        return SPECIES_STRINGS;
+    }
+
     //Ids of symptoms for localization
-    public static final int[] SYMPTOMS_IDS = {
+    private static final int[] SYMPTOMS_IDS = {
             R.string.symptom_swelling,
             R.string.symptom_pain,
             R.string.symptom_burning,
@@ -68,8 +102,12 @@ public class Values {
             R.string.irregular_heartbeat,
             R.string.symptoms_swollen_lymph_glands};
 
+    static int[] getSymptomsIds(){
+        return SYMPTOMS_IDS;
+    }
+
     //Symptoms default values for database queries
-    public static final String[] SYMPTOMS_STRINGS = {
+    private static final String[] SYMPTOMS_STRINGS = {
             "swelling",
             "pain",
             "burning",
@@ -88,4 +126,8 @@ public class Values {
             "chills",
             "irregular_hearbeat",
             "swollen__lymph_glands"};
+
+    public static String[] getSymptomsDefaultNames(){
+        return SYMPTOMS_STRINGS;
+    }
 }

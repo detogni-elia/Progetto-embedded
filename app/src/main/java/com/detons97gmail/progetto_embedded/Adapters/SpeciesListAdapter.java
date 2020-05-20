@@ -82,7 +82,7 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
         void onSpeciesListItemClick(int position);
     }
 
-    public SpeciesListAdapter(ArrayList<DataWrapper> wrappedData, OnSpeciesSelectedListener listener, Context context) {
+    public SpeciesListAdapter(ArrayList<DataWrapper> wrappedData, OnSpeciesSelectedListener listener) {
         if(wrappedData != null) {
             fullData = wrappedData;
             //filteredData.addAll(fullData);

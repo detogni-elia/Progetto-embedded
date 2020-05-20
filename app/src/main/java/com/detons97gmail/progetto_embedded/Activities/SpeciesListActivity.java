@@ -35,6 +35,7 @@ public class SpeciesListActivity extends AppCompatActivity {
         if(savedInstanceState != null)
             return;
 
+
         Bundle fragBundle = getIntent().getExtras();
         SpeciesListFragment speciesListFragment = new SpeciesListFragment();
         speciesListFragment.setArguments(fragBundle);

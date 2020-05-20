@@ -83,28 +83,17 @@ public class SymptomsSearchAdapter extends RecyclerView.Adapter<SymptomsSearchAd
         private boolean selected;
         private int absolutePos;
 
-        public DataWrapper(String s, boolean sel, int absolutePos){
+        DataWrapper(String s, boolean sel, int absolutePos){
             symptom = s;
             selected = sel;
             this.absolutePos = absolutePos;
         }
-        public void setSymptom(String s){
-            symptom = s;
-        }
-        public void setSelected(boolean sel){
-            selected = sel;
-        }
-        public void setAbsolutePos(int pos){
-            absolutePos = pos;
-        }
-        public String getSymptom(){
+
+        String getSymptom(){
             return symptom;
         }
         public boolean isSelected(){
             return selected;
-        }
-        public int getAbsolutePos(){
-            return absolutePos;
         }
         public static ArrayList<DataWrapper> wrapData(String[] symptomsList, boolean[] selections){
             ArrayList<DataWrapper> toReturn = new ArrayList<>();
@@ -119,14 +108,12 @@ public class SymptomsSearchAdapter extends RecyclerView.Adapter<SymptomsSearchAd
     class SymptomsViewHolder extends RecyclerView.ViewHolder {
         private TextView symptom;
         private Switch symptomSwitch;
-        private OnSymptomCheckListener listener;
-        private int symptomAbsolutePosition = -1;
+        private int symptomAbsolutePosition;
 
         SymptomsViewHolder(RelativeLayout root, int position, final OnSymptomCheckListener listener){
             super(root);
             symptom = root.findViewById(R.id.textView);
             symptomSwitch = root.findViewById(R.id.symptomSwitch);
-            this.listener = listener;
             //Tag specifies if we have to ignore the onCheckedChanged callback
             symptomSwitch.setTag(true);
             //We save the absolute position of the element in fullData so that we can communicate the checked symptoms to the listener

@@ -37,25 +37,18 @@ import java.util.Arrays;
 
 public class SpeciesListFragment extends Fragment implements SpeciesListAdapter.OnSpeciesSelectedListener {
     private static final String TAG = "SpeciesListFragment";
-    //Static variables for permission requests
-    //Variables to store UI objects
     private RecyclerView recyclerView;
-    //LayoutManager for the RecyclerView
     private RecyclerView.LayoutManager layoutManager;
-    //Adapter for the RecyclerView
     private SpeciesListAdapter adapter;
-    //Application context
     private Context context;
 
     private ArrayList<SpeciesListAdapter.DataWrapper> data;
 
-    //State variables
     /**
      * Required empty public constructor
      */
     public SpeciesListFragment() {
     }
-
     /**
      * We override onAttach in order to store the application Context
      * Method called each time fragment is attached to Activity. For example, when orientation changes the Activity is destroyed then created anew
@@ -180,7 +173,7 @@ public class SpeciesListFragment extends Fragment implements SpeciesListAdapter.
         //If no images were found initialize dummy adapter as to not show error message every time the method onCreateView is called
         //TODO: Show AlertDialog instead of Toast
         if(images == null || images.length == 0) {
-            adapter = new SpeciesListAdapter(null, this, getContext());
+            adapter = new SpeciesListAdapter(null, this);
             Utilities.showToast(context, context.getString(R.string.images_load_error), Toast.LENGTH_SHORT);
         }
 
@@ -193,7 +186,7 @@ public class SpeciesListFragment extends Fragment implements SpeciesListAdapter.
             }
 
             data = SpeciesListAdapter.DataWrapper.fromArrayList(new ArrayList<>(Arrays.asList(images)), speciesNames);
-            adapter = new SpeciesListAdapter(data, this, getContext());
+            adapter = new SpeciesListAdapter(data, this);
         }
     }
 
@@ -210,6 +203,5 @@ public class SpeciesListFragment extends Fragment implements SpeciesListAdapter.
         //TODO: ADD SYSTEM TO LOCALIZE ON MAP (FOR EXAMPLE, CENTER AND RADIUS TO DESCRIBE AN AREA WHERE THE ANIMAL, PLANT, INSECT CAN BE FOUND)
         startIntent.putExtra(Values.EXTRA_SYMPTOMS, getString(R.string.details_symptom_bite) + ": Gonfiore, bruciore, dolore, sanguinamento, intorpidimento");
         startActivity(startIntent);
-        //Utilities.showToast(context, "Click on element n. " + position, Toast.LENGTH_SHORT);
     }
 }

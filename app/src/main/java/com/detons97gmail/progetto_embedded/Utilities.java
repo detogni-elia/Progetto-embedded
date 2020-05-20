@@ -5,7 +5,10 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 public class Utilities {
     public static void showToast(Context context, String message, int duration){
@@ -26,7 +29,7 @@ public class Utilities {
             if(resFolders != null){
                 //countriesNames contains the english name of all supported countries
                 //The resFolders will always use the english names of the countries
-                String[] countriesNames = Values.SUPPORTED_COUNTRIES_NAMES;
+                String[] countriesNames = Values.getCountriesDefaultNames();
                 downloadedCountries = new String[resFolders.length];
                 //Get folder name and translate country name
                 for(int i = 0; i < resFolders.length; i++) {
@@ -49,18 +52,42 @@ public class Utilities {
         return null;
     }
 
-    public static String[] getLocalizationForCountries(Context context, String[] downloadedCountries){
-        String[] localizedCountries = new String[downloadedCountries.length];
-        int i = 0;
-            for(String country: downloadedCountries){
-                for(int j = 0; j < Values.SUPPORTED_COUNTRIES_NAMES.length; j++){
-                    if(country.equals(Values.SUPPORTED_COUNTRIES_NAMES[j])) {
-                        localizedCountries[i++] = context.getString(Values.COUNTRIES_IDS[j]);
-                        break;
-                    }
-                }
+    private static final Map<String, Integer> countriesHashMap = new HashMap<>();
+
+    public static String[] getLocalizedCountries(Context context, String[] toLocalize){
+        if(countriesHashMap.isEmpty()){
+            int[] supportedCountriesIds = Values.getCountriesIds();
+            String[] supportedCountriesDefaultNames = Values.getCountriesDefaultNames();
+            for(int i = 0; i < supportedCountriesDefaultNames.length; i++)
+                countriesHashMap.put(supportedCountriesDefaultNames[i], supportedCountriesIds[i]);
+        }
+        ArrayList<String> localizedCountries = new ArrayList<>();
+        for (String s : toLocalize) {
+            if (countriesHashMap.containsKey(s)) {
+                int countryId = countriesHashMap.get(s);
+                String localized = context.getString(countryId);
+                localizedCountries.add(localized);
             }
-        return localizedCountries;
+        }
+        return localizedCountries.toArray(new String[]{});
+    }
+
+    public static String[] getLocalizedSymptoms(Context context){
+        int[] symptomsIds = Values.getSymptomsIds();
+        String[] localizedSymptoms = new String[symptomsIds.length];
+        for(int i = 0; i < localizedSymptoms.length; i++)
+            localizedSymptoms[i] = context.getString(symptomsIds[i]);
+
+        return localizedSymptoms;
+    }
+
+    public static String[] getLocalizedCategories(Context context){
+        int[] speciesIds = Values.getSpeciesIds();
+        String[] localizedSpecies = new String[speciesIds.length];
+        for(int i = 0; i < localizedSpecies.length; i++)
+            localizedSpecies[i] = context.getString(speciesIds[i]);
+
+        return localizedSpecies;
     }
 
     public static class AnimalDetails {

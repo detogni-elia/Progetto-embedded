@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import com.detons97gmail.progetto_embedded.Utilities;
 import com.detons97gmail.progetto_embedded.Values;
 import com.detons97gmail.progetto_embedded.R;
 
@@ -49,9 +50,10 @@ public class MainActivity extends AppCompatActivity {
             if(resFolders != null) {
                 //countriesNames contains the english name of all supported countries
                 //The resFolders will always use the english names of the countries
-                String[] countriesNames = Values.SUPPORTED_COUNTRIES_NAMES;
-                localizedCountries = new String[resFolders.length];
-                countriesFoldersNames = new String[resFolders.length];
+                String[] countriesNames = Values.getCountriesDefaultNames();
+                countriesFoldersNames = Utilities.getDownloadedCountries(this);
+                localizedCountries = Utilities.getLocalizedCountries(this, countriesFoldersNames);
+                /*
                 //Get folder name and translate country name
                 for(int i = 0; i < resFolders.length; i++) {
                     String[] folderPath = resFolders[i].getAbsolutePath().split("/");
@@ -64,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 }
+
+                 */
             }
             //TODO: IF RESOURCES NOT PRESENT, ASK TO DOWNLOAD
             //If resource folders not present, display default values
