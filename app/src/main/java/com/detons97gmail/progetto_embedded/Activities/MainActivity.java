@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if(resFolders != null) {
                 //countriesNames contains the english name of all supported countries
                 //The resFolders will always use the english names of the countries
-                String[] countriesNames = Values.getCountriesDefaultNames();
                 countriesFoldersNames = Utilities.getDownloadedCountries(this);
                 localizedCountries = Utilities.getLocalizedCountries(this, countriesFoldersNames);
                 /*
