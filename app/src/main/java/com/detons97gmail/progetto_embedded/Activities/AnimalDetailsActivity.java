@@ -1,8 +1,10 @@
 package com.detons97gmail.progetto_embedded.Activities;
 
+import android.content.ComponentCallbacks2;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -19,18 +21,19 @@ import com.detons97gmail.progetto_embedded.R;
 import com.detons97gmail.progetto_embedded.Utilities;
 
 
-public class AnimalDetailsActivity extends AppCompatActivity
+public class AnimalDetailsActivity extends AppCompatActivity implements ComponentCallbacks2
 {
+
+    private ImageView imageView;
+    private LinearLayout nameEntry;
+    private LinearLayout speciesEntry;
+    private LinearLayout dietEntry;
+    private LinearLayout symptomsEntry;
+    private TextView speciesDescription;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        ImageView imageView;
-        LinearLayout nameEntry;
-        LinearLayout speciesEntry;
-        LinearLayout dietEntry;
-        LinearLayout symptomsEntry;
-        TextView speciesDescription;
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_species_details);
 
@@ -84,5 +87,52 @@ public class AnimalDetailsActivity extends AppCompatActivity
             finish();
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        if(imageView == null) {
+            imageView = findViewById(R.id.detailsImage);
+            Log.d("ON_RESUME","ImageView ripristinata");
+        }
+        if(nameEntry == null) {
+            nameEntry = findViewById(R.id.nameEntry);
+            Log.d("ON_RESUME","nameEntry ripristinata");
+        }
+        if(speciesEntry == null) {
+            speciesEntry = findViewById(R.id.speciesEntry);
+            Log.d("ON_RESUME","SpeciesEntry ripristinata");
+        }
+        if(dietEntry == null)
+        {
+            dietEntry = findViewById(R.id.dietEntry);
+            Log.d("ON_RESUME","DietEntry ripristinata");
+        }
+        if(symptomsEntry == null) {
+            symptomsEntry = findViewById(R.id.symptomsEntry);
+            Log.d("ON_RESUME","SymptomsEntry ripristinata");
+        }
+        if(speciesDescription == null) {
+            speciesDescription = findViewById(R.id.speciesDescription);
+            Log.d("ON_RESUME","SpeciesDescription ripristinata");
+        }
+    }
+
+    //METODO NON TESTATO, DA PROVARE QUANDO LA NAVIGAZIONE è' COMPLETA
+    public void onTrimMemory(int level)
+    {
+        if(level == ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN)
+        {
+            //Release all the UI references, app is in background
+            imageView=null;
+            nameEntry=null;
+            speciesEntry=null;
+            dietEntry=null;
+            symptomsEntry=null;
+            speciesDescription=null;
+            Log.d("TRIM_MEMORY_UI_HIDDEN"," Eliminati i riferimenti a tutti i widget UI");
+        }
     }
 }

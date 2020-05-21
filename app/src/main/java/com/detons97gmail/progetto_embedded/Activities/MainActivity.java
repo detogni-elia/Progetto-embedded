@@ -3,8 +3,10 @@ package com.detons97gmail.progetto_embedded.Activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.ComponentCallbacks2;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -16,10 +18,11 @@ import com.detons97gmail.progetto_embedded.R;
 import java.io.File;
 import java.io.FileFilter;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ComponentCallbacks2 {
     //Contains the folders names of the resources stored
     private String[] countriesFoldersNames;
 
+    Toolbar toolbar;
     Spinner mSpinnerCountries;
 
     @Override
@@ -28,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //Set support action bar, for now it does nothing
-        Toolbar toolbar= findViewById(R.id.toolbar);
+        toolbar= findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         mSpinnerCountries = findViewById(R.id.countries_spinner);
@@ -94,7 +97,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
         public void onClickCategory(View v){
-        String country = countriesFoldersNames[mSpinnerCountries.getSelectedItemPosition()];
+        //String country = countriesFoldersNames[mSpinnerCountries.getSelectedItemPosition()];
+        String country="USA";
         String category;
         switch (v.getId()){
             case R.id.animals_button:
@@ -113,6 +117,34 @@ public class MainActivity extends AppCompatActivity {
         startIntent.putExtra(Values.EXTRA_COUNTRY, country);
         startIntent.putExtra(Values.EXTRA_CATEGORY, category);
         startActivity(startIntent);
+    }
+
+    //Reimposto i riferimenti agli oggetti della UI
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        if(toolbar == null) {
+            toolbar = findViewById(R.id.toolbar);
+            Log.d("ON_RESUME", "Ripristinata la toolbar");
+        }
+        if(mSpinnerCountries == null) {
+            findViewById(R.id.countries_spinner);
+            Log.d("ON_RESUME", "Ripristinata lo spinner");
+        }
+    }
+
+    //Gestione delle callbacks legate alla memoria
+    public void onTrimMemory(int level)
+    {
+        if(level == ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN)
+        {
+            //Se l' app passa in background elimino i riferimenti all UI
+            toolbar=null;
+            Log.d("TRIM_MEMORY-UI-HIDDEN","Eliminata la toolbar");
+            mSpinnerCountries=null;
+            Log.d("TRIM_MEMORY-UI-HIDDEN","Eliminato lo spinner");
+        }
     }
 }
 
