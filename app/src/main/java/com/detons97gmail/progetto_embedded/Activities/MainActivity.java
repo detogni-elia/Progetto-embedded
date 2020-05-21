@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private String[] countriesFoldersNames;
 
     Spinner mSpinnerCountries;
-
     Toolbar toolbar;
     DrawerLayout drawer;
     ActionBarDrawerToggle actionBarDrawerToggle;
@@ -158,12 +157,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     {
         super.onResume();
         if(toolbar == null) {
-            toolbar = findViewById(R.id.toolbar);
+            toolbar=findViewById(R.id.drawer_toolbar);
             Log.d("ON_RESUME", "Ripristinata la toolbar");
         }
         if(mSpinnerCountries == null) {
             findViewById(R.id.countries_spinner);
             Log.d("ON_RESUME", "Ripristinata lo spinner");
+        }
+        if(drawer == null) {
+            drawer=findViewById(R.id.drawer);
+            Log.d("ON_RESUME", "Ripristinata il drawer");
+        }
+        if(actionBarDrawerToggle == null){
+            actionBarDrawerToggle= new ActionBarDrawerToggle(this,drawer,toolbar,R.string.open_drawer,R.string.close_drawer);
+            Log.d("ON_RESUME", "Ripristinata actionBarDrawerToggle");
+        }
+        if(navigationView == null){
+            navigationView=findViewById(R.id.navigation_view);
+            Log.d("ON_RESUME", "Ripristinata la navigationView");
         }
     }
 
@@ -177,6 +188,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Log.d("TRIM_MEMORY-UI-HIDDEN","Eliminata la toolbar");
             mSpinnerCountries=null;
             Log.d("TRIM_MEMORY-UI-HIDDEN","Eliminato lo spinner");
+            drawer=null;
+            Log.d("TRIM_MEMORY-UI-HIDDEN","Eliminato il drawer");
+            actionBarDrawerToggle=null;
+            Log.d("TRIM_MEMORY-UI-HIDDEN","Eliminato la actionBarDrawerTool");
+            navigationView=null;
+            Log.d("TRIM_MEMORY-UI-HIDDEN","Eliminato la navigationView");
         }
     }
 }
