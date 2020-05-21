@@ -28,7 +28,6 @@ public class SpeciesListActivity extends AppCompatActivity implements ComponentC
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //TODO: Load different layouts in relation to memory available
-        //TODO: Insert fragment programmatically in order to pass information about which data to show
         setContentView(R.layout.activity_species_list);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
