@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 //TODO: COMMENT CODE AND IMPLEMENT ACTIVITY TO SELECT COUNTRY, CONTACT TYPE AND IF ANIMAL, INSECT OR PLANT. THE ACTIVITY WILL THEN LAUNCH THIS ACTIVITY
 public class SymptomsSelectionActivity extends AppCompatActivity implements SymptomsSearchAdapter.OnSymptomCheckListener, ComponentCallbacks2 {
     private String[] symptomsDefaultNames;
+    private String[] contactsDefaultNames;
     private ArrayList<SymptomsSearchAdapter.DataWrapper> data;
     private String[] downloadedCountries;
     private RecyclerView.LayoutManager manager;
@@ -34,6 +36,7 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
 
     private Spinner countries_spinner;
     private Spinner species_spinner;
+    private Spinner contact_spinner;
     private FloatingActionButton fab;
 
     private static final String DOWNLOADED_COUNTRIES = "SymptomsSelectionActivity.DOWNLOADED_COUNTRIES";
@@ -48,13 +51,16 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
         fab = findViewById(R.id.fab);
         countries_spinner = findViewById(R.id.countries_spinner);
         species_spinner = findViewById(R.id.species_spinner);
+        contact_spinner = findViewById(R.id.contact_spinner);
 
         //Get localized symptoms and species categories to display
         String[] symptoms = Utilities.getLocalizedSymptoms(this);
         String[] categories = Utilities.getLocalizedCategories(this);
+        String[] contacts = Utilities.getLocalizedContacts(this);
 
         //Get english symptoms names to pass via intent to SpeciesListActivity to interrogate the database
         symptomsDefaultNames = Values.getSymptomsDefaultNames();
+        contactsDefaultNames = Values.getContactTypesDefaultNames();
 
         boolean[] selections;
         String[] localizedCountries;
@@ -77,6 +83,7 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
 
         countries_spinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, localizedCountries));
         species_spinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, categories));
+        contact_spinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, contacts));
 
         //Wrap the data for SymptomSearchAdapter
         data = SymptomsSearchAdapter.DataWrapper.wrapData(symptoms, selections);
@@ -90,6 +97,11 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
         //Set the toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(R.string.symptoms_search_toolbar_title);
+        }
     }
 
     @Override
@@ -97,6 +109,7 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
         getMenuInflater().inflate(R.menu.search_menu, menu);
         MenuItem searchItem = menu.getItem(0);
         SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setQueryHint(getString(R.string.symptoms_search_query_hint));
         //Listener for the search button on the ToolBar
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -134,6 +147,17 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
         super.onDestroy();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
+        if(id == android.R.id.home){
+            //Should use NavUtils.navigateUpTo(this, new Intent(this, Activity.class))
+            //With NavUtils we can navigate to a custom destination while destroying this Activity
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private int checkedCounter = 0;
 
     //Update checkedCounter to determine if FloatingActionButton should be shown or not
@@ -163,6 +187,7 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
             }
 
         }
+        startIntent.putExtra(Values.EXTRA_CONTACT, contactsDefaultNames[contact_spinner.getSelectedItemPosition()]);
         startIntent.putExtra(Values.EXTRA_SYMPTOMS, querySymptoms.toArray(new String[]{}));
         startIntent.putExtra(Values.EXTRA_COUNTRY, downloadedCountries[countries_spinner.getSelectedItemPosition()]);
 

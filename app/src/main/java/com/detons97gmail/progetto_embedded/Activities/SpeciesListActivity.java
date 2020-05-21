@@ -53,7 +53,7 @@ public class SpeciesListActivity extends AppCompatActivity implements ComponentC
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.search_menu, menu);
-        ((SearchView)menu.getItem(0).getActionView()).setQueryHint(getString(R.string.menu_search_tooltip));
+        ((SearchView)menu.getItem(0).getActionView()).setQueryHint(getString(R.string.species_list_query_hint));
         return true;
     }
 
@@ -64,7 +64,6 @@ public class SpeciesListActivity extends AppCompatActivity implements ComponentC
         if(id == android.R.id.home){
             //Should use NavUtils.navigateUpTo(this, new Intent(this, Activity.class))
             //With NavUtils we can navigate to a custom destination while destroying this Activity
-            //TODO: Add ToolBar instead of letting the app set a default
             finish();
         }
         return super.onOptionsItemSelected(item);
