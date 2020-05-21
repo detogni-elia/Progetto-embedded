@@ -28,7 +28,7 @@ public class SymptomsSearchAdapter extends RecyclerView.Adapter<SymptomsSearchAd
 
     @Override
     public SymptomsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        RelativeLayout item = (RelativeLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.symptoms_search_item, parent, false);
+        RelativeLayout item = (RelativeLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.symptoms_search_item_layout, parent, false);
         return new SymptomsViewHolder(item, -1, listener);
     }
 
