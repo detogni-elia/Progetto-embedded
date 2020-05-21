@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/app_theme">
-        <activity android:name=".Activities.MainActivity"
+        <activity android:name=".Activities.SymptomsSelectionActivity"
             tools:ignore="InnerclassSeparator">
 
         </activity>
@@ -24,7 +24,7 @@
         <activity android:name=".Activities.AnimalDetailsActivity"
             tools:ignore="InnerclassSeparator">
         </activity>
-        <activity android:name=".MainActivity"
+        <activity android:name=".Activities.MainActivity"
             tools:ignore="InnerclassSeparator" >
 
             <intent-filter>
