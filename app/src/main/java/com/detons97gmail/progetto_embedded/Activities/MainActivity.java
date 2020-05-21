@@ -1,12 +1,16 @@
 package com.detons97gmail.progetto_embedded.Activities;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.ComponentCallbacks2;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -14,16 +18,21 @@ import android.widget.Spinner;
 import com.detons97gmail.progetto_embedded.Utilities;
 import com.detons97gmail.progetto_embedded.Values;
 import com.detons97gmail.progetto_embedded.R;
+import com.google.android.material.navigation.NavigationView;
 
 import java.io.File;
 import java.io.FileFilter;
 
-public class MainActivity extends AppCompatActivity implements ComponentCallbacks2 {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ComponentCallbacks2{
     //Contains the folders names of the resources stored
     private String[] countriesFoldersNames;
 
-    Toolbar toolbar;
     Spinner mSpinnerCountries;
+
+    Toolbar toolbar;
+    DrawerLayout drawer;
+    ActionBarDrawerToggle actionBarDrawerToggle;
+    NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +90,21 @@ public class MainActivity extends AppCompatActivity implements ComponentCallback
                         getString(R.string.cn),
                 };
             }
+
+            //set toolbar
+            toolbar=findViewById(R.id.drawer_toolbar);
+            setSupportActionBar(toolbar);
+
+            //set drawer
+            drawer=findViewById(R.id.drawer);
+            actionBarDrawerToggle= new ActionBarDrawerToggle(this,drawer,toolbar,R.string.open_drawer,R.string.close_drawer);
+            drawer.addDrawerListener(actionBarDrawerToggle);
+            //display burger icon
+            actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
+            actionBarDrawerToggle.syncState();
+
+            navigationView=findViewById(R.id.navigation_view);
+            navigationView.setNavigationItemSelectedListener(this);
         }
         //TODO: IF RESOURCES NOT PRESENT, ASK TO DOWNLOAD
         else{
@@ -97,8 +121,7 @@ public class MainActivity extends AppCompatActivity implements ComponentCallback
 
     }
         public void onClickCategory(View v){
-        //String country = countriesFoldersNames[mSpinnerCountries.getSelectedItemPosition()];
-        String country="USA";
+        String country = countriesFoldersNames[mSpinnerCountries.getSelectedItemPosition()];
         String category;
         switch (v.getId()){
             case R.id.animals_button:
@@ -117,6 +140,16 @@ public class MainActivity extends AppCompatActivity implements ComponentCallback
         startIntent.putExtra(Values.EXTRA_COUNTRY, country);
         startIntent.putExtra(Values.EXTRA_CATEGORY, category);
         startActivity(startIntent);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId()==R.id.symptoms_drawer) {
+            Intent symptomsIntent = new Intent(this, SymptomsSelectionActivity.class);
+            startActivity(symptomsIntent);
+        }
+
+        return true;
     }
 
     //Reimposto i riferimenti agli oggetti della UI
