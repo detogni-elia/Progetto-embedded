@@ -9,6 +9,7 @@ public class Values {
     public static final String EXTRA_NAME = BASE + "Name";
     public static final String EXTRA_SPECIES = BASE + "Species";
     public static final String EXTRA_DIET = BASE + "Diet";
+    public static final String EXTRA_CONTACT = BASE + "Contact";
     public static final String EXTRA_SYMPTOMS = BASE + "Symptoms";
 
     //Ids of countries for localization

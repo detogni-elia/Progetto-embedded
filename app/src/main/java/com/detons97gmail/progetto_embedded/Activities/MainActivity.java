@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //countriesFoldesrNames will contain the actual folder name in order to pass the intent to the SpeciesListActivity
         //Get supported localizedCountries by parsing the folders in the app FilesDir
 
-         //We should use getFilesDir() in the final version SEE EXPLANATION ON SpeciesListFragment
+        //We should use getFilesDir() in the final version SEE EXPLANATION ON SpeciesListFragment
         File appRootPath = getExternalFilesDir(null);
         if(appRootPath != null) {
             //Get directories in app FilesDir

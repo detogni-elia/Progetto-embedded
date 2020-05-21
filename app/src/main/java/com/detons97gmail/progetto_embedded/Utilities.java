@@ -90,6 +90,15 @@ public class Utilities {
         return localizedSpecies;
     }
 
+    public static String[] getLocalizedContacts(Context context){
+        int[] contactsIds = Values.getContactsTypeIds();
+        String[] localizedContactsTypes = new String[contactsIds.length];
+        for(int i = 0; i < localizedContactsTypes.length; i++)
+            localizedContactsTypes[i] = context.getString(contactsIds[i]);
+
+        return localizedContactsTypes;
+    }
+
     public static class AnimalDetails {
         private int imageRef;
         private LinkedList<String> attributeName;
