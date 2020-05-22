@@ -4,7 +4,8 @@
     <corners
         android:radius="30dp"
         />
-    <solid
-        android:color="@color/species_list_card_background"/>
+    <!--solid
+        android:color="@color/species_list_card_background"/-->
+    <solid android:color="@color/colorAccent"/>
 
 </shape>

@@ -181,4 +181,20 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
             notifyDataSetChanged();
         }
     };
+
+    //Used by onTrimMemory in SpeciesListActivity class to manage memory
+    //Reduce cache size
+    public void resizeImageCache()
+    {
+        //10 Mb of Cache
+        imageCache.trimToSize(1024 * 10);
+    }
+
+    //Used by onTrimMemory in SpeciesListActivity class to manage memory
+    //Delete cache
+    public void deleteImageCache()
+    {
+        //Make available to th Garbage Collector
+        imageCache=null;
+    }
 }

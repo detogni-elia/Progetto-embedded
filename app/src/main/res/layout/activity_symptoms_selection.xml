@@ -2,6 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:animateLayoutChanges="true"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
@@ -19,40 +20,71 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="8dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp">
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/countries_prompt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/countries_prompt"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="@id/countries_spinner"/>
 
             <Spinner
                 android:id="@+id/countries_spinner"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
+                android:layout_margin="4dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/species_spinner"
-                android:layout_margin="4dp" />
+                app:layout_constraintTop_toBottomOf="@id/countries_prompt"/>
+
+            <TextView
+                android:id="@+id/species_prompt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/category_prompt"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="@id/species_spinner"/>
 
             <Spinner
                 android:id="@+id/species_spinner"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_margin="4dp"
                 app:layout_constraintStart_toEndOf="@id/countries_spinner"
-                android:layout_margin="4dp" />
+                app:layout_constraintEnd_toStartOf="@id/contact_spinner"
+                app:layout_constraintTop_toBottomOf="@id/species_prompt"/>
+
+            <TextView
+                android:id="@+id/contact_prompt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/contact_prompt"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="@id/contact_spinner"/>
 
             <Spinner
                 android:id="@+id/contact_spinner"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/countries_spinner"
-                app:layout_constraintStart_toStartOf="parent"
+                android:layout_margin="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_margin="4dp"/>
+                app:layout_constraintStart_toEndOf="@id/species_spinner"
+                app:layout_constraintTop_toBottomOf="@id/contact_prompt"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:background="@color/colorAccent"
+                style="@style/horizontal_divider"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@id/species_spinner"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -61,13 +93,10 @@
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="8dp"
             android:layout_below="@+id/linearLayout"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_margin="8dp" />
+            android:scrollbars="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     </RelativeLayout>
 

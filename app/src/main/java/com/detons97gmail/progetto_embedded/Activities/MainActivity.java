@@ -6,8 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.ComponentCallbacks2;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -21,12 +23,11 @@ import com.google.android.material.navigation.NavigationView;
 import java.io.File;
 import java.io.FileFilter;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ComponentCallbacks2{
     //Contains the folders names of the resources stored
     private String[] countriesFoldersNames;
 
     Spinner mSpinnerCountries;
-
     Toolbar toolbar;
     DrawerLayout drawer;
     ActionBarDrawerToggle actionBarDrawerToggle;
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         //Set support action bar, for now it does nothing
-        Toolbar toolbar= findViewById(R.id.toolbar);
+        toolbar= findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         mSpinnerCountries = findViewById(R.id.countries_spinner);
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //countriesFoldesrNames will contain the actual folder name in order to pass the intent to the SpeciesListActivity
         //Get supported localizedCountries by parsing the folders in the app FilesDir
 
-         //We should use getFilesDir() in the final version SEE EXPLANATION ON SpeciesListFragment
+        //We should use getFilesDir() in the final version SEE EXPLANATION ON SpeciesListFragment
         File appRootPath = getExternalFilesDir(null);
         if(appRootPath != null) {
             //Get directories in app FilesDir
@@ -60,7 +61,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if(resFolders != null) {
                 //countriesNames contains the english name of all supported countries
                 //The resFolders will always use the english names of the countries
-                String[] countriesNames = Values.getCountriesDefaultNames();
                 countriesFoldersNames = Utilities.getDownloadedCountries(this);
                 localizedCountries = Utilities.getLocalizedCountries(this, countriesFoldersNames);
                 /*
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
             //set toolbar
-            toolbar=findViewById(R.id.drawer_toolbar);
+            toolbar = findViewById(R.id.drawer_toolbar);
             setSupportActionBar(toolbar);
 
             //set drawer
@@ -148,6 +148,52 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         return true;
+    }
+
+    //Reimposto i riferimenti agli oggetti della UI
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        if(toolbar == null) {
+            toolbar=findViewById(R.id.drawer_toolbar);
+            Log.d("ON_RESUME", "Ripristinata la toolbar");
+        }
+        if(mSpinnerCountries == null) {
+            findViewById(R.id.countries_spinner);
+            Log.d("ON_RESUME", "Ripristinata lo spinner");
+        }
+        if(drawer == null) {
+            drawer=findViewById(R.id.drawer);
+            Log.d("ON_RESUME", "Ripristinata il drawer");
+        }
+        if(actionBarDrawerToggle == null){
+            actionBarDrawerToggle= new ActionBarDrawerToggle(this,drawer,toolbar,R.string.open_drawer,R.string.close_drawer);
+            Log.d("ON_RESUME", "Ripristinata actionBarDrawerToggle");
+        }
+        if(navigationView == null){
+            navigationView=findViewById(R.id.navigation_view);
+            Log.d("ON_RESUME", "Ripristinata la navigationView");
+        }
+    }
+
+    //Gestione delle callbacks legate alla memoria
+    public void onTrimMemory(int level)
+    {
+        if(level == ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN)
+        {
+            //Se l' app passa in background elimino i riferimenti all UI
+            toolbar=null;
+            Log.d("TRIM_MEMORY-UI-HIDDEN","Eliminata la toolbar");
+            mSpinnerCountries=null;
+            Log.d("TRIM_MEMORY-UI-HIDDEN","Eliminato lo spinner");
+            drawer=null;
+            Log.d("TRIM_MEMORY-UI-HIDDEN","Eliminato il drawer");
+            actionBarDrawerToggle=null;
+            Log.d("TRIM_MEMORY-UI-HIDDEN","Eliminato la actionBarDrawerTool");
+            navigationView=null;
+            Log.d("TRIM_MEMORY-UI-HIDDEN","Eliminato la navigationView");
+        }
     }
 }
 

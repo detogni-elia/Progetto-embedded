@@ -204,4 +204,16 @@ public class SpeciesListFragment extends Fragment implements SpeciesListAdapter.
         startIntent.putExtra(Values.EXTRA_SYMPTOMS, getString(R.string.details_symptom_bite) + ": Gonfiore, bruciore, dolore, sanguinamento, intorpidimento");
         startActivity(startIntent);
     }
+
+    //To call resizeImageCache in Adapter class
+    public void resizeImageCache()
+    {
+        adapter.resizeImageCache();
+    }
+
+    //To call deleteImageCache in Adapter class
+    public void deleteImageCache()
+    {
+        adapter.deleteImageCache();
+    }
 }

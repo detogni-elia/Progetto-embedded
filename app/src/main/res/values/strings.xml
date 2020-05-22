@@ -2,11 +2,13 @@
     <string name="app_name">ESP Project</string>
     <string name="species_item_imageview_placeholder_description">Placeholder description</string>
     <string name="menu_search_title">Search</string>
-    <string name="menu_search_tooltip">Search for specific name</string>
+    <string name="species_list_query_hint">Search for specific name</string>
     <string name="animals">Animals</string>
     <string name="insects">Insects</string>
     <string name="plants">Plants</string>
-    <string name="countries_prompt">Countries</string>
+    <string name="countries_prompt">Select country</string>
+    <string name="category_prompt">Select category</string>
+    <string name="contact_prompt">Select contact</string>
     <string name="it">Italy</string>
     <string name="in">India</string>
     <string name="cn">China</string>
@@ -52,6 +54,8 @@
     <string name="open_drawer">open</string>
     <string name="close_drawer">close</string>
     <string name="settings">Settings</string>
+    <string name="symptoms_search_query_hint">Search for specific symptoms</string>
+    <string name="symptoms_search_toolbar_title">Symptoms search</string>
     <string name="change_language">Select the language</string>
 
     <string-array name="change_language_entries">

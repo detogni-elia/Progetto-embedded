@@ -3,14 +3,14 @@
     <string name="app_name">Progetto sistemi embedded</string>
     <string name="species_item_imageview_placeholder_description">Descrizione standard</string>
     <string name="menu_search_title">Ricerca</string>
-    <string name="menu_search_tooltip">Cerca per nome della specie</string>
+    <string name="species_list_query_hint">Cerca per nome della specie</string>
     <string name="image_details_animal_content_descriptor">Immagine per il dettaglio</string>
     <string name="menu_details_title">Dettagli</string>
     <string name="menu_details_button_name">GPS</string>
     <string name="animals">Animali</string>
     <string name="insects">Insetti</string>
     <string name="plants">Piante</string>
-    <string name="countries_prompt">Paesi</string>
+    <string name="countries_prompt">Seleziona paese</string>
     <string name="it">Italia</string>
     <string name="in">India</string>
     <string name="cn">Cina</string>
@@ -53,5 +53,9 @@
     <string name="open_drawer">open</string>
     <string name="close_drawer">close</string>
     <string name="settings">Impostazioni</string>
+    <string name="category_prompt">Seleziona categoria</string>
+    <string name="contact_prompt">Seleziona contatto</string>
+    <string name="symptoms_search_toolbar_title">Ricerca sintomi</string>
+    <string name="symptoms_search_query_hint">Ricerca sintomi specifici</string>
     <string name="change_language">Seleziona la lingua</string>
 </resources>
