@@ -53,4 +53,5 @@
     <string name="open_drawer">open</string>
     <string name="close_drawer">close</string>
     <string name="settings">Impostazioni</string>
+    <string name="change_language">Seleziona la lingua</string>
 </resources>
