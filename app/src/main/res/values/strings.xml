@@ -58,6 +58,7 @@
     <string name="symptoms_search_toolbar_title">Symptoms search</string>
     <string name="change_language">Select the language</string>
     <string name="ask_permission">The following permissions must be accepted for the app to work properly</string>
+    <string name="permissions_not_granted">Permission not granted</string>
 
 
 </resources>

@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     TextView permission_textView;
     ImageView permission_ImageView;
 
-    //permissions codes
+    //permissions code
     static final int REQUEST_CODE=100;
 
 
@@ -141,9 +141,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView=findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        //shared preference for the first run
         sharedPreferences= getSharedPreferences("com.detons97gmail.progetto_embedded",MODE_PRIVATE);
         permissionDialog=new Dialog(this);
 
+        //is firstrun true? if so execute code for first run
         if (sharedPreferences.getBoolean("firstrun", true)) {
             Log.i("TAG", "onResume: first run started");
             // start code for first run
@@ -152,9 +154,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             permission_ImageView=permissionDialog.findViewById(R.id.permission_ImageView);
             ok_button=permissionDialog.findViewById(R.id.ok_button);
 
+            //show dialog box
             permissionDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             permissionDialog.show();
 
+            //ok button click listener, ask for permissions if not already granted
             ok_button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -269,11 +273,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(requestCode==REQUEST_CODE){
             if((grantResults.length>0)&&(grantResults[0]+grantResults[1]+grantResults[2]+grantResults[3]==PackageManager.PERMISSION_GRANTED))
             {
+                //permissions have been granted
                 Log.i("TAG", "onRequestPermissionsResult: Permission granted");
             }
+            else
+            {
+                Toast.makeText(this, R.string.permissions_not_granted,Toast.LENGTH_SHORT).show();
+            }
         }
-
-
     }
 }
 
