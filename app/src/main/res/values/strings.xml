@@ -57,16 +57,7 @@
     <string name="symptoms_search_query_hint">Search for specific symptoms</string>
     <string name="symptoms_search_toolbar_title">Symptoms search</string>
     <string name="change_language">Select the language</string>
-
-    <string-array name="change_language_entries">
-        <item>English</item>
-        <item>Italian</item>
-    </string-array>
-
-    <string-array name="change_language_values">
-        <item>en</item>
-        <item>it</item>
-    </string-array>
+    <string name="ask_permission">The following permissions must be accepted for the app to work properly</string>
 
 
 </resources>

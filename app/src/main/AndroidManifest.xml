@@ -3,7 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.detons97gmail.progetto_embedded">
 
-    <!--uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="false"
@@ -12,27 +16,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/app_theme">
-        <activity android:name=".Activities.SymptomsSelectionActivity"
+        <activity android:name=".Activities.SettingsActivity"></activity>
+        <activity
+            android:name=".Activities.SymptomsSelectionActivity"
+            tools:ignore="InnerclassSeparator" />
+        <activity
+            android:name=".Activities.SpeciesListActivity"
+            tools:ignore="InnerclassSeparator" />
+        <activity
+            android:name=".Activities.AnimalDetailsActivity"
+            tools:ignore="InnerclassSeparator" />
+        <activity
+            android:name=".Activities.MainActivity"
             tools:ignore="InnerclassSeparator">
-
-        </activity>
-
-        <activity android:name=".Activities.SpeciesListActivity"
-            tools:ignore="InnerclassSeparator">
-        </activity>
-
-        <activity android:name=".Activities.AnimalDetailsActivity"
-            tools:ignore="InnerclassSeparator">
-        </activity>
-        <activity android:name=".Activities.MainActivity"
-            tools:ignore="InnerclassSeparator" >
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>

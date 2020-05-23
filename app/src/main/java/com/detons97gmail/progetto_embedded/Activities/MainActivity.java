@@ -4,16 +4,28 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.Manifest;
+import android.app.Dialog;
 import android.content.ComponentCallbacks2;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.detons97gmail.progetto_embedded.Utilities;
 import com.detons97gmail.progetto_embedded.Values;
@@ -23,7 +35,7 @@ import com.google.android.material.navigation.NavigationView;
 import java.io.File;
 import java.io.FileFilter;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ComponentCallbacks2{
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     //Contains the folders names of the resources stored
     private String[] countriesFoldersNames;
 
@@ -33,14 +45,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ActionBarDrawerToggle actionBarDrawerToggle;
     NavigationView navigationView;
 
+    //permission dialog stuff
+    SharedPreferences sharedPreferences=null;
+    Dialog permissionDialog;
+    Button ok_button;
+    TextView permission_textView;
+    ImageView permission_ImageView;
+
+    //permissions codes
+    static final int REQUEST_CODE=100;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         //Set support action bar, for now it does nothing
-        toolbar= findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        /*Toolbar toolbar= findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);*/
 
         mSpinnerCountries = findViewById(R.id.countries_spinner);
         //localizedCountries will contain translated country name to populate the spinner
@@ -48,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //countriesFoldesrNames will contain the actual folder name in order to pass the intent to the SpeciesListActivity
         //Get supported localizedCountries by parsing the folders in the app FilesDir
 
-        //We should use getFilesDir() in the final version SEE EXPLANATION ON SpeciesListFragment
+         //We should use getFilesDir() in the final version SEE EXPLANATION ON SpeciesListFragment
         File appRootPath = getExternalFilesDir(null);
         if(appRootPath != null) {
             //Get directories in app FilesDir
@@ -89,20 +112,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 };
             }
 
-            //set toolbar
-            toolbar = findViewById(R.id.drawer_toolbar);
-            setSupportActionBar(toolbar);
-
-            //set drawer
-            drawer=findViewById(R.id.drawer);
-            actionBarDrawerToggle= new ActionBarDrawerToggle(this,drawer,toolbar,R.string.open_drawer,R.string.close_drawer);
-            drawer.addDrawerListener(actionBarDrawerToggle);
-            //display burger icon
-            actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
-            actionBarDrawerToggle.syncState();
-
-            navigationView=findViewById(R.id.navigation_view);
-            navigationView.setNavigationItemSelectedListener(this);
         }
         //TODO: IF RESOURCES NOT PRESENT, ASK TO DOWNLOAD
         else{
@@ -116,6 +125,58 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, localizedCountries);
         // Setting the array adapter containing country list to the spinner widget
         mSpinnerCountries.setAdapter(adapter);
+
+        //set toolbar
+        toolbar = findViewById(R.id.drawer_toolbar);
+        setSupportActionBar(toolbar);
+
+        //set drawer
+        drawer=findViewById(R.id.drawer);
+        actionBarDrawerToggle= new ActionBarDrawerToggle(this,drawer,toolbar,R.string.open_drawer,R.string.close_drawer);
+        drawer.addDrawerListener(actionBarDrawerToggle);
+        //display burger icon
+        actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
+        actionBarDrawerToggle.syncState();
+
+        navigationView=findViewById(R.id.navigation_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        sharedPreferences= getSharedPreferences("com.detons97gmail.progetto_embedded",MODE_PRIVATE);
+        permissionDialog=new Dialog(this);
+
+        if (sharedPreferences.getBoolean("firstrun", true)) {
+            Log.i("TAG", "onResume: first run started");
+            // start code for first run
+            permissionDialog.setContentView(R.layout.custom_dialog_box);
+            permission_textView=permissionDialog.findViewById(R.id.permission_textView);
+            permission_ImageView=permissionDialog.findViewById(R.id.permission_ImageView);
+            ok_button=permissionDialog.findViewById(R.id.ok_button);
+
+            permissionDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            permissionDialog.show();
+
+            ok_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)+
+                            ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.ACCESS_COARSE_LOCATION)+
+                                 ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.WRITE_EXTERNAL_STORAGE)+
+                                     ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+                        //permission not granted
+                        ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE},REQUEST_CODE);
+                        permissionDialog.dismiss();
+                    }else{
+                        ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE},REQUEST_CODE);
+                        permissionDialog.dismiss();
+                    }
+                }
+            });
+
+            // set false if first run is completed
+            sharedPreferences.edit().putBoolean("firstrun", false).commit();
+        }
 
     }
         public void onClickCategory(View v){
@@ -146,7 +207,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent symptomsIntent = new Intent(this, SymptomsSelectionActivity.class);
             startActivity(symptomsIntent);
         }
-
+        if(item.getItemId()==R.id.bar_settings) {
+            Intent settingsIntent = new Intent(this, SettingsActivity.class);
+            startActivity(settingsIntent);
+        }
         return true;
     }
 
@@ -155,6 +219,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onResume()
     {
         super.onResume();
+
+
+
         if(toolbar == null) {
             toolbar=findViewById(R.id.drawer_toolbar);
             Log.d("ON_RESUME", "Ripristinata la toolbar");
@@ -194,6 +261,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navigationView=null;
             Log.d("TRIM_MEMORY-UI-HIDDEN","Eliminato la navigationView");
         }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode==REQUEST_CODE){
+            if((grantResults.length>0)&&(grantResults[0]+grantResults[1]+grantResults[2]+grantResults[3]==PackageManager.PERMISSION_GRANTED))
+            {
+                Log.i("TAG", "onRequestPermissionsResult: Permission granted");
+            }
+        }
+
+
     }
 }
 

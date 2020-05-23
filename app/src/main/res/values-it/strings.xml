@@ -58,4 +58,5 @@
     <string name="symptoms_search_toolbar_title">Ricerca sintomi</string>
     <string name="symptoms_search_query_hint">Ricerca sintomi specifici</string>
     <string name="change_language">Seleziona la lingua</string>
+    <string name="ask_permission">I permessi che seguiranno dovranno essere accettati se si vuole utilizzare l\'applicazione</string>
 </resources>
