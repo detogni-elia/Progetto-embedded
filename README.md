@@ -1,25 +1,54 @@
 Cose da fare
 
 1) Layout sintomi(checkbox) --> ELIA
+
 2) Settings --> MATTIA
     --> Download automatici
     --> Lingua
     --> Qualità foto scaricate
     --> Tasto aggiorna posizione
     --> {Se la memoria è poca ==> salvataggio in SD [DikLRUCache]} --> Tasto rimuovi cache dalla memoria
+
 3) {Struttura file in memoria ==> Database} --> Più avanti
+
 4) Navigazione tra le activity --> ELIA
     --> Intent con i giusti extra
     --> Navigazione all' indietro
+
 5) Activity di prima apertura --> MATTIA
     --> con un if per capire se è la prima attivazione
     --> permessi [Lettura/scrittura]
-6) Gestione RAM [Adapter Species_list_adapter][Android.util.LRUCache] --> ROCCO
+
+6) Gestione RAM [Adapter Species_list_adapter][Android.util.LRUCache] --> ROCCO --> Provo a caricare immagini a manetta e riduco RAM emulatore
         --> Primo livello ==> Riduzione cache (resize, trim)
         --> Secondo livello ==> Elimino il riferimento alla cache
-7) Utilizzo di risorse vettoriali nella MainActivity[icone] --> MATTIA
-8) Download fasulli --> ROCCO
 
+7) Utilizzo di risorse vettoriali nella MainActivity[icone] --> MATTIA
+
+8) Download fasulli --> Finisce ELIA
+    --> Sistemare un pelo ( cartella di destinazione)
+    --> AddressBar [Notifica]
+    --> Da fare in un service e usare JobIntentService ( al posto di IntentService)
+    --> Prima del download fare controllo dei permessi, se mancanti chiederli
+
+9) Report --> ROCCO
+
+10) Database --> ELIA
+    --> Databse differente per ogni nazione e per ogni lingua
+    --> Attributi
+            - Path Immagine
+            - Nome latino
+            - Nome Specie Tradotto
+            - Lista di sintomi SEPARATI DA VIRGOLE
+            - Tipologia di contatto (Unica)
+    --> Room
+
+11) Controllo impostazioni di download --> DOPO
+    --> Esempio download solo wifi
+
+12) Icona Sintomi vettoriale --> MATTIA
+
+13) Icona dell'applicazione --> Guardiamo un po' tutti
 
 Proposta schema funzionamento app:
 
