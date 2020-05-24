@@ -77,3 +77,15 @@ andiamo a prendere le informazioni rimanenti dal database (Specie, dieta, sintom
 Quindi SpeciesListActivity mostrerebbe Animali, insetti, piante con quei sintomi dopo aver interrogato il database.
 Con questa soluzione andrebbero aperte 2 connessioni diverse al database. Una possibile soluzione potrebbe essere quella di usare sintomi predefiniti e di inserirli staticamente in una classe Java, in questo modo
 dovremmo interrogare il database solo nella SpeciesListActivity.
+
+
+
+OPZIONI:
+Qualità foto: Alta o bassa
+Lingua: Italiano inglese
+Rimuovi cache memoria
+Se scheda SD, download in SD, altrimenti no
+
+Show progress bar: https://stuff.mit.edu/afs/sipb/project/android/docs/training/notify-user/display-progress.html
+
+DA CHIEDERE: Non ricordo perchè chiediamo il permesso di accedere alla memoria esterna.

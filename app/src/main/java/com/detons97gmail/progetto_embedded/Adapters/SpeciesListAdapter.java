@@ -114,6 +114,7 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
         return new SpeciesListItemViewHolder(item, clickListener);
     }
 
+    //TODO: GESTIRE CASO CACHE NULLA
     @Override
     public void onBindViewHolder(SpeciesListItemViewHolder holder, int position) {
         Bitmap cachedImage = imageCache.get(filteredData.get(position).getImage());

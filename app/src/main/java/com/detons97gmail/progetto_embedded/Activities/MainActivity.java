@@ -22,35 +22,34 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.detons97gmail.progetto_embedded.FakeDownload;
 import com.detons97gmail.progetto_embedded.Utilities;
 import com.detons97gmail.progetto_embedded.Values;
 import com.detons97gmail.progetto_embedded.R;
 import com.google.android.material.navigation.NavigationView;
 
-import java.io.File;
-import java.io.FileFilter;
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+    private static final String TAG = "MainActivity";
+
     //Contains the folders names of the resources stored
-    private String[] countriesFoldersNames;
+    private String[] countriesFolders;
 
-    Spinner mSpinnerCountries;
-    Toolbar toolbar;
-    DrawerLayout drawer;
-    ActionBarDrawerToggle actionBarDrawerToggle;
-    NavigationView navigationView;
+    //UI Widgets
+    private Spinner mSpinnerCountries;
+    private Toolbar toolbar;
+    private DrawerLayout drawer;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
+    private NavigationView navigationView;
+    private Button animals_button;
+    private Button insects_button;
+    private Button plants_button;
 
-    //permission dialog stuff
-    SharedPreferences sharedPreferences=null;
-    Dialog permissionDialog;
-    Button ok_button;
-    TextView permission_textView;
-    ImageView permission_ImageView;
+    private Dialog permissionDialog;
 
     //permissions code
     static final int REQUEST_CODE=100;
@@ -60,71 +59,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //Set support action bar, for now it does nothing
-        /*Toolbar toolbar= findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);*/
-
-        mSpinnerCountries = findViewById(R.id.countries_spinner);
-        //localizedCountries will contain translated country name to populate the spinner
-        String[] localizedCountries;
-        //countriesFoldesrNames will contain the actual folder name in order to pass the intent to the SpeciesListActivity
-        //Get supported localizedCountries by parsing the folders in the app FilesDir
-
-         //We should use getFilesDir() in the final version SEE EXPLANATION ON SpeciesListFragment
-        File appRootPath = getExternalFilesDir(null);
-        if(appRootPath != null) {
-            //Get directories in app FilesDir
-            File[] resFolders = appRootPath.listFiles(new FileFilter() {
-                @Override
-                public boolean accept(File pathname) {
-                    return pathname.isDirectory();
-                }
-            });
-            if(resFolders != null) {
-                //countriesNames contains the english name of all supported countries
-                //The resFolders will always use the english names of the countries
-                countriesFoldersNames = Utilities.getDownloadedCountries(this);
-                localizedCountries = Utilities.getLocalizedCountries(this, countriesFoldersNames);
-                /*
-                //Get folder name and translate country name
-                for(int i = 0; i < resFolders.length; i++) {
-                    String[] folderPath = resFolders[i].getAbsolutePath().split("/");
-                    String folderName = folderPath[folderPath.length - 1];
-                    for(int j = 0; j < countriesNames.length; j++){
-                        if(folderName.equals(countriesNames[j])) {
-                            localizedCountries[i] = getString(Values.COUNTRIES_IDS[j]);
-                            countriesFoldersNames[i] = folderName;
-                            break;
-                        }
-                    }
-                }
-
-                 */
-            }
-            //TODO: IF RESOURCES NOT PRESENT, ASK TO DOWNLOAD
-            //If resource folders not present, display default values
-            else{
-                localizedCountries = new String[] {
-                        getString(R.string.it),
-                        getString(R.string.in),
-                        getString(R.string.cn),
-                };
-            }
-
-        }
-        //TODO: IF RESOURCES NOT PRESENT, ASK TO DOWNLOAD
-        else{
-            localizedCountries = new String[] {
-                    getString(R.string.it),
-                    getString(R.string.in),
-                    getString(R.string.cn),
-            };
-        }
-        // Array adapter to set data in Spinner Widget
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, localizedCountries);
-        // Setting the array adapter containing country list to the spinner widget
-        mSpinnerCountries.setAdapter(adapter);
 
         //set toolbar
         toolbar = findViewById(R.id.drawer_toolbar);
@@ -142,7 +76,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         //shared preference for the first run
-        sharedPreferences= getSharedPreferences("com.detons97gmail.progetto_embedded",MODE_PRIVATE);
+        //permission dialog stuff
+        SharedPreferences sharedPreferences = getSharedPreferences("com.detons97gmail.progetto_embedded", MODE_PRIVATE);
         permissionDialog=new Dialog(this);
 
         //is firstrun true? if so execute code for first run
@@ -150,9 +85,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Log.i("TAG", "onResume: first run started");
             // start code for first run
             permissionDialog.setContentView(R.layout.custom_dialog_box);
-            permission_textView=permissionDialog.findViewById(R.id.permission_textView);
-            permission_ImageView=permissionDialog.findViewById(R.id.permission_ImageView);
-            ok_button=permissionDialog.findViewById(R.id.ok_button);
+            //TextView permission_textView = permissionDialog.findViewById(R.id.permission_textView);
+            //ImageView permission_ImageView = permissionDialog.findViewById(R.id.permission_ImageView);
+            Button ok_button = permissionDialog.findViewById(R.id.ok_button);
 
             //show dialog box
             permissionDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -179,12 +114,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             });
 
             // set false if first run is completed
-            sharedPreferences.edit().putBoolean("firstrun", false).commit();
+            sharedPreferences.edit().putBoolean("firstrun", false).apply();
         }
 
     }
         public void onClickCategory(View v){
-        String country = countriesFoldersNames[mSpinnerCountries.getSelectedItemPosition()];
+        String country = countriesFolders[mSpinnerCountries.getSelectedItemPosition()];
         String category;
         switch (v.getId()){
             case R.id.animals_button:
@@ -224,8 +159,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     {
         super.onResume();
 
-
-
         if(toolbar == null) {
             toolbar=findViewById(R.id.drawer_toolbar);
             Log.d("ON_RESUME", "Ripristinata la toolbar");
@@ -245,6 +178,46 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(navigationView == null){
             navigationView=findViewById(R.id.navigation_view);
             Log.d("ON_RESUME", "Ripristinata la navigationView");
+        }
+        animals_button = findViewById(R.id.animals_button);
+        insects_button = findViewById(R.id.insects_button);
+        plants_button = findViewById(R.id.plants_button);
+
+        mSpinnerCountries = findViewById(R.id.countries_spinner);
+        //localizedCountries will contain translated country name to populate the spinner
+        String[] localizedCountries;
+        //Check app's files to get downloaded resources
+        countriesFolders = Utilities.getDownloadedCountries(this);
+        //If no resources available, ask to download
+        if(countriesFolders == null || countriesFolders.length == 0) {
+            try {
+                //We fake the download by copying the app's assets into the device's storage
+                FakeDownload.copyAssetsToStorage(this, "India", "en");
+                countriesFolders = Utilities.getDownloadedCountries(this);
+            } catch (IOException e) {
+                //TODO: TRANSLATE ERROR
+                Utilities.showToast(this, "There was an error downloading the necessary files", Toast.LENGTH_SHORT);
+                Log.e(TAG, "Error copying files to device's storage: " + e.toString());
+            }
+        }
+        //Translate country names
+        localizedCountries = Utilities.getLocalizedCountries(this, countriesFolders);
+
+        if(localizedCountries.length > 0) {
+            // Array adapter to set data in Spinner Widget
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, localizedCountries);
+            // Setting the array adapter containing country list to the spinner widget
+            mSpinnerCountries.setAdapter(adapter);
+            animals_button.setEnabled(true);
+            insects_button.setEnabled(true);
+            plants_button.setEnabled(true);
+        }
+
+        //If download failed or was rejected by user, disable the ui buttons
+        else{
+            animals_button.setEnabled(false);
+            insects_button.setEnabled(false);
+            plants_button.setEnabled(false);
         }
     }
 
