@@ -4,8 +4,7 @@
 
     <item
         android:id="@+id/symptoms_drawer"
-        android:icon="@drawable/rsz_1symptoms"
-
+        android:icon="@drawable/ic_symptoms_72"
         android:title="@string/details_symptoms" />
     <item
         android:id="@+id/bar_settings"
