@@ -5,6 +5,7 @@ public class Values {
     private static final String BASE = "it.unipd.dei.esp1920.REM.";
     public static final String EXTRA_IMAGE_PATH = BASE + "ImagePath";
     public static final String EXTRA_COUNTRY = BASE + "Country";
+    public static final String EXTRA_LANGUAGE = BASE + "Language";
     public static final String EXTRA_CATEGORY = BASE + "Category";
     public static final String EXTRA_NAME = BASE + "Name";
     public static final String EXTRA_SPECIES = BASE + "Species";
