@@ -13,8 +13,8 @@
         app:cardCornerRadius="15dp"
         app:cardBackgroundColor="@color/colorAnimals"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -50,18 +50,19 @@
                     android:layout_marginRight="30dp"
                     android:layout_marginBottom="20dp"
                     android:layout_marginTop="20dp"
+                    android:contentDescription="PLACEHOLDER"
                     android:src="@drawable/taz" />
 
                 <Button
                     android:id="@+id/ok_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="OK"
+                    android:text="@android:string/ok"
                     android:textStyle="bold"
                     android:textSize="20sp"
-                    android:background="@drawable/button_ok"
-                    android:layout_gravity="right"
-                    android:layout_marginRight="20dp"
+                    android:background="@drawable/button_ripple_effect"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="20dp"
                     />
 
             </LinearLayout>

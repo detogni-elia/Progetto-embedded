@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (sharedPreferences.getBoolean("firstrun", true)) {
             Log.i("TAG", "onResume: first run started");
             // start code for first run
-            permissionDialog.setContentView(R.layout.custom_dialog_box);
+            permissionDialog.setContentView(R.layout.first_start_permissions_dialog_layout);
             //TextView permission_textView = permissionDialog.findViewById(R.id.permission_textView);
             //ImageView permission_ImageView = permissionDialog.findViewById(R.id.permission_ImageView);
             Button ok_button = permissionDialog.findViewById(R.id.ok_button);
@@ -300,7 +300,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             //If at least one country's resources are available
 
             // Array adapter to set data in Spinner Widget
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, localizedCountries);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, localizedCountries);
             // Setting the array adapter containing country list to the spinner widget
             mSpinnerCountries.setAdapter(adapter);
             setUiButtonsEnabled(true);
@@ -323,10 +323,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             //If service is not running, we ask the user to download resources
             else {
-                permissionDialog.setContentView(R.layout.custom_dialog_box);
+                permissionDialog.setContentView(R.layout.resources_download_dialog_layout);
                 //TextView permission_textView = permissionDialog.findViewById(R.id.permission_textView);
                 //ImageView permission_ImageView = permissionDialog.findViewById(R.id.permission_ImageView);
                 Button ok_button = permissionDialog.findViewById(R.id.ok_button);
+                Button cancel_button = permissionDialog.findViewById(R.id.cancel_button);
+
+                final Spinner countries_spinner = permissionDialog.findViewById(R.id.countries_spinner);
+                String[] supportedCountries = Utilities.getLocalizedSupportedCountries(getApplicationContext());
+                countries_spinner.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, supportedCountries));
+                final Spinner languages_spinner = permissionDialog.findViewById(R.id.languages_spinner);
+                String[] supportedLanguages = Utilities.getLocalizedSupportedLanguages(getApplicationContext());
+                languages_spinner.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, supportedLanguages));
 
                 //show dialog box
                 Window window = permissionDialog.getWindow();
@@ -339,7 +347,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 ok_button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startDownloadService("India", "en");
+                        String country = (String) countries_spinner.getSelectedItem();
+                        String language = (String)languages_spinner.getSelectedItem();
+                        startDownloadService(Utilities.getDefaultCountryName(getApplicationContext(), country), Utilities.getDefaultLanguageName(getApplicationContext(), language));
+                        permissionDialog.dismiss();
+                    }
+                });
+                cancel_button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
                         permissionDialog.dismiss();
                     }
                 });

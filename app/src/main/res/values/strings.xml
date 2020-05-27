@@ -6,9 +6,9 @@
     <string name="animals">Animals</string>
     <string name="insects">Insects</string>
     <string name="plants">Plants</string>
-    <string name="countries_prompt">Select country</string>
-    <string name="category_prompt">Select category</string>
-    <string name="contact_prompt">Select contact</string>
+    <string name="countries_prompt">Country</string>
+    <string name="category_prompt">Category</string>
+    <string name="contact_prompt">Contact</string>
     <string name="it">Italy</string>
     <string name="in">India</string>
     <string name="cn">China</string>
@@ -50,7 +50,7 @@
     <string name="contact_stung">Stung</string>
     <string name="contact_eaten">Eaten</string>
     <string name="contact_contact">Skin contact</string>
-    <string name="select_the_country">Select the country</string>
+    <string name="select_the_country">Country</string>
     <string name="open_drawer">open</string>
     <string name="close_drawer">close</string>
     <string name="settings">Settings</string>
@@ -59,6 +59,10 @@
     <string name="change_language">Select the language</string>
     <string name="ask_permission">The following permissions must be accepted for the app to work properly</string>
     <string name="permissions_not_granted">Permission not granted</string>
+    <string name="select_the_language">Language</string>
+    <string name="italian">Italian</string>
+    <string name="english">English</string>
+    <string name="download_dialog_message">Please select a country and a language to download corresponding resources</string>
 
 
 </resources>

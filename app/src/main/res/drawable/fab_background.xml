@@ -7,6 +7,6 @@
         android:height="48dp"/>
 
 <solid
-    android:color="@color/colorAccent"/>
+    android:color="@color/colorPrimaryDark"/>
 
 </shape>

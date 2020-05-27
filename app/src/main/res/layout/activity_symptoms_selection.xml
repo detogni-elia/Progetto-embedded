@@ -2,7 +2,6 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:animateLayoutChanges="true"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
@@ -33,8 +32,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/countries_prompt"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="@id/countries_spinner"/>
+                app:layout_constraintEnd_toEndOf="@+id/countries_spinner"
+                app:layout_constraintStart_toStartOf="@id/countries_spinner"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Spinner
                 android:id="@+id/countries_spinner"
@@ -50,8 +50,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/category_prompt"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="@id/species_spinner"/>
+                app:layout_constraintEnd_toEndOf="@+id/species_spinner"
+                app:layout_constraintStart_toStartOf="@id/species_spinner"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Spinner
                 android:id="@+id/species_spinner"
@@ -67,8 +68,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/contact_prompt"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="@id/contact_spinner"/>
+                app:layout_constraintEnd_toEndOf="@+id/contact_spinner"
+                app:layout_constraintStart_toStartOf="@id/contact_spinner"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Spinner
                 android:id="@+id/contact_spinner"
@@ -109,7 +111,7 @@
             android:onClick="onFabClicked"
             app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
             android:layout_margin="16dp"
-            android:background="@drawable/fab_background"
+            android:backgroundTint="@color/colorPrimary"
             android:src="@drawable/ic_check_icon" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
