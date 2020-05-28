@@ -277,10 +277,14 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
 
                 final Spinner countries_spinner = permissionDialog.findViewById(R.id.countries_spinner);
                 String[] supportedCountries = Utilities.getLocalizedSupportedCountries(getApplicationContext());
-                countries_spinner.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, supportedCountries));
+                ArrayAdapter<String> countriesAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, supportedCountries);
+                countriesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                countries_spinner.setAdapter(countriesAdapter);
                 final Spinner languages_spinner = permissionDialog.findViewById(R.id.languages_spinner);
                 String[] supportedLanguages = Utilities.getLocalizedSupportedLanguages(getApplicationContext());
-                languages_spinner.setAdapter(new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, supportedLanguages));
+                ArrayAdapter<String> languagesAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, supportedLanguages);
+                languagesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                languages_spinner.setAdapter(languagesAdapter);
 
                 //show dialog box
                 Window window = permissionDialog.getWindow();
