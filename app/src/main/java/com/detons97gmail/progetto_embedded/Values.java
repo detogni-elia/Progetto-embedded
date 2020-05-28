@@ -5,6 +5,7 @@ public class Values {
     private static final String BASE = "it.unipd.dei.esp1920.REM.";
     public static final String EXTRA_IMAGE_PATH = BASE + "ImagePath";
     public static final String EXTRA_COUNTRY = BASE + "Country";
+    public static final String EXTRA_LANGUAGE = BASE + "Language";
     public static final String EXTRA_CATEGORY = BASE + "Category";
     public static final String EXTRA_NAME = BASE + "Name";
     public static final String EXTRA_SPECIES = BASE + "Species";
@@ -30,7 +31,7 @@ public class Values {
             "Italy"
     };
 
-    public static String[] getCountriesDefaultNames(){
+    static String[] getCountriesDefaultNames(){
         return COUNTRIES_DEFAULT_NAMES;
     }
 
@@ -42,7 +43,25 @@ public class Values {
             R.string.contact_contact
     };
 
-    public static int[] getContactsTypeIds(){
+    private static final int[] LANGUAGES_IDS = {
+            R.string.italian,
+            R.string.english
+    };
+
+    private static final String[] LANGUAGES_DEFAULT_NAMES = {
+            "it",
+            "en"
+    };
+
+    static int[] getLanguagesIds(){
+        return LANGUAGES_IDS;
+    }
+
+    static String[] getLanguagesDefaultNames(){
+        return LANGUAGES_DEFAULT_NAMES;
+    }
+
+    static int[] getContactsTypeIds(){
         return CONTACTS_IDS;
     }
 

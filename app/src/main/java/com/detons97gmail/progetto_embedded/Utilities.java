@@ -3,6 +3,8 @@ package com.detons97gmail.progetto_embedded;
 import android.content.Context;
 import android.widget.Toast;
 
+import androidx.core.content.ContextCompat;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
@@ -97,6 +99,47 @@ public class Utilities {
             localizedContactsTypes[i] = context.getString(contactsIds[i]);
 
         return localizedContactsTypes;
+    }
+
+    public static String getDefaultCountryName(Context context, String localizedCountry){
+        String toReturn = "";
+        int[] countriesIds = Values.getCountriesIds();
+        for(int i = 0; i < countriesIds.length; i++){
+            if(context.getString(countriesIds[i]).equals(localizedCountry)) {
+                toReturn = Values.getCountriesDefaultNames()[i];
+                break;
+            }
+        }
+        return toReturn;
+    }
+
+    public static String getDefaultLanguageName(Context context, String localizedLanguage){
+        String toReturn = "";
+        int[] languagesIds = Values.getLanguagesIds();
+        for(int i = 0; i < languagesIds.length; i++){
+            if(context.getString(languagesIds[i]).equals(localizedLanguage)){
+                toReturn = Values.getLanguagesDefaultNames()[i];
+                break;
+            }
+        }
+        return toReturn;
+    }
+
+    public static String[] getLocalizedSupportedLanguages(Context context){
+        int[] languagesIds = Values.getLanguagesIds();
+        String[] localizedLanguages = new String[languagesIds.length];
+        for(int i = 0; i < languagesIds.length; i++)
+            localizedLanguages[i] = context.getString(languagesIds[i]);
+        return localizedLanguages;
+    }
+
+    public static String[] getLocalizedSupportedCountries(Context context){
+        int[] countriesIds = Values.getCountriesIds();
+        String[] localizedCountries = new String[countriesIds.length];
+        for(int i = 0; i < countriesIds.length; i++)
+            localizedCountries[i] = context.getString(countriesIds[i]);
+
+        return localizedCountries;
     }
 
     public static class AnimalDetails {

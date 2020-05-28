@@ -49,15 +49,19 @@
     <string name="contact_stung">Puntura</string>
     <string name="contact_eaten">Ingestione</string>
     <string name="contact_contact">Contatto con la pelle</string>
-    <string name="select_the_country">Seleziona lo stato</string>
+    <string name="select_the_country">Paese</string>
     <string name="open_drawer">open</string>
     <string name="close_drawer">close</string>
     <string name="settings">Impostazioni</string>
-    <string name="category_prompt">Seleziona categoria</string>
-    <string name="contact_prompt">Seleziona contatto</string>
+    <string name="category_prompt">Categoria</string>
+    <string name="contact_prompt">Contatto</string>
     <string name="symptoms_search_toolbar_title">Ricerca sintomi</string>
     <string name="symptoms_search_query_hint">Ricerca sintomi specifici</string>
     <string name="change_language">Seleziona la lingua</string>
     <string name="ask_permission">I permessi che seguiranno dovranno essere accettati se si vuole utilizzare l\'applicazione</string>
     <string name="permissions_not_granted">Permissi non garantiti</string>
+    <string name="select_the_language">Lingua</string>
+    <string name="italian">Italiano</string>
+    <string name="english">Inglese</string>
+    <string name="download_dialog_message">Prego selezionare paese e lingua per scaricare le risorse corrispondenti</string>
 </resources>
