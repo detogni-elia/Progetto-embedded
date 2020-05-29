@@ -63,6 +63,13 @@
     <string name="italian">Italian</string>
     <string name="english">English</string>
     <string name="download_dialog_message">Please select a country and a language to download corresponding resources</string>
+    <string name="change_image_quality">Change image quality</string>
+    <string name="select_image_quality">Image quality</string>
+    <string name="low">low</string>
+    <string name="medium">medium</string>
+    <string name="high">high</string>
+    <string name="update_location">Update Location</string>
+    <string name="remove_cache">Delete cache</string>
 
 
 </resources>

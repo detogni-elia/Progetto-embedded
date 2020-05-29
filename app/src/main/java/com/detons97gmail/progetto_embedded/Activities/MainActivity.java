@@ -17,11 +17,14 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,6 +39,8 @@ import com.detons97gmail.progetto_embedded.Utilities;
 import com.detons97gmail.progetto_embedded.Values;
 import com.detons97gmail.progetto_embedded.R;
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, FakeDownloadIntentService.DownloadCallbacks{
     private static final String TAG = "MainActivity";
@@ -62,6 +67,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int REQUEST_CODE=100;
     private static final int INTERNET_FOR_DOWNLOAD = 200;
 
+    private Locale myLocale;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //permission dialog stuff
         SharedPreferences sharedPreferences = getSharedPreferences("com.detons97gmail.progetto_embedded", MODE_PRIVATE);
         permissionDialog=new Dialog(this);
+
 
         //is firstrun true? if so execute code for first run
         if (sharedPreferences.getBoolean("firstrun", true)) {
@@ -127,6 +135,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             // set false if first run is completed
             sharedPreferences.edit().putBoolean("firstrun", false).apply();
+            //set update position to true on first run
+            sharedPreferences.edit().putBoolean("updatePosition",true).apply();
+            //set delete cache to false on first run
+            sharedPreferences.edit().putBoolean("deleteCache",false).apply();
         }
 
     }
@@ -339,6 +351,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 ArrayAdapter<String> languagesAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, supportedLanguages);
                 languagesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 languages_spinner.setAdapter(languagesAdapter);
+                final Spinner image_quality_spinner = permissionDialog.findViewById(R.id.image_quality_spinner);
+                String[] supportedImageQuality = Utilities.getSupportedImageQuality(getApplicationContext());
+                ArrayAdapter<String> imagesQualityAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, supportedImageQuality);
+                imagesQualityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                image_quality_spinner.setAdapter(imagesQualityAdapter);
 
                 //show dialog box
                 Window window = permissionDialog.getWindow();
@@ -353,6 +370,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     public void onClick(View v) {
                         String country = (String) countries_spinner.getSelectedItem();
                         String language = (String)languages_spinner.getSelectedItem();
+                        String imageQuality = (String)image_quality_spinner.getSelectedItem();
+                        //save in SharedPreference for settings activity display information layout
+                        SharedPreferences prefs=getSharedPreferences("com.detons97gmail.progetto_embedded",MODE_PRIVATE);
+                        SharedPreferences.Editor editor=prefs.edit();
+                        editor.putString("selectedLanguage",language);
+                        editor.putString("selectedImageQuality",imageQuality);
+                        editor.commit();
+                        //change language displayed in run time
+                        Log.i(TAG, "onClick: ");
+                        if(language.equalsIgnoreCase("italian"))
+                            setLocale("it");
+                        else
+                            setLocale("en");
+
                         startDownloadService(Utilities.getDefaultCountryName(getApplicationContext(), country), Utilities.getDefaultLanguageName(getApplicationContext(), language));
                         permissionDialog.dismiss();
                     }
@@ -412,6 +443,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 checkResourcesAvailability();
             }
         });
+    }
+
+    //set language method called when language is selected at first launch
+    public void setLocale(String lang) {
+
+        myLocale = new Locale(lang);
+        Resources res = getResources();
+        DisplayMetrics dm = res.getDisplayMetrics();
+        Configuration conf = res.getConfiguration();
+        conf.locale = myLocale;
+        res.updateConfiguration(conf, dm);
+        Intent refresh = new Intent(this, MainActivity.class);
+        startActivity(refresh);
     }
 }
 

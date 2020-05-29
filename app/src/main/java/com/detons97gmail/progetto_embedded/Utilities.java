@@ -142,6 +142,17 @@ public class Utilities {
         return localizedCountries;
     }
 
+    public static String[] getSupportedImageQuality(Context context){
+        int[] imageQualityIds = Values.getImageQualityIds();
+        String[] supportedImageQuality = new String[imageQualityIds.length];
+        for(int i = 0; i < imageQualityIds.length; i++)
+            supportedImageQuality[i] = context.getString(imageQualityIds[i]);
+
+        return supportedImageQuality;
+    }
+
+
+
     public static class AnimalDetails {
         private int imageRef;
         private LinkedList<String> attributeName;

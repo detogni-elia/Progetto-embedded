@@ -12,6 +12,7 @@ public class Values {
     public static final String EXTRA_DIET = BASE + "Diet";
     public static final String EXTRA_CONTACT = BASE + "Contact";
     public static final String EXTRA_SYMPTOMS = BASE + "Symptoms";
+    public static final String EXTRA_IMAGE_QUALITY = BASE + "ImageQuality";
 
     //Ids of countries for localization
     private static final int[] COUNTRIES_IDS = {
@@ -52,6 +53,26 @@ public class Values {
             "it",
             "en"
     };
+
+    private static final int[] IMAGE_QUALITY_IDS = {
+            R.string.low,
+            R.string.medium,
+            R.string.high
+    };
+
+    private static final String[] IMAGE_QUALITY_NAMES = {
+            "low",
+            "medium",
+            "high"
+    };
+
+    static int[] getImageQualityIds(){
+        return IMAGE_QUALITY_IDS;
+    }
+
+    static String[] getImageQualityNames(){
+        return IMAGE_QUALITY_NAMES;
+    }
 
     static int[] getLanguagesIds(){
         return LANGUAGES_IDS;

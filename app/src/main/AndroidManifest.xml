@@ -18,6 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/app_theme">
         <activity android:name=".Activities.SettingsActivity"
+
             tools:ignore="InnerclassSeparator" />
         <activity
             android:name=".Activities.SymptomsSelectionActivity"

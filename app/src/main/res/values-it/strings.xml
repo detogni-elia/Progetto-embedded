@@ -64,4 +64,12 @@
     <string name="italian">Italiano</string>
     <string name="english">Inglese</string>
     <string name="download_dialog_message">Prego selezionare paese e lingua per scaricare le risorse corrispondenti</string>
+    <string name="change_image_quality">Cambia qualità immagini</string>
+    <string name="select_image_quality">Qualità immagine</string>
+    <string name="low">bassa</string>
+    <string name="medium">media</string>
+    <string name="high">alta</string>
+    <string name="update_location">Aggiorna Posizione</string>
+    <string name="remove_cache">Cancella cache</string>
+
 </resources>
