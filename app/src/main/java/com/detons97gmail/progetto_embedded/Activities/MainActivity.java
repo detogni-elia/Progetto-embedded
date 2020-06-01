@@ -34,6 +34,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.detons97gmail.progetto_embedded.Fragments.ResourcesDownloadDialogFragment;
 import com.detons97gmail.progetto_embedded.Services.FakeDownloadIntentService;
 import com.detons97gmail.progetto_embedded.Utilities;
 import com.detons97gmail.progetto_embedded.Values;
@@ -67,13 +68,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int REQUEST_CODE=100;
     private static final int INTERNET_FOR_DOWNLOAD = 200;
 
-    private Locale myLocale;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //new ResourcesDownloadDialogFragment().show(getSupportFragmentManager(), null);
 
         //set toolbar
         toolbar = findViewById(R.id.drawer_toolbar);
@@ -94,7 +95,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //permission dialog stuff
         SharedPreferences sharedPreferences = getSharedPreferences("com.detons97gmail.progetto_embedded", MODE_PRIVATE);
         permissionDialog=new Dialog(this);
-
 
         //is firstrun true? if so execute code for first run
         if (sharedPreferences.getBoolean("firstrun", true)) {
@@ -142,27 +142,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
     }
-        public void onClickCategory(View v){
-        String country = countriesFolders[mSpinnerCountries.getSelectedItemPosition()];
-        String category;
-        switch (v.getId()){
-            case R.id.animals_button:
-                category = Values.CATEGORY_ANIMALS;
-                break;
-            case R.id.insects_button:
-                category = Values.CATEGORY_INSECTS;
-                break;
-            case R.id.plants_button:
-                category = Values.CATEGORY_PLANTS;
-                break;
-            default:
-                category = Values.CATEGORY_ANIMALS;
-        }
-        Intent startIntent = new Intent(this, SpeciesListActivity.class);
-        startIntent.putExtra(Values.EXTRA_COUNTRY, country);
-        startIntent.putExtra(Values.EXTRA_CATEGORY, category);
-        startActivity(startIntent);
-    }
 
     @Override
     protected void onPause(){
@@ -191,7 +170,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onResume() {
         super.onResume();
-
         if(toolbar == null) {
             toolbar=findViewById(R.id.drawer_toolbar);
             Log.d("ON_RESUME", "Ripristinata la toolbar");
@@ -251,7 +229,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Log.d(TAG, "Removed references to UI buttons");
         }
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -319,6 +296,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    public void onClickCategory(View v){
+        String country = countriesFolders[mSpinnerCountries.getSelectedItemPosition()];
+        String category;
+        switch (v.getId()){
+            case R.id.animals_button:
+                category = Values.CATEGORY_ANIMALS;
+                break;
+            case R.id.insects_button:
+                category = Values.CATEGORY_INSECTS;
+                break;
+            case R.id.plants_button:
+                category = Values.CATEGORY_PLANTS;
+                break;
+            default:
+                category = Values.CATEGORY_ANIMALS;
+        }
+        Intent startIntent = new Intent(this, SpeciesListActivity.class);
+        startIntent.putExtra(Values.EXTRA_COUNTRY, country);
+        startIntent.putExtra(Values.EXTRA_CATEGORY, category);
+        startActivity(startIntent);
+    }
+
     //ServiceConnection object to use for binding with FakeDownloadIntentService
     private ServiceConnection connection = new ServiceConnection() {
         @Override
@@ -330,14 +329,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             //If service is running we do nothing, we don't want to manage multiple downloads and we simply listen for updates from the service
             if(mService.isRunning()) {
                 Log.v(TAG, "Service is already running");
-                mService.setCallback(MainActivity.this);
             }
 
             //If service is not running, we ask the user to download resources
+
+            else
+                new ResourcesDownloadDialogFragment().show(getSupportFragmentManager(), "downloader");
+
+            //Register as callback to get updates regarding downloads
+            mService.setCallback(MainActivity.this);
+
+            /*
             else {
                 permissionDialog.setContentView(R.layout.resources_download_dialog_layout);
-                //TextView permission_textView = permissionDialog.findViewById(R.id.permission_textView);
-                //ImageView permission_ImageView = permissionDialog.findViewById(R.id.permission_ImageView);
                 Button ok_button = permissionDialog.findViewById(R.id.ok_button);
                 Button cancel_button = permissionDialog.findViewById(R.id.cancel_button);
 
@@ -346,11 +350,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 ArrayAdapter<String> countriesAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, supportedCountries);
                 countriesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 countries_spinner.setAdapter(countriesAdapter);
+
                 final Spinner languages_spinner = permissionDialog.findViewById(R.id.languages_spinner);
                 String[] supportedLanguages = Utilities.getLocalizedSupportedLanguages(getApplicationContext());
                 ArrayAdapter<String> languagesAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, supportedLanguages);
                 languagesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 languages_spinner.setAdapter(languagesAdapter);
+
                 final Spinner image_quality_spinner = permissionDialog.findViewById(R.id.image_quality_spinner);
                 String[] supportedImageQuality = Utilities.getSupportedImageQuality(getApplicationContext());
                 ArrayAdapter<String> imagesQualityAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, supportedImageQuality);
@@ -360,7 +366,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //show dialog box
                 Window window = permissionDialog.getWindow();
                 if(window != null)
-                    window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    //window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
                 permissionDialog.show();
 
@@ -376,7 +382,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         SharedPreferences.Editor editor=prefs.edit();
                         editor.putString("selectedLanguage",language);
                         editor.putString("selectedImageQuality",imageQuality);
-                        editor.commit();
+                        editor.apply();
                         //change language displayed in run time
                         Log.i(TAG, "onClick: ");
                         if(language.equalsIgnoreCase("italian"))
@@ -395,8 +401,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                 });
             }
+             */
         }
-
+        /*
         private void startDownloadService(String country, String language){
             Intent startIntent = new Intent(MainActivity.this, FakeDownloadIntentService.class);
             startIntent.putExtra(Values.EXTRA_COUNTRY, country);
@@ -409,6 +416,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             mService.setCallback(MainActivity.this);
         }
+
+         */
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
@@ -448,7 +457,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //set language method called when language is selected at first launch
     public void setLocale(String lang) {
 
-        myLocale = new Locale(lang);
+        Locale myLocale = new Locale(lang);
         Resources res = getResources();
         DisplayMetrics dm = res.getDisplayMetrics();
         Configuration conf = res.getConfiguration();
@@ -457,5 +466,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Intent refresh = new Intent(this, MainActivity.class);
         startActivity(refresh);
     }
-}
 
+}

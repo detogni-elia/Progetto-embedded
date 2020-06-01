@@ -13,7 +13,7 @@
     <string name="countries_prompt">Seleziona paese</string>
     <string name="it">Italia</string>
     <string name="in">India</string>
-    <string name="cn">Cina</string>
+    <string name="s_africa">Sud Africa</string>
     <string name="images_load_error">Si è verificato un problema nel caricamento delle immagini. Prova a riscaricarle.</string>
     <string name="details_name">NOME COMUNE</string>
     <string name="details_species">NOME SPECIE</string>
@@ -66,9 +66,9 @@
     <string name="download_dialog_message">Prego selezionare paese e lingua per scaricare le risorse corrispondenti</string>
     <string name="change_image_quality">Cambia qualità immagini</string>
     <string name="select_image_quality">Qualità immagine</string>
-    <string name="low">bassa</string>
-    <string name="medium">media</string>
-    <string name="high">alta</string>
+    <string name="low">Bassa</string>
+    <string name="medium">Media</string>
+    <string name="high">Alta</string>
     <string name="update_location">Aggiorna Posizione</string>
     <string name="remove_cache">Cancella cache</string>
 

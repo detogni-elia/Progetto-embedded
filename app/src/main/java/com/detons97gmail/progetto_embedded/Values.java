@@ -17,7 +17,7 @@ public class Values {
     //Ids of countries for localization
     private static final int[] COUNTRIES_IDS = {
             R.string.in,
-            R.string.cn,
+            R.string.s_africa,
             R.string.it
     };
 
@@ -28,7 +28,7 @@ public class Values {
     //Countries english names for database queries
     private static final String[] COUNTRIES_DEFAULT_NAMES = {
             "India",
-            "China",
+            "South-Africa",
             "Italy"
     };
 
@@ -61,9 +61,9 @@ public class Values {
     };
 
     private static final String[] IMAGE_QUALITY_NAMES = {
-            "low",
-            "medium",
-            "high"
+            "Low",
+            "Medium",
+            "High"
     };
 
     static int[] getImageQualityIds(){
@@ -166,7 +166,7 @@ public class Values {
             "fever",
             "chills",
             "irregular_hearbeat",
-            "swollen__lymph_glands"};
+            "swollen_lymph_glands"};
 
     public static String[] getSymptomsDefaultNames(){
         return SYMPTOMS_STRINGS;

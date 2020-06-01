@@ -1,7 +1,6 @@
 package com.detons97gmail.progetto_embedded.Services;
 
 import android.app.IntentService;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Intent;
@@ -66,6 +65,7 @@ public class FakeDownloadIntentService extends IntentService {
         isRunning = true;
         String country = intent.getStringExtra(Values.EXTRA_COUNTRY);
         String language = intent.getStringExtra(Values.EXTRA_LANGUAGE);
+        String imageQuality = intent.getStringExtra(Values.EXTRA_IMAGE_QUALITY);
         createNotificationChannel();
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "notificationId")
                 .setSmallIcon(android.R.drawable.stat_sys_download)
@@ -76,12 +76,11 @@ public class FakeDownloadIntentService extends IntentService {
 
         try {
             Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            ;
+        } catch (InterruptedException ignored) {
         }
 
         try {
-            FakeDownload.copyAssetsToStorage(getApplicationContext(), country, language);
+            FakeDownload.copyAssetsToStorage(getApplicationContext(), country, language, imageQuality);
         } catch (IOException e) {
             Log.e(TAG, "Could not copy assets to storage: " + e.toString());
         }

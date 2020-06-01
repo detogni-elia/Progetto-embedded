@@ -114,7 +114,7 @@ public class SettingsActivity extends AppCompatActivity{
 
                 SharedPreferences.Editor editor=mPrefs.edit();
                 editor.putString("selectedLanguage",selectedItem);
-                editor.commit();
+                editor.apply();
 
             }
 
@@ -139,13 +139,12 @@ public class SettingsActivity extends AppCompatActivity{
                         Toast.makeText(getApplicationContext(),"Selected medium image quality",Toast.LENGTH_SHORT).show();
                     else
                         Toast.makeText(getApplicationContext(),"Selected high image quality",Toast.LENGTH_SHORT).show();
-
                 }
 
 
                 SharedPreferences.Editor editor1 = mPrefs.edit();
                 editor1.putString("selectedImageQuality",selectedItem);
-                editor1.commit();
+                editor1.apply();
             }
 
             @Override
@@ -159,7 +158,7 @@ public class SettingsActivity extends AppCompatActivity{
             public void onClick(View v) {
                 SharedPreferences.Editor editor=mPrefs.edit();
                 editor.putBoolean("updatePosition",true);
-                editor.commit();
+                editor.apply();
             }
         });
 
@@ -168,7 +167,7 @@ public class SettingsActivity extends AppCompatActivity{
             public void onClick(View v) {
                 SharedPreferences.Editor editor=mPrefs.edit();
                 editor.putBoolean("deleteCache",true);
-                editor.commit();
+                editor.apply();
             }
         });
 

@@ -68,7 +68,7 @@ public class FakeDownload {
     //https://howtodoinjava.com/java/io/how-to-copy-directories-in-java/
     //Suppress NullPointerException warnings
     @SuppressWarnings("ConstantConditions")
-    public static void copyAssetsToStorage(Context context, String country, String locale) throws IOException {
+    public static void copyAssetsToStorage(Context context, String country, String language, String imageQuality) throws IOException {
         //Get app's dedicated files directory (either in sd card or in emulated sd card)
         File root = context.getExternalFilesDir(null);
         //Create the subfolder for the selected country, if it does not exist
@@ -77,13 +77,13 @@ public class FakeDownload {
         //Create the subfolder for the images
         File imagesFolder = new File(countryFolder, "Images");
         imagesFolder.mkdirs();
-        //Create the subfolder for the databases and the subfolder for the selected locale (language)
-        File dbFolder = new File(countryFolder, "Databases/" + locale);
+        //Create the subfolder for the databases and the subfolder for the selected language
+        File dbFolder = new File(countryFolder, "Databases/" + language);
         dbFolder.mkdirs();
 
         AssetManager assetManager = context.getAssets();
         //Get sub-folders for each category (Animals, Insects, Plants) inside the selected country's Images assets
-        String[] categories = assetManager.list(country + "/Images");
+        String[] categories = assetManager.list(country + "/Images/" + imageQuality);
         InputStream src;
         OutputStream dest;
         //Iterate
@@ -92,9 +92,9 @@ public class FakeDownload {
             //Final path will be /files/COUNTRY/Images/CATEGORY(Animals, Insects, Plants)/image_file.webp
             File subFolder = new File(imagesFolder, categoryFolder);
             subFolder.mkdirs();
-            String[] assetImages = assetManager.list(country + "/Images/" + categoryFolder);
+            String[] assetImages = assetManager.list(country + "/Images/"+ imageQuality + "/" +  categoryFolder);
             for(String image: assetImages){
-                src = assetManager.open(country + "/Images/" + categoryFolder + "/" + image);
+                src = assetManager.open(country + "/Images/" + imageQuality + "/" + categoryFolder + "/" + image);
                 dest = new FileOutputStream(new File(subFolder, image));
                 copyFile(src, dest);
                 src.close();
@@ -102,7 +102,7 @@ public class FakeDownload {
             }
         }
         //Copy database
-        src = assetManager.open(country + "/Databases/" + locale + ".tar");
+        src = assetManager.open(country + "/Databases/" + language + ".tar");
         dest = new FileOutputStream(dbFolder + "/" + "db.tar");
 
         copyFile(src, dest);
@@ -111,7 +111,7 @@ public class FakeDownload {
 
 
         /*
-        String dbRes = "Databases-" + locale;
+        String dbRes = "Databases-" + language;
         File root = context.getExternalFilesDir(null);
         String dest;
         if(root != null)

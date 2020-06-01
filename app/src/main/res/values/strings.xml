@@ -11,7 +11,7 @@
     <string name="contact_prompt">Contact</string>
     <string name="it">Italy</string>
     <string name="in">India</string>
-    <string name="cn">China</string>
+    <string name="s_africa">South Africa</string>
     <string name="image_details_animal_content_descriptor">Immagine per il dettaglio</string>
     <string name="menu_details_title">Details</string>
     <string name="menu_details_button_name">GPS</string>
@@ -65,9 +65,9 @@
     <string name="download_dialog_message">Please select a country and a language to download corresponding resources</string>
     <string name="change_image_quality">Change image quality</string>
     <string name="select_image_quality">Image quality</string>
-    <string name="low">low</string>
-    <string name="medium">medium</string>
-    <string name="high">high</string>
+    <string name="low">Low</string>
+    <string name="medium">Medium</string>
+    <string name="high">High</string>
     <string name="update_location">Update Location</string>
     <string name="remove_cache">Delete cache</string>
 

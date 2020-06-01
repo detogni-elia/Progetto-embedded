@@ -112,7 +112,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="32dp"
         android:text="@android:string/ok"
-        android:background="@drawable/button_ripple_effect"
+        android:background="@drawable/button_ripple_effect_white"
         android:stateListAnimator="@null"/>
 
     <Button
@@ -123,7 +123,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="32dp"
         android:text="@android:string/cancel"
-        android:background="@drawable/button_ripple_effect"
+        android:background="@drawable/button_ripple_effect_white"
         android:stateListAnimator="@null"/>
 
 

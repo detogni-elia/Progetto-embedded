@@ -1,23 +1,17 @@
 package com.detons97gmail.progetto_embedded.Activities;
 
-import android.app.Dialog;
 import android.content.ComponentCallbacks2;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Spinner;
 
 import androidx.appcompat.app.ActionBar;
@@ -28,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.detons97gmail.progetto_embedded.Adapters.SymptomsSearchAdapter;
+import com.detons97gmail.progetto_embedded.Fragments.ResourcesDownloadDialogFragment;
 import com.detons97gmail.progetto_embedded.R;
 import com.detons97gmail.progetto_embedded.Services.FakeDownloadIntentService;
 import com.detons97gmail.progetto_embedded.Utilities;
@@ -52,9 +47,7 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
     private int checkedCounter = 0;
     private boolean areResourcesAvailable;
 
-    private FakeDownloadIntentService mService;
     private boolean bound;
-    private Dialog permissionDialog;
 
     private static final String DOWNLOADED_COUNTRIES = "SymptomsSelectionActivity.DOWNLOADED_COUNTRIES";
     private static final String CHECKED_COUNTER = "SymptomsSelectionActivity.CHECKED_COUNTER";
@@ -80,7 +73,6 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
         contactsDefaultNames = Values.getContactTypesDefaultNames();
 
         boolean[] selections;
-        String[] localizedCountries;
         //If not restoring after orientation change
         if(savedInstanceState == null)
             selections = new boolean[symptoms.length];
@@ -257,70 +249,16 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             FakeDownloadIntentService.ServiceBinder binder = (FakeDownloadIntentService.ServiceBinder) service;
-            mService = binder.getService();
+            FakeDownloadIntentService mService = binder.getService();
             Log.d(TAG, "Service bound");
             bound = true;
             //If service is running we do nothing, we don't want to manage multiple downloads and we simply listen for updates from the service
             if(mService.isRunning()) {
                 Log.v(TAG, "Service is already running");
-                mService.setCallback(SymptomsSelectionActivity.this);
             }
-
             //If service is not running, we ask the user to download resources
-            else {
-                permissionDialog = new Dialog(SymptomsSelectionActivity.this);
-                permissionDialog.setContentView(R.layout.resources_download_dialog_layout);
-                //TextView permission_textView = permissionDialog.findViewById(R.id.permission_textView);
-                //ImageView permission_ImageView = permissionDialog.findViewById(R.id.permission_ImageView);
-                Button ok_button = permissionDialog.findViewById(R.id.ok_button);
-                Button cancel_button = permissionDialog.findViewById(R.id.cancel_button);
-
-                final Spinner countries_spinner = permissionDialog.findViewById(R.id.countries_spinner);
-                String[] supportedCountries = Utilities.getLocalizedSupportedCountries(getApplicationContext());
-                ArrayAdapter<String> countriesAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, supportedCountries);
-                countriesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                countries_spinner.setAdapter(countriesAdapter);
-                final Spinner languages_spinner = permissionDialog.findViewById(R.id.languages_spinner);
-                String[] supportedLanguages = Utilities.getLocalizedSupportedLanguages(getApplicationContext());
-                ArrayAdapter<String> languagesAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, supportedLanguages);
-                languagesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                languages_spinner.setAdapter(languagesAdapter);
-
-                //show dialog box
-                Window window = permissionDialog.getWindow();
-                if(window != null)
-                    window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-                permissionDialog.show();
-
-                //Listener for the dialog's OK button
-                ok_button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String country = (String) countries_spinner.getSelectedItem();
-                        String language = (String)languages_spinner.getSelectedItem();
-                        startDownloadService(Utilities.getDefaultCountryName(getApplicationContext(), country), Utilities.getDefaultLanguageName(getApplicationContext(), language));
-                        permissionDialog.dismiss();
-                    }
-                });
-                cancel_button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        permissionDialog.dismiss();
-                    }
-                });
-            }
-        }
-
-        private void startDownloadService(String country, String language){
-            Intent startIntent = new Intent(SymptomsSelectionActivity.this, FakeDownloadIntentService.class);
-            startIntent.putExtra(Values.EXTRA_COUNTRY, country);
-            startIntent.putExtra(Values.EXTRA_LANGUAGE, language);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                startForegroundService(startIntent);
             else
-                startService(startIntent);
+                new ResourcesDownloadDialogFragment().show(getSupportFragmentManager(), "download");
 
             mService.setCallback(SymptomsSelectionActivity.this);
         }
@@ -329,7 +267,6 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
         public void onServiceDisconnected(ComponentName name) {
             Log.v(TAG, "Service unbound");
             bound = false;
-            //checkResourcesState();
         }
     };
 

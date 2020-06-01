@@ -23,7 +23,7 @@
         android:layout_marginTop="100dp"
         android:layout_marginRight="50dp"
         android:background="@drawable/button_background_animals"
-        android:drawableLeft="@drawable/ic_animals_480"
+        android:drawableStart="@drawable/ic_animals_480"
         android:onClick="onClickCategory"
         android:text="@string/animals"
         android:textColor="@android:color/white"
@@ -42,7 +42,7 @@
         android:layout_marginTop="5dp"
         android:layout_marginRight="50dp"
         android:background="@drawable/button_background_insects"
-        android:drawableLeft="@drawable/ic_insect_480"
+        android:drawableStart="@drawable/ic_insect_480"
         android:onClick="onClickCategory"
         android:text="@string/insects"
         android:textAlignment="center"
@@ -63,7 +63,7 @@
         android:layout_marginRight="50dp"
         android:layout_marginBottom="50dp"
         android:background="@drawable/button_background_plants"
-        android:drawableLeft="@drawable/ic_plants_480"
+        android:drawableStart="@drawable/ic_plants_480"
         android:onClick="onClickCategory"
         android:text="@string/plants"
         android:textColor="@android:color/white"
@@ -84,7 +84,8 @@
         app:layout_constraintBottom_toTopOf="@id/animals_button"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        tools:ignore="UnknownIdInLayout" />
 
 
 

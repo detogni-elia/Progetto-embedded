@@ -56,6 +56,7 @@ public class Utilities {
 
     private static final Map<String, Integer> countriesHashMap = new HashMap<>();
 
+    //TODO: NON SO COSA CASPITA HO FATTO, VA TOLTA L'HASHMAP
     public static String[] getLocalizedCountries(Context context, String[] toLocalize){
         if(countriesHashMap.isEmpty()){
             int[] supportedCountriesIds = Values.getCountriesIds();
@@ -101,7 +102,7 @@ public class Utilities {
         return localizedContactsTypes;
     }
 
-    public static String getDefaultCountryName(Context context, String localizedCountry){
+    public static String getCountryNameInEnglish(Context context, String localizedCountry){
         String toReturn = "";
         int[] countriesIds = Values.getCountriesIds();
         for(int i = 0; i < countriesIds.length; i++){
@@ -113,7 +114,7 @@ public class Utilities {
         return toReturn;
     }
 
-    public static String getDefaultLanguageName(Context context, String localizedLanguage){
+    public static String getLanguageNameInEnglish(Context context, String localizedLanguage){
         String toReturn = "";
         int[] languagesIds = Values.getLanguagesIds();
         for(int i = 0; i < languagesIds.length; i++){
@@ -151,6 +152,17 @@ public class Utilities {
         return supportedImageQuality;
     }
 
+    public static String getQualityValueInEnglish(Context context, String imageQuality) {
+        String toReturn = "";
+        int[] qualityIds = Values.getImageQualityIds();
+        for(int i = 0; i < qualityIds.length; i++){
+            if(context.getString((qualityIds[i])).equals(imageQuality)){
+                toReturn = Values.getImageQualityNames()[i];
+                break;
+            }
+        }
+        return toReturn;
+    }
 
 
     public static class AnimalDetails {
