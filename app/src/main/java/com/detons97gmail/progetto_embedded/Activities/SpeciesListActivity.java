@@ -18,16 +18,15 @@ import com.detons97gmail.progetto_embedded.Fragments.SpeciesListFragment;
  */
 
 public class SpeciesListActivity extends AppCompatActivity implements ComponentCallbacks2 {
-
     private Toolbar toolbar;
     private ActionBar actionBar;
+    private final String TAG = this.getClass().getSimpleName();
 
    private SpeciesListFragment speciesListFragment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //TODO: Load different layouts in relation to memory available
         setContentView(R.layout.activity_species_list);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -41,7 +40,6 @@ public class SpeciesListActivity extends AppCompatActivity implements ComponentC
         //If we are restoring from a previous state, do nothing as to not overlap fragments
         if(savedInstanceState != null)
             return;
-
 
         Bundle fragBundle = getIntent().getExtras();
         speciesListFragment = new SpeciesListFragment();
@@ -75,11 +73,11 @@ public class SpeciesListActivity extends AppCompatActivity implements ComponentC
         super.onResume();
         if(toolbar == null) {
             toolbar = findViewById(R.id.toolbar);
-            Log.d("ON_RESUME", "Toolbar ripristinata");
+            Log.d(TAG, "Toolbar ripristinata");
         }
         if(actionBar == null){
             actionBar=getSupportActionBar();
-            Log.d("ON_RESUME", "ActionBar ripristinata");
+            Log.d(TAG, "ActionBar ripristinata");
         }
     }
     //Release Memory when system resources becomes low
@@ -91,9 +89,9 @@ public class SpeciesListActivity extends AppCompatActivity implements ComponentC
             //Sembrava funzionare correttamente anche senza onResume
             //App in background --> Remove UI widget
             toolbar = null;
-            Log.d("TRIM_MEMORY_UI_HIDDEN", "Toolbar eliminata");
+            Log.d(TAG, "Toolbar eliminata");
             actionBar = null;
-            Log.d("TRIM_MEMORY_UI_HIDDEN", "ActionBar eliminata");
+            Log.d(TAG, "ActionBar eliminata");
         }
         else if(level== ComponentCallbacks2.TRIM_MEMORY_RUNNING_LOW) {
             //Memory is on low level ==> resize the cache

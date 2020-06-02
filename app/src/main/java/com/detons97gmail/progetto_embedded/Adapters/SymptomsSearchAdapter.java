@@ -105,6 +105,7 @@ public class SymptomsSearchAdapter extends RecyclerView.Adapter<SymptomsSearchAd
         }
     }
 
+    //TODO: MOVE THIS CLASS OUTSIDE OR MOVE SpeciesListItemViewHolder OUTSIDE OF RELATIVE ADAPTER, FOR CONSISTENCY
     class SymptomsViewHolder extends RecyclerView.ViewHolder {
         private TextView symptom;
         private Switch symptomSwitch;

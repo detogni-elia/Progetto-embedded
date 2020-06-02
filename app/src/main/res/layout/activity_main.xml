@@ -11,7 +11,7 @@
     <include
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        layout="@layout/drawer_toolbar" />
+        layout="@layout/toolbar" />
 
     <include
         android:layout_marginTop="?attr/actionBarSize"

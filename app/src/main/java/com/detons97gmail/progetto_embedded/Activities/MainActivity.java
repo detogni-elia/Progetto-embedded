@@ -21,7 +21,6 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.DisplayMetrics;
@@ -46,9 +45,6 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, FakeDownloadIntentService.DownloadCallbacks{
     private static final String TAG = "MainActivity";
 
-    //Contains the folders names of the resources stored
-    private String[] countriesFolders;
-
     //UI Widgets
     private Spinner mSpinnerCountries;
     private Toolbar toolbar;
@@ -62,22 +58,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Dialog permissionDialog;
 
     private boolean bound;
-    private FakeDownloadIntentService mService;
 
     //permissions codes
     private static final int REQUEST_CODE=100;
-    private static final int INTERNET_FOR_DOWNLOAD = 200;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //new ResourcesDownloadDialogFragment().show(getSupportFragmentManager(), null);
-
         //set toolbar
-        toolbar = findViewById(R.id.drawer_toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         //set drawer
@@ -98,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //is firstrun true? if so execute code for first run
         if (sharedPreferences.getBoolean("firstrun", true)) {
-            Log.i("TAG", "onResume: first run started");
+            Log.i(TAG, "onResume: first run started");
             // start code for first run
             permissionDialog.setContentView(R.layout.first_start_permissions_dialog_layout);
             //TextView permission_textView = permissionDialog.findViewById(R.id.permission_textView);
@@ -140,7 +131,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             //set delete cache to false on first run
             sharedPreferences.edit().putBoolean("deleteCache",false).apply();
         }
-
     }
 
     @Override
@@ -166,12 +156,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    //Reimposto i riferimenti agli oggetti della UI
     @Override
     public void onResume() {
         super.onResume();
+        //Reimposto i riferimenti agli oggetti della UI
         if(toolbar == null) {
-            toolbar=findViewById(R.id.drawer_toolbar);
+            toolbar=findViewById(R.id.toolbar);
             Log.d("ON_RESUME", "Ripristinata la toolbar");
         }
         if(mSpinnerCountries == null) {
@@ -244,23 +234,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Toast.makeText(this, R.string.permissions_not_granted,Toast.LENGTH_SHORT).show();
                 }
                 break;
-            case INTERNET_FOR_DOWNLOAD:
-                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                    Log.d(TAG, "Internet permission granted for download");
-                    Intent startIntent = new Intent(MainActivity.this, FakeDownloadIntentService.class);
-                    startIntent.putExtra(Values.EXTRA_COUNTRY, "India");
-                    startIntent.putExtra(Values.EXTRA_LANGUAGE, "en");
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                        startForegroundService(startIntent);
-                    else
-                        startService(startIntent);
-
-                    mService.setCallback(MainActivity.this);
-                }
-                else{
-                    Utilities.showToast(this, "Please allow internet access to the app to download resources", Toast.LENGTH_SHORT);
-                }
         }
     }
 
@@ -268,41 +241,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * Checks the device's storage for the required resources. If those are not present asks the user to download them.
      */
     private void checkResourcesAvailability(){
-        //localizedCountries will contain translated country name to populate the spinner
+        //localizedCountries will contain translated country name to populate countriesSpinner
         String[] localizedCountries;
         //Check app's files to get downloaded resources
-        countriesFolders = Utilities.getDownloadedCountries(this);
-        //If no resources available, bind to FakeDownloadService to get updates about downloads
+        //Contains the folders names of the resources stored
+        String[] countriesFolders = Utilities.getDownloadedCountries(this);
+        //If no resources available, bind to FakeDownloadIntentService to get updates about downloads
         if(countriesFolders == null || countriesFolders.length == 0) {
-            //Reset adapter for spinner
+            //Reset adapter if resources were removed while the app was in background
             mSpinnerCountries.setAdapter(null);
             Log.d(TAG, "No resources available");
             Intent startIntent = new Intent(MainActivity.this, FakeDownloadIntentService.class);
             //Bind to FakeDownloadIntentService to listen to updates for the downloads
             bindService(startIntent, connection, Context.BIND_AUTO_CREATE);
-            //Disable navigation in the app until resources are available
+            //Disable navigation until resources are available
             setUiButtonsEnabled(false);
         }
         else {
-            //Translate country names
+            //Translate names of available countries to display them
             localizedCountries = Utilities.getLocalizedCountries(this, countriesFolders);
-            //If at least one country's resources are available
-
-            // Array adapter to set data in Spinner Widget
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, localizedCountries);
-            // Setting the array adapter containing country list to the spinner widget
             mSpinnerCountries.setAdapter(adapter);
+            //Enable navigation now that there are resources
             setUiButtonsEnabled(true);
         }
     }
 
+    /**
+     * Method handles clicks for the MainActivity's buttons
+     * @param v The button clicked
+     */
     public void onClickCategory(View v){
-        String country = countriesFolders[mSpinnerCountries.getSelectedItemPosition()];
+        //Translate selected country's name to query SQLite database
+        String country = Utilities.getCountryNameInEnglish(this, (String)mSpinnerCountries.getSelectedItem());
+        //String country = countriesFolders[mSpinnerCountries.getSelectedItemPosition()];
         String category;
         switch (v.getId()){
-            case R.id.animals_button:
-                category = Values.CATEGORY_ANIMALS;
-                break;
             case R.id.insects_button:
                 category = Values.CATEGORY_INSECTS;
                 break;
@@ -323,7 +297,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             FakeDownloadIntentService.ServiceBinder binder = (FakeDownloadIntentService.ServiceBinder) service;
-            mService = binder.getService();
+            FakeDownloadIntentService mService = binder.getService();
             Log.d(TAG, "Service bound");
             bound = true;
             //If service is running we do nothing, we don't want to manage multiple downloads and we simply listen for updates from the service
@@ -332,7 +306,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
             //If service is not running, we ask the user to download resources
-
             else
                 new ResourcesDownloadDialogFragment().show(getSupportFragmentManager(), "downloader");
 

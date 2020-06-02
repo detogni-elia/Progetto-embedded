@@ -22,6 +22,10 @@ import com.detons97gmail.progetto_embedded.Services.FakeDownloadIntentService;
 import com.detons97gmail.progetto_embedded.Utilities;
 import com.detons97gmail.progetto_embedded.Values;
 
+/**
+ * Dialog fragment asks the user to download resources when those are not present
+ */
+
 public class ResourcesDownloadDialogFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -34,22 +38,29 @@ public class ResourcesDownloadDialogFragment extends DialogFragment {
     }
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState){
+        final Context context = getContext();
+        if(context == null)
+            return;
+
+        //Populate country spinner
         final Spinner countries_spinner = view.findViewById(R.id.countries_spinner);
-        String[] supportedCountries = Utilities.getLocalizedSupportedCountries(getContext());
-        ArrayAdapter<String> countriesAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, supportedCountries);
+        String[] supportedCountries = Utilities.getLocalizedSupportedCountries(context);
+        ArrayAdapter<String> countriesAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, supportedCountries);
         countriesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         countries_spinner.setAdapter(countriesAdapter);
         countriesAdapter.notifyDataSetChanged();
 
+        //Populate language spinner
         final Spinner languages_spinner = view.findViewById(R.id.languages_spinner);
         String[] supportedLanguages = Utilities.getLocalizedSupportedLanguages(getContext());
-        ArrayAdapter<String> languagesAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, supportedLanguages);
+        ArrayAdapter<String> languagesAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, supportedLanguages);
         languagesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         languages_spinner.setAdapter(languagesAdapter);
 
+        //Populate image quality spinner
         final Spinner image_quality_spinner = view.findViewById(R.id.image_quality_spinner);
         String[] supportedImageQuality = Utilities.getSupportedImageQuality(getContext());
-        ArrayAdapter<String> imagesQualityAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, supportedImageQuality);
+        ArrayAdapter<String> imagesQualityAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, supportedImageQuality);
         imagesQualityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         image_quality_spinner.setAdapter(imagesQualityAdapter);
 
@@ -59,19 +70,24 @@ public class ResourcesDownloadDialogFragment extends DialogFragment {
         ok_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Get selected item for each spinner
                 String country = (String) countries_spinner.getSelectedItem();
                 String language = (String)languages_spinner.getSelectedItem();
                 String imageQuality = (String)image_quality_spinner.getSelectedItem();
-                //save in SharedPreference for settings activity display information layout
-                SharedPreferences prefs = getContext().getSharedPreferences("com.detons97gmail.progetto_embedded",Context.MODE_PRIVATE);
+                //Save favourite language and image quality in app's SharedPreference
+                SharedPreferences prefs = context.getSharedPreferences("com.detons97gmail.progetto_embedded",Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor=prefs.edit();
                 editor.putString("selectedLanguage",language);
                 editor.putString("selectedImageQuality",imageQuality);
                 editor.apply();
+                //Start download of selected resources
                 startDownloadService(
+                        //Translate all items in english since all resources have english names
                         Utilities.getCountryNameInEnglish(getContext(), country),
                         Utilities.getLanguageNameInEnglish(getContext(), language),
                         Utilities.getQualityValueInEnglish(getContext(),imageQuality));
+
+                //Close the dialog
                 dismiss();
             }
         });
@@ -84,15 +100,24 @@ public class ResourcesDownloadDialogFragment extends DialogFragment {
         });
     }
 
+    /**
+     * Start FakeDownloadIntentService to simulate download of resources
+     * @param country The english name of the selected country
+     * @param language The english name of the selected language for the database
+     * @param imageQuality The english name of the selected image quality
+     */
     private void startDownloadService(String country, String language, String imageQuality){
         Intent startIntent = new Intent(getContext(), FakeDownloadIntentService.class);
         startIntent.putExtra(Values.EXTRA_COUNTRY, country);
         startIntent.putExtra(Values.EXTRA_LANGUAGE, language);
         startIntent.putExtra(Values.EXTRA_IMAGE_QUALITY, imageQuality);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-            getActivity().startForegroundService(startIntent);
-        else
-            getActivity().startService(startIntent);
+        if(getActivity() != null) {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                getActivity().startForegroundService(startIntent);
+            else
+                getActivity().startService(startIntent);
+        }
     }
 }

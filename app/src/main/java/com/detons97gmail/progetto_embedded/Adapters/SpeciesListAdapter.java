@@ -1,22 +1,16 @@
 package com.detons97gmail.progetto_embedded.Adapters;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
-import android.widget.Toast;
-
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.detons97gmail.progetto_embedded.R;
-import com.detons97gmail.progetto_embedded.Utilities;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -24,13 +18,14 @@ import java.util.ArrayList;
 /**
  * Adapter used in SpeciesListFragment loads implements filterable in order to filter the data displayed
  */
-
 public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemViewHolder> implements Filterable {
     /**
      * Private class wraps the data in order to bind species name with relative image for the purpose of filtering the data
      */
     public static class DataWrapper{
+        //Path to the image
         private String image;
+        //Name of the animal/plant depicted in the image
         private String name;
 
         DataWrapper(String img, String n){
@@ -39,7 +34,7 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
         }
 
         /**
-         * Build ArrayList of DataWrapper objects from 2 ArrayList containing Strings
+         * Build ArrayList of DataWrapper objects from 2 ArrayLists containing Strings
          * @param paths List of paths for the images
          * @param names List of names for each entry
          * @return The ArrayList of DataWrapper objects
@@ -65,11 +60,11 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
 
     //Store all the data loaded
     private ArrayList<DataWrapper> fullData = new ArrayList<>();
-    //Store the filtered data, this will be the data passed to the RecyclerView
+    //Store the filtered data, this is the actual data shown in the RecyclerView
     private ArrayList<DataWrapper> filteredData = new ArrayList<>();
-    //Listener fo clicks on the elements
+    //Listener fo clicks on the elements of the RecyclerView
     private OnSpeciesSelectedListener clickListener;
-    //Cache for images
+    //Cache to store images's Bitmaps
     private LruCache<String, Bitmap> imageCache;
     //Tag for logging
     private static final String TAG = "SpeciesListAdapter";
@@ -77,7 +72,6 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
     /**
      * Interface defines method to handle click of an item in the RecyclerView
      */
-
     public interface OnSpeciesSelectedListener {
         void onSpeciesListItemClick(int position);
     }
@@ -101,24 +95,20 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
         }
     }
 
-    //Notify dataset changed after applying changes to filteredData
-    public void myNotifyDataSetChanged(){
-        filteredData.clear();
-        filteredData.addAll(fullData);
-        notifyDataSetChanged();
-    }
-
     @Override
     public SpeciesListItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         CardView item = (CardView) LayoutInflater.from(parent.getContext()).inflate(R.layout.species_list_item_layout, parent, false);
         return new SpeciesListItemViewHolder(item, clickListener);
     }
 
-    //TODO: GESTIRE CASO CACHE NULLA
     @Override
     public void onBindViewHolder(SpeciesListItemViewHolder holder, int position) {
-        Bitmap cachedImage = imageCache.get(filteredData.get(position).getImage());
-        //Load image from storage if not in cache
+        Bitmap cachedImage = null;
+        //Try loading image from cache, if cache is available
+        if(imageCache != null)
+            cachedImage = imageCache.get(filteredData.get(position).getImage());
+
+        //Load image from storage if image was not in cache or if cache was not present at all due to low memory
         if(cachedImage == null){
             //TODO: Load image in background thread instead of UI thread, AsyncTask deprecated in api level R
             //https://android-developers.googleblog.com/2009/05/painless-threading.html  contains threading solutions
@@ -127,7 +117,7 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
             if(loadedImage == null)
                 holder.setPlaceholderImage();
 
-            //Cache image only if it's not placeholder
+            //Set image to ViewHolder and add it to cache
             else {
                 holder.setImage(loadedImage);
                 //Save image to cache
@@ -153,7 +143,7 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
         return filter;
     }
 
-    //We define a filter for the data
+    //We define a filter for the data to implement searching for animals/plants's names
     private Filter filter = new Filter() {
         //This method will be automatically executed in a background thread so that the ui won't slow down
         //Checks the text filter passed and returns only the items containing the filter text in their names
@@ -183,19 +173,21 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
         }
     };
 
-    //Used by onTrimMemory in SpeciesListActivity class to manage memory
-    //Reduce cache size
+    /**
+     * Resize adapter's cache's size to 10Mb, called from activities on OnTrimMemory method
+     */
     public void resizeImageCache()
     {
         //10 Mb of Cache
         imageCache.trimToSize(1024 * 10);
     }
 
-    //Used by onTrimMemory in SpeciesListActivity class to manage memory
-    //Delete cache
+    /**
+     * Stop using cache altogether when memory is too low, called from activities on OnTrimMemory method
+     */
     public void deleteImageCache()
     {
-        //Make available to th Garbage Collector
+        //Make available to the Garbage Collector
         imageCache=null;
     }
 }

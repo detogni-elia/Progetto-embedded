@@ -21,8 +21,7 @@ import com.detons97gmail.progetto_embedded.R;
 import com.detons97gmail.progetto_embedded.Utilities;
 
 
-public class AnimalDetailsActivity extends AppCompatActivity implements ComponentCallbacks2
-{
+public class AnimalDetailsActivity extends AppCompatActivity implements ComponentCallbacks2 {
 
     private ImageView imageView;
     private LinearLayout nameEntry;
@@ -30,6 +29,8 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
     private LinearLayout dietEntry;
     private LinearLayout symptomsEntry;
     private TextView speciesDescription;
+
+    private final String TAG = this.getClass().getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -52,6 +53,7 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
             actionBar.setTitle(R.string.details_toolbar_title);
         }
 
+        //If nameEntry is not present, we are in landscape layout and we do not have to update the TextViews
         if(findViewById(R.id.nameEntry) == null)
             return;
 
@@ -95,28 +97,28 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
         super.onResume();
         if(imageView == null) {
             imageView = findViewById(R.id.detailsImage);
-            Log.d("ON_RESUME","ImageView ripristinata");
+            Log.d(TAG,"ImageView ripristinata");
         }
         if(nameEntry == null) {
             nameEntry = findViewById(R.id.nameEntry);
-            Log.d("ON_RESUME","nameEntry ripristinata");
+            Log.d(TAG,"nameEntry ripristinata");
         }
         if(speciesEntry == null) {
             speciesEntry = findViewById(R.id.speciesEntry);
-            Log.d("ON_RESUME","SpeciesEntry ripristinata");
+            Log.d(TAG,"SpeciesEntry ripristinata");
         }
         if(dietEntry == null)
         {
             dietEntry = findViewById(R.id.dietEntry);
-            Log.d("ON_RESUME","DietEntry ripristinata");
+            Log.d(TAG,"DietEntry ripristinata");
         }
         if(symptomsEntry == null) {
             symptomsEntry = findViewById(R.id.symptomsEntry);
-            Log.d("ON_RESUME","SymptomsEntry ripristinata");
+            Log.d(TAG,"SymptomsEntry ripristinata");
         }
         if(speciesDescription == null) {
             speciesDescription = findViewById(R.id.speciesDescription);
-            Log.d("ON_RESUME","SpeciesDescription ripristinata");
+            Log.d(TAG,"SpeciesDescription ripristinata");
         }
     }
 
@@ -132,7 +134,7 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
             dietEntry=null;
             symptomsEntry=null;
             speciesDescription=null;
-            Log.d("TRIM_MEMORY_UI_HIDDEN"," Eliminati i riferimenti a tutti i widget UI");
+            Log.d(TAG," Eliminati i riferimenti a tutti i widget UI");
         }
     }
 }

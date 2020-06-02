@@ -33,23 +33,22 @@ import java.util.ArrayList;
 
 public class SymptomsSelectionActivity extends AppCompatActivity implements SymptomsSearchAdapter.OnSymptomCheckListener, ComponentCallbacks2, FakeDownloadIntentService.DownloadCallbacks {
     private final String TAG = this.getClass().getSimpleName();
+
     private String[] symptomsDefaultNames;
     private String[] contactsDefaultNames;
     private ArrayList<SymptomsSearchAdapter.DataWrapper> data;
     private String[] downloadedCountries;
     private RecyclerView.LayoutManager manager;
     private SymptomsSearchAdapter adapter;
-
     private Spinner countries_spinner;
     private Spinner species_spinner;
     private Spinner contact_spinner;
     private FloatingActionButton fab;
     private int checkedCounter = 0;
     private boolean areResourcesAvailable;
-
     private boolean bound;
 
-    private static final String DOWNLOADED_COUNTRIES = "SymptomsSelectionActivity.DOWNLOADED_COUNTRIES";
+    //Class's keys to restore instance state
     private static final String CHECKED_COUNTER = "SymptomsSelectionActivity.CHECKED_COUNTER";
     private static final String SELECTIONS = "SymptomsSelectionActivity.SELECTIONS";
 
@@ -130,10 +129,7 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
     public void onSaveInstanceState(Bundle savedInstanceState){
         super.onSaveInstanceState(savedInstanceState);
 
-        //Save downloaded country as to not scan storage each configuration change
-        savedInstanceState.putStringArray(DOWNLOADED_COUNTRIES, downloadedCountries);
         savedInstanceState.putInt(CHECKED_COUNTER, checkedCounter);
-
         boolean[] selections = new boolean[data.size()];
         for(int i = 0; i < selections.length; i++)
             selections[i] = data.get(i).isSelected();
@@ -229,7 +225,6 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
             Log.d("ON_RESUME","Species_spinner ripristinato");
         }
         checkResourcesAvailability();
-
     }
 
     public void onTrimMemory(int level)
@@ -286,7 +281,6 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
             Intent startIntent = new Intent(SymptomsSelectionActivity.this, FakeDownloadIntentService.class);
             //Bind to FakeDownloadIntentService to listen to updates for the downloads
             bindService(startIntent, connection, Context.BIND_AUTO_CREATE);
-            //Disable navigation in the app until resources are available
             areResourcesAvailable = false;
         }
         else {
@@ -300,12 +294,14 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
             countries_spinner.setAdapter(adapter);
             areResourcesAvailable = true;
         }
+        //Show FAB only when both resources are available and at least one symptom is checked
         if(checkedCounter > 0 && areResourcesAvailable)
             fab.setVisibility(View.VISIBLE);
         else
             fab.setVisibility(View.GONE);
     }
 
+    //Implementation of FakeDownloadIntentService's interface callback method
     @Override
     public void notifyDownloadFinished() {
         unbindService(connection);
