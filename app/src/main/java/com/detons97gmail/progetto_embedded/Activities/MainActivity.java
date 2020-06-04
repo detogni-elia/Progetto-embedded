@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 
 import android.Manifest;
 import android.app.Dialog;
@@ -21,6 +22,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.DisplayMetrics;
@@ -33,14 +35,16 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.material.navigation.NavigationView;
+import java.util.List;
+import java.util.Locale;
+
+import com.detons97gmail.progetto_embedded.Fragments.ConnectionDialogFragment;
 import com.detons97gmail.progetto_embedded.Fragments.ResourcesDownloadDialogFragment;
 import com.detons97gmail.progetto_embedded.Services.FakeDownloadIntentService;
 import com.detons97gmail.progetto_embedded.Utilities;
 import com.detons97gmail.progetto_embedded.Values;
 import com.detons97gmail.progetto_embedded.R;
-import com.google.android.material.navigation.NavigationView;
-
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, FakeDownloadIntentService.DownloadCallbacks{
     private static final String TAG = "MainActivity";
@@ -305,9 +309,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Log.v(TAG, "Service is already running");
             }
 
-            //If service is not running, we ask the user to download resources
-            else
-                new ResourcesDownloadDialogFragment().show(getSupportFragmentManager(), "downloader");
+            //If service is not running, it means we should ask the user to download resources
+            else {
+                //We show a message only if there isn't one already on screen. We want to avoid overlap of identical DialogFragments
+                List<Fragment> fragments = getSupportFragmentManager().getFragments();
+                boolean alreadyShowing = false;
+                for (Fragment fragment : fragments) {
+                    String fragmentName = fragment.getClass().getSimpleName();
+                    if (fragmentName.equals(ConnectionDialogFragment.class.getSimpleName()) || fragmentName.equals(ResourcesDownloadDialogFragment.class.getSimpleName()))
+                        alreadyShowing = true;
+                }
+                if (!alreadyShowing) {
+                    //We show a cautionary message to the user about downloading with a metered connection if that's the case
+                    ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                    boolean isConnectionMetered = cm != null && cm.isActiveNetworkMetered();
+                    if(isConnectionMetered)
+                        new ConnectionDialogFragment().show(getSupportFragmentManager(), "alert");
+                        //new ResourcesDownloadDialogFragment().show(getSupportFragmentManager(), "download");
+
+                    else
+                        new ResourcesDownloadDialogFragment().show(getSupportFragmentManager(), "download");
+                }
+            }
 
             //Register as callback to get updates regarding downloads
             mService.setCallback(MainActivity.this);

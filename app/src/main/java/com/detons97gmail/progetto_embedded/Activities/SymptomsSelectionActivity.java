@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -18,10 +19,12 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.detons97gmail.progetto_embedded.Adapters.SymptomsSearchAdapter;
+import com.detons97gmail.progetto_embedded.Fragments.ConnectionDialogFragment;
 import com.detons97gmail.progetto_embedded.Fragments.ResourcesDownloadDialogFragment;
 import com.detons97gmail.progetto_embedded.R;
 import com.detons97gmail.progetto_embedded.Services.FakeDownloadIntentService;
@@ -30,6 +33,7 @@ import com.detons97gmail.progetto_embedded.Values;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class SymptomsSelectionActivity extends AppCompatActivity implements SymptomsSearchAdapter.OnSymptomCheckListener, ComponentCallbacks2, FakeDownloadIntentService.DownloadCallbacks {
     private final String TAG = this.getClass().getSimpleName();
@@ -251,9 +255,28 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
             if(mService.isRunning()) {
                 Log.v(TAG, "Service is already running");
             }
-            //If service is not running, we ask the user to download resources
-            else
-                new ResourcesDownloadDialogFragment().show(getSupportFragmentManager(), "download");
+            //If service is not running, it means we should ask the user to download resources
+            else {
+                //We show a message only if there isn't one already on screen. We want to avoid overlap of identical DialogFragments
+                List<Fragment> fragments = getSupportFragmentManager().getFragments();
+                boolean alreadyShowing = false;
+                for (Fragment fragment : fragments) {
+                    String fragmentName = fragment.getClass().getSimpleName();
+                    if (fragmentName.equals(ConnectionDialogFragment.class.getSimpleName()) || fragmentName.equals(ResourcesDownloadDialogFragment.class.getSimpleName()))
+                        alreadyShowing = true;
+                }
+                if (!alreadyShowing) {
+                    //We show a cautionary message to the user about downloading with a metered connection if that's the case
+                    ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                    boolean isConnectionMetered = cm != null && cm.isActiveNetworkMetered();
+                    if(isConnectionMetered)
+                        new ConnectionDialogFragment().show(getSupportFragmentManager(), "alert");
+                        //new ResourcesDownloadDialogFragment().show(getSupportFragmentManager(), "download");
+
+                    else
+                        new ResourcesDownloadDialogFragment().show(getSupportFragmentManager(), "download");
+                }
+            }
 
             mService.setCallback(SymptomsSelectionActivity.this);
         }

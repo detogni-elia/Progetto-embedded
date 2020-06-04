@@ -64,10 +64,10 @@ public class ResourcesDownloadDialogFragment extends DialogFragment {
         imagesQualityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         image_quality_spinner.setAdapter(imagesQualityAdapter);
 
-        Button ok_button = view.findViewById(R.id.ok_button);
-        Button cancel_button = view.findViewById(R.id.cancel_button);
+        Button okButton = view.findViewById(R.id.ok_button);
+        Button cancelButton = view.findViewById(R.id.cancel_button);
 
-        ok_button.setOnClickListener(new View.OnClickListener() {
+        okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Get selected item for each spinner
@@ -92,7 +92,7 @@ public class ResourcesDownloadDialogFragment extends DialogFragment {
             }
         });
 
-        cancel_button.setOnClickListener(new View.OnClickListener() {
+        cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();
