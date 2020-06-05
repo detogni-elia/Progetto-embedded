@@ -18,6 +18,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/app_theme">
+        <activity android:name=".Activities.ProvaDatabase"
+            tools:ignore="InnerclassSeparator" />
         <activity android:name=".Activities.SettingsActivity"
 
             tools:ignore="InnerclassSeparator" />
