@@ -203,6 +203,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SharedPreferences sharedPreferences = getSharedPreferences("com.detons97gmail.progetto_embedded", MODE_PRIVATE);
         permissionDialog=new Dialog(this);
 
+        //TODO: CONTROLLARE CHE CAMBIANDO ORIENTAMENTO NON VENGANO MOSTRATI PIU' DIALOG
         if (sharedPreferences.getBoolean("firstrun", true)) {
             Log.i(TAG, "onResume: first run started");
             // start code for first run
