@@ -88,10 +88,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //shared preference for the first run
         //permission dialog stuff
+        /*
         SharedPreferences sharedPreferences = getSharedPreferences("com.detons97gmail.progetto_embedded", MODE_PRIVATE);
         permissionDialog=new Dialog(this);
 
         //is firstrun true? if so execute code for first run
+
         if (sharedPreferences.getBoolean("firstrun", true)) {
             Log.i(TAG, "onResume: first run started");
             // start code for first run
@@ -135,6 +137,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             //set delete cache to false on first run
             sharedPreferences.edit().putBoolean("deleteCache",false).apply();
         }
+
+         */
     }
 
     @Override
@@ -196,8 +200,60 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Log.d(TAG, "Restored spinner");
         }
 
+        SharedPreferences sharedPreferences = getSharedPreferences("com.detons97gmail.progetto_embedded", MODE_PRIVATE);
+        permissionDialog=new Dialog(this);
+
+        if (sharedPreferences.getBoolean("firstrun", true)) {
+            Log.i(TAG, "onResume: first run started");
+            // start code for first run
+            permissionDialog.setContentView(R.layout.first_start_permissions_dialog_layout);
+            //TextView permission_textView = permissionDialog.findViewById(R.id.permission_textView);
+            //ImageView permission_ImageView = permissionDialog.findViewById(R.id.permission_ImageView);
+            Button ok_button = permissionDialog.findViewById(R.id.ok_button);
+
+            //show dialog box
+            Window window = permissionDialog.getWindow();
+            if(window != null)
+                window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+            permissionDialog.show();
+
+            //ok button click listener, ask for permissions if not already granted
+            ok_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                            + ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.INTERNET)
+                            + ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.ACCESS_COARSE_LOCATION)
+                            + ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            + ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+                        //permission not granted
+                        ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE},REQUEST_CODE);
+                        permissionDialog.dismiss();
+
+                    }
+                    else{
+                        ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE},REQUEST_CODE);
+                        permissionDialog.dismiss();
+                        checkResourcesAvailability();
+                    }
+                }
+            });
+
+            // set false if first run is completed
+            sharedPreferences.edit().putBoolean("firstrun", false).apply();
+            //set update position to true on first run
+            sharedPreferences.edit().putBoolean("updatePosition",true).apply();
+            //set delete cache to false on first run
+            sharedPreferences.edit().putBoolean("deleteCache",false).apply();
+        }
+        else
+            checkResourcesAvailability();
+
         //Check whether app's resources are available or not, handling accordingly
-        checkResourcesAvailability();
+        //checkResourcesAvailability();
     }
 
     //Gestione delle callbacks legate alla memoria
@@ -232,6 +288,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 {
                     //permissions have been granted
                     Log.i("TAG", "onRequestPermissionsResult: Permission granted");
+                    checkResourcesAvailability();
                 }
                 else
                 {
@@ -334,7 +391,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             //Register as callback to get updates regarding downloads
             mService.setCallback(MainActivity.this);
-
             /*
             else {
                 permissionDialog.setContentView(R.layout.resources_download_dialog_layout);
