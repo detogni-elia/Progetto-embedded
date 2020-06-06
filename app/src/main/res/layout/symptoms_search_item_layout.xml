@@ -38,7 +38,6 @@
         android:layout_toStartOf="@+id/symptomSwitch"
         android:layout_alignTop="@+id/symptomSwitch"
         android:layout_alignBottom="@+id/symptomSwitch"
-        style="@style/vertical_divider"
-        android:background="@color/colorPrimary" />
+        style="@style/vertical_divider"/>
 
 </RelativeLayout>

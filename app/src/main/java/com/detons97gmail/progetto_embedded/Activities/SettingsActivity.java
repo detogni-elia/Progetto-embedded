@@ -95,9 +95,6 @@ public class SettingsActivity extends AppCompatActivity{
         spinnerPos=imageQualityAdapter.getPosition(defaultImageQuality);
         mSpinnerImageQuality.setSelection(spinnerPos);
 
-
-
-
         mSpinnerLanguages.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -162,6 +159,7 @@ public class SettingsActivity extends AppCompatActivity{
             }
         });
 
+        /*
         deleteCache.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -171,6 +169,7 @@ public class SettingsActivity extends AppCompatActivity{
             }
         });
 
+         */
 
     }
 
@@ -200,5 +199,10 @@ public class SettingsActivity extends AppCompatActivity{
     {
         finish();
         super.onPause();
+    }
+
+    public void onClickDeleteCache(View v){
+        Utilities.deleteCache(getApplicationContext());
+        Utilities.showToast(this, getString(R.string.resources_deleted_message), Toast.LENGTH_SHORT);
     }
 }

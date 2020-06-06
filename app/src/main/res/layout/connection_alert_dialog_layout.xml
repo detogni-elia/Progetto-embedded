@@ -6,16 +6,16 @@
     android:background="@drawable/dialog_background"
     android:padding="16dp">
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            android:text="@string/connection_alert_dialog_message"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textAlignment="center"
-            android:textColor="@android:color/white"/>
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/connection_alert_dialog_message"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"/>
 
     <Button
         android:id="@+id/ok_button"
@@ -25,7 +25,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="32dp"
         android:text="@android:string/ok"
-        android:background="@drawable/button_ripple_effect_white"
+        android:background="@drawable/dialog_button_ripple_effect_white"
         android:stateListAnimator="@null"/>
 
     <Button
@@ -36,7 +36,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="32dp"
         android:text="@android:string/cancel"
-        android:background="@drawable/button_ripple_effect_white"
+        android:background="@drawable/dialog_button_ripple_effect_white"
         android:stateListAnimator="@null"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

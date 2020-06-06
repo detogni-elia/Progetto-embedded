@@ -164,6 +164,21 @@ public class Utilities {
         return toReturn;
     }
 
+    public static void deleteCache(Context context){
+        File baseDir = context.getExternalFilesDir(null);
+        for(File file: baseDir.listFiles())
+            deleteRecursively(file);
+    }
+
+
+    private static void deleteRecursively(File file) {
+        if(file.isDirectory()) {
+            for (File content : file.listFiles())
+                deleteRecursively(content);
+        }
+
+        file.delete();
+    }
 
     public static class AnimalDetails {
         private int imageRef;

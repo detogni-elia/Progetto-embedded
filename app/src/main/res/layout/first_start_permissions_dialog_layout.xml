@@ -60,7 +60,7 @@
                     android:text="@android:string/ok"
                     android:textStyle="bold"
                     android:textSize="20sp"
-                    android:background="@drawable/button_ripple_effect_white"
+                    android:background="@drawable/dialog_button_ripple_effect_white"
                     android:layout_gravity="end"
                     android:layout_marginEnd="20dp"
                     />
