@@ -73,5 +73,6 @@
     <string name="remove_cache">Cancella cache</string>
     <string name="connection_alert_dialog_message">Sono necessari file aggiuntivi per poter utilizzare quest\'app, ma sembra che tu non stia utilizzando una connessione WIFI. Se intendi procedere comunque con il download seleziona OK, altrimenti seleziona CANCEL o assicurati di connetterti a una rete WIFI prima di procedere.</string>
     <string name="resources_deleted_message">Eliminate cache e risorse.</string>
+    <string name="download_new_resources">Scarica nuove risorse</string>
 
 </resources>

@@ -72,6 +72,7 @@
     <string name="remove_cache">Delete cache</string>
     <string name="connection_alert_dialog_message">You need to download some resources to use this app, but it seems you are not currently connected to a WIFI network. If you wish to continue anyway then press OK, otherwise press CANCEL or connect to a WIFI network before continuing.</string>
     <string name="resources_deleted_message">Deleted cache and resources.</string>
+    <string name="download_new_resources">Download new resources</string>
 
 
 </resources>

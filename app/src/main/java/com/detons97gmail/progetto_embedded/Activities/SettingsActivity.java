@@ -21,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.detons97gmail.progetto_embedded.Fragments.ResourcesDownloadDialogFragment;
 import com.detons97gmail.progetto_embedded.R;
 import com.detons97gmail.progetto_embedded.Utilities;
 
@@ -204,5 +205,9 @@ public class SettingsActivity extends AppCompatActivity{
     public void onClickDeleteCache(View v){
         Utilities.deleteCache(getApplicationContext());
         Utilities.showToast(this, getString(R.string.resources_deleted_message), Toast.LENGTH_SHORT);
+    }
+
+    public void onClickDownloadResources(View v){
+        new ResourcesDownloadDialogFragment().show(getSupportFragmentManager(), "download");
     }
 }
