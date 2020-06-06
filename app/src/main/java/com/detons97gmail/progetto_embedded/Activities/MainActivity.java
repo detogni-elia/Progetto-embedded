@@ -37,6 +37,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.detons97gmail.progetto_embedded.Fragments.FirstStartDialogFragment;
 import com.google.android.material.navigation.NavigationView;
 import java.util.List;
 import java.util.Locale;
@@ -48,7 +49,7 @@ import com.detons97gmail.progetto_embedded.Utilities;
 import com.detons97gmail.progetto_embedded.Values;
 import com.detons97gmail.progetto_embedded.R;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, FakeDownloadIntentService.DownloadCallbacks{
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, FakeDownloadIntentService.DownloadCallbacks, FirstStartDialogFragment.FirstStartListener{
     private static final String TAG = "MainActivity";
 
     //UI Widgets
@@ -209,6 +210,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (sharedPreferences.getBoolean("firstrun", true)) {
             Log.i(TAG, "onResume: first run started");
             // start code for first run
+            /*
             permissionDialog.setContentView(R.layout.first_start_permissions_dialog_layout);
             //TextView permission_textView = permissionDialog.findViewById(R.id.permission_textView);
             //ImageView permission_ImageView = permissionDialog.findViewById(R.id.permission_ImageView);
@@ -244,13 +246,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
                 }
             });
-
-            // set false if first run is completed
-            sharedPreferences.edit().putBoolean("firstrun", false).apply();
-            //set update position to true on first run
-            sharedPreferences.edit().putBoolean("updatePosition",true).apply();
-            //set delete cache to false on first run
-            sharedPreferences.edit().putBoolean("deleteCache",false).apply();
+            */
+            List<Fragment> fragments = getSupportFragmentManager().getFragments();
+            boolean alreadyShowing = false;
+            for (Fragment fragment : fragments) {
+                String fragmentName = fragment.getClass().getSimpleName();
+                if (fragmentName.equals(FirstStartDialogFragment.class.getSimpleName()))
+                    alreadyShowing = true;
+            }
+            if(!alreadyShowing)
+                new FirstStartDialogFragment().show(getSupportFragmentManager(), "first_run");
         }
         else
             checkResourcesAvailability();
@@ -384,9 +389,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     //We show a cautionary message to the user about downloading with a metered connection if that's the case
                     ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                     boolean isConnectionMetered = cm != null && cm.isActiveNetworkMetered();
-                    if(isConnectionMetered)
+                    if(isConnectionMetered) {
                         new ConnectionDialogFragment().show(getSupportFragmentManager(), "alert");
-                        //new ResourcesDownloadDialogFragment().show(getSupportFragmentManager(), "download");
+                    }
 
                     else
                         new ResourcesDownloadDialogFragment().show(getSupportFragmentManager(), "download");
@@ -522,4 +527,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         startActivity(refresh);
     }
 
+    @Override
+    public void closingStartDialog() {
+        if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                + ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.INTERNET)
+                + ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.ACCESS_COARSE_LOCATION)
+                + ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                + ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+            //permission not granted
+            ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE},REQUEST_CODE);
+
+        }
+        else{
+            ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE},REQUEST_CODE);
+            checkResourcesAvailability();
+        }
+    }
 }

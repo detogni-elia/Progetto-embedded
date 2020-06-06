@@ -1,5 +1,6 @@
 package com.detons97gmail.progetto_embedded.Fragments;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -15,9 +16,9 @@ import androidx.fragment.app.FragmentManager;
 import com.detons97gmail.progetto_embedded.R;
 
 public class ConnectionDialogFragment extends DialogFragment {
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        //TODO: CHANGE LAYOUT
         View view = inflater.inflate(R.layout.connection_alert_dialog_layout, container, false);
         if(getDialog() != null && getDialog().getWindow()!= null){
             getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -35,9 +36,7 @@ public class ConnectionDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 dismiss();
-                FragmentManager manager = getFragmentManager();
-                if(manager != null)
-                    new ResourcesDownloadDialogFragment().show(manager, "download");
+                new ResourcesDownloadDialogFragment().show(getFragmentManager(), "download");
             }
         });
 
