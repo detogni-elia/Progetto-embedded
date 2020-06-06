@@ -40,11 +40,11 @@ public class ProvaDatabase extends AppCompatActivity {
                 //String s=creatures.get(1).toString();
                 //TextView tw=findViewById(R.id.textView2);
                 //tw.setText(s);
-                List<String> symptoms=database.symptomsDao().getAll();
-                List<String> contacts=database.contactsDao().getAll();
-                List<String> creatures=database.effectsDao().getCreatures(contacts.get(0),symptoms);
-                TextView tw=findViewById(R.id.textView2);
-                tw.setText(creatures.get(2));
+                //List<String> symptoms=database.symptomsDao().getAll();
+                //List<String> contacts=database.contactsDao().getAll();
+                //List<String> creatures=database.effectsDao().getCreatures(contacts.get(0),symptoms);
+                //TextView tw=findViewById(R.id.textView2);
+                //tw.setText(creatures.get(2));
             }
         });
     }

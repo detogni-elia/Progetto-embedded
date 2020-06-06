@@ -19,7 +19,14 @@
         android:supportsRtl="true"
         android:theme="@style/app_theme">
         <activity android:name=".Activities.MainActivity"
-            tools:ignore="InnerclassSeparator" />
+            tools:ignore="InnerclassSeparator" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
         <activity android:name=".Activities.SettingsActivity"
 
             tools:ignore="InnerclassSeparator" />
@@ -35,11 +42,7 @@
         <activity
             android:name=".Activities.ProvaDatabase"
             tools:ignore="InnerclassSeparator">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <service android:name=".Services.FakeDownloadIntentService"

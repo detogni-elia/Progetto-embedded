@@ -25,6 +25,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.telephony.CellInfoWcdma;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
@@ -32,6 +33,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -55,9 +57,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawer;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private NavigationView navigationView;
-    private Button animals_button;
-    private Button insects_button;
-    private Button plants_button;
+    private LinearLayout animals_button;
+    private LinearLayout insects_button;
+    private LinearLayout plants_button;
 
     private Dialog permissionDialog;
 
@@ -322,7 +324,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         else {
             //Translate names of available countries to display them
             localizedCountries = Utilities.getLocalizedCountries(this, countriesFolders);
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, localizedCountries);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, localizedCountries);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             mSpinnerCountries.setAdapter(adapter);
             //Enable navigation now that there are resources
             setUiButtonsEnabled(true);
@@ -476,7 +479,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         public void onServiceDisconnected(ComponentName name) {
             Log.v(TAG, "Service unbound");
             bound = false;
-            //checkResourcesState();
         }
     };
 
