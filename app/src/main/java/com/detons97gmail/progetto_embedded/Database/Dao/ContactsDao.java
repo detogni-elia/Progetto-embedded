@@ -18,6 +18,6 @@ public interface ContactsDao
     @Delete
     void delete(Contacts contact);
     @Query("SELECT * FROM Contacts")
-    List<String> getAll();
-    //LiveData<List<Contacts>> getAll();
+    //List<String> getAll();
+    LiveData<List<Contacts>> getAll();
 }

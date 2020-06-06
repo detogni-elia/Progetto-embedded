@@ -18,7 +18,6 @@ public interface SymptomsDao
     @Delete
     void delete(Symptoms symptom);
     @Query("SELECT * FROM Symptoms")
-    List<String> getAll();
-    //LiveData è una struttura dati molto comoda in combo con le recycler view
-    //LiveData<List<Symptoms>> getAll();
+    //List<String> getAll();
+    LiveData<List<Symptoms>> getAll();
 }

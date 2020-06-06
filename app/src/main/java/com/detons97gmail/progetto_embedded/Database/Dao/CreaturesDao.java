@@ -18,9 +18,8 @@ public interface CreaturesDao
     @Delete
     void delete(Creatures creature);
     @Query("SELECT * FROM Creatures")
-    List<Creatures> getAll();
-    //LiveData è una struttura dati molto comoda in combo con le recycler view
-    //LiveData<List<Creatures>> getAll();
+    //List<Creatures> getAll();
+    LiveData<List<Creatures>> getAll();
     @Query("SELECT * FROM Creatures WHERE latin_name = :creature")
     Creatures getCreature(String creature);
     //@Query("SELECT common_name, image FROM Creatures WHERE category = :cat")

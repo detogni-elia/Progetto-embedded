@@ -18,7 +18,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/app_theme">
-        <activity android:name=".Activities.ProvaDatabase"
+        <activity android:name=".Activities.MainActivity"
             tools:ignore="InnerclassSeparator" />
         <activity android:name=".Activities.SettingsActivity"
 
@@ -33,7 +33,7 @@
             android:name=".Activities.AnimalDetailsActivity"
             tools:ignore="InnerclassSeparator" />
         <activity
-            android:name=".Activities.MainActivity"
+            android:name=".Activities.ProvaDatabase"
             tools:ignore="InnerclassSeparator">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
