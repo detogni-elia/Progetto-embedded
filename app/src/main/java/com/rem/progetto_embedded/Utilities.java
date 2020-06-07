@@ -21,7 +21,7 @@ public class Utilities {
     }
 
     public static String[] getDownloadedCountries(Context context){
-        SharedPreferences sharedPreferences = context.getSharedPreferences("com.rem.progetto_embedded", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Values.PREFERENCES_NAME, Context.MODE_PRIVATE);
         File downloadPath = null;
         switch (sharedPreferences.getString(Values.DOWNLOAD_LOCATION, Values.LOCATION_INTERNAL)){
             case Values.LOCATION_INTERNAL:
@@ -67,7 +67,7 @@ public class Utilities {
     }
 
     public static File getResourcesFolder(Context context){
-        SharedPreferences sharedPreferences = context.getSharedPreferences("com.rem.progetto_embedded", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Values.PREFERENCES_NAME, Context.MODE_PRIVATE);
         File downloadPath = null;
         File[] folders = context.getExternalFilesDirs(null);
         switch (sharedPreferences.getString(Values.DOWNLOAD_LOCATION, Values.NOT_YET_DECIDED)) {
@@ -79,22 +79,13 @@ public class Utilities {
                     downloadPath = folders[1];
                 break;
             case Values.NOT_YET_DECIDED:
-                if(hasWritableSd(context) && checkAvailableSpace(folders[1], 10)){
-                    downloadPath = folders[1];
-                    sharedPreferences.edit().putString(Values.DOWNLOAD_LOCATION, Values.LOCATION_EXTERNAL).apply();
-                }
-                else{
-                    if(checkAvailableSpace(folders[0], 10)){
-                        downloadPath = folders[0];
-                        sharedPreferences.edit().putString(Values.DOWNLOAD_LOCATION, Values.LOCATION_INTERNAL).apply();
-                    }
-                }
+                downloadPath = requestNewResourcesFolder(context);
         }
         return downloadPath;
     }
 
     public static File requestNewResourcesFolder(Context context){
-        SharedPreferences sharedPreferences = context.getSharedPreferences("com.rem.progetto_embedded", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(Values.PREFERENCES_NAME, Context.MODE_PRIVATE);
         File downloadPath = null;
         File[] folders = context.getExternalFilesDirs(null);
         if(hasWritableSd(context) && checkAvailableSpace(folders[1], 10)){

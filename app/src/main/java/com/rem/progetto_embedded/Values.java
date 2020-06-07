@@ -18,6 +18,7 @@ public class Values {
     public static final String EXTRA_IMAGE_QUALITY = BASE + "ImageQuality";
 
     //SharedPreferences keys
+    public static final String PREFERENCES_NAME = BASE;
     public static final String DOWNLOAD_LOCATION = BASE + "downloadLocation";
     public static final String LOCATION_INTERNAL = BASE + "locationInternal";
     public static final String LOCATION_EXTERNAL = BASE + "locationExternal";
