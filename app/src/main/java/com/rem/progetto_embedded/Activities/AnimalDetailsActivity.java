@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import androidx.appcompat.app.ActionBar;
@@ -83,7 +82,7 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.gps_button)
-            Utilities.showToast(this, "Connettere alla mappa", Toast.LENGTH_SHORT);
+            Utilities.showToast(this, "Connettere alla mappa");
 
         if(item.getItemId() == android.R.id.home)
             finish();

@@ -325,7 +325,7 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
         countriesFolders = Utilities.getDownloadedCountries(this);
         if(countriesFolders == null)
             return;
-        String[] localizedCountries = Utilities.getLocalizedCountries(this, countriesFolders);
+        String[] localizedCountries = Utilities.localizeCountries(this, countriesFolders);
         // Array adapter to set data in Spinner Widget
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, localizedCountries);
         // Setting the array adapter containing country list to the spinner widget

@@ -84,7 +84,7 @@ public class Values {
         return IMAGE_QUALITY_NAMES;
     }
 
-    static int[] getLanguagesIds(){
+    public static int[] getLanguagesIds(){
         return LANGUAGES_IDS;
     }
 
@@ -92,7 +92,7 @@ public class Values {
         return LANGUAGES_DEFAULT_NAMES;
     }
 
-    static int[] getContactsTypeIds(){
+    public static int[] getContactsTypeIds(){
         return CONTACTS_IDS;
     }
 

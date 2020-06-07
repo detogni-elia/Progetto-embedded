@@ -74,6 +74,8 @@
     <string name="resources_deleted_message">Deleted cache and resources.</string>
     <string name="download_new_resources">Download new resources</string>
     <string name="not_enough_space">There is not enough space for new reources.</string>
+    <string name="notification_download_message">"Downloading resources for: "</string>
+    <string name="unexpected_error">Unexpected error.</string>
 
 
 </resources>

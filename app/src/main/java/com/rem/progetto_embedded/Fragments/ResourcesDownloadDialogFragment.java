@@ -59,7 +59,7 @@ public class ResourcesDownloadDialogFragment extends DialogFragment {
 
         //Populate image quality spinner
         final Spinner image_quality_spinner = view.findViewById(R.id.image_quality_spinner);
-        String[] supportedImageQuality = Utilities.getSupportedImageQuality(getContext());
+        String[] supportedImageQuality = Utilities.getLocalizedImagesQualities(getContext());
         ArrayAdapter<String> imagesQualityAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, supportedImageQuality);
         imagesQualityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         image_quality_spinner.setAdapter(imagesQualityAdapter);

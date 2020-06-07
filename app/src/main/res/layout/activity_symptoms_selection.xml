@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
@@ -32,61 +33,86 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/countries_prompt"
-                app:layout_constraintEnd_toEndOf="@+id/countries_spinner"
-                app:layout_constraintStart_toStartOf="@id/countries_spinner"
+                app:layout_constraintEnd_toEndOf="@+id/countries_spinner_layout"
+                app:layout_constraintStart_toStartOf="@id/countries_spinner_layout"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <Spinner
-                android:id="@+id/countries_spinner"
+            <LinearLayout
+                android:id="@+id/countries_spinner_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
+                android:background="@drawable/spinner_layout_background"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/species_spinner"
-                app:layout_constraintTop_toBottomOf="@id/countries_prompt"/>
+                app:layout_constraintEnd_toStartOf="@id/species_spinner_layout"
+                app:layout_constraintTop_toBottomOf="@id/countries_prompt">
+
+                <Spinner
+                    android:id="@+id/countries_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
 
             <TextView
                 android:id="@+id/species_prompt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/category_prompt"
-                app:layout_constraintEnd_toEndOf="@+id/species_spinner"
-                app:layout_constraintStart_toStartOf="@id/species_spinner"
+                app:layout_constraintEnd_toEndOf="@+id/species_spinner_layout"
+                app:layout_constraintStart_toStartOf="@id/species_spinner_layout"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <Spinner
-                android:id="@+id/species_spinner"
+            <LinearLayout
+                android:id="@+id/species_spinner_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
-                app:layout_constraintStart_toEndOf="@id/countries_spinner"
-                app:layout_constraintEnd_toStartOf="@id/contact_spinner"
-                app:layout_constraintTop_toBottomOf="@id/species_prompt"/>
+                android:background="@drawable/spinner_layout_background"
+                app:layout_constraintStart_toEndOf="@id/countries_spinner_layout"
+                app:layout_constraintEnd_toStartOf="@id/contact_spinner_layout"
+                app:layout_constraintTop_toBottomOf="@id/species_prompt">
+
+                <Spinner
+                    android:id="@+id/species_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
 
             <TextView
                 android:id="@+id/contact_prompt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/contact_prompt"
-                app:layout_constraintEnd_toEndOf="@+id/contact_spinner"
-                app:layout_constraintStart_toStartOf="@id/contact_spinner"
+                app:layout_constraintEnd_toEndOf="@+id/contact_spinner_layout"
+                app:layout_constraintStart_toStartOf="@id/contact_spinner_layout"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <Spinner
-                android:id="@+id/contact_spinner"
+            <LinearLayout
+                android:id="@+id/contact_spinner_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
+                android:background="@drawable/spinner_layout_background"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/species_spinner"
-                app:layout_constraintTop_toBottomOf="@id/contact_prompt"/>
+                app:layout_constraintStart_toEndOf="@id/species_spinner_layout"
+                app:layout_constraintTop_toBottomOf="@id/contact_prompt">
+
+                <Spinner
+                    android:id="@+id/contact_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
 
             <View
-                android:layout_width="match_parent"
-                android:background="@color/colorAccent"
                 style="@style/horizontal_divider"
                 android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@id/species_spinner"/>
+                app:layout_constraintTop_toBottomOf="@id/species_spinner_layout"
+                tools:ignore="MissingConstraints" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

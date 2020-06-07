@@ -8,7 +8,6 @@ import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
@@ -19,13 +18,18 @@ import com.rem.progetto_embedded.Values;
 
 import java.io.IOException;
 
-//TODO: COMMENT EVERYTHING
+/**
+ * Class simulates a download of resources such as images and databases
+ */
 public class FakeDownloadIntentService extends IntentService {
     private final String TAG = getClass().getSimpleName();
     private final IBinder binder = new ServiceBinder();
     private boolean isRunning;
     private boolean bound;
 
+    /**
+     * Interface for notifying clients about the completion of a download
+     */
     public interface DownloadCallbacks{
         void notifyDownloadFinished();
     }
@@ -36,7 +40,13 @@ public class FakeDownloadIntentService extends IntentService {
         super("FakeDownloadIntentService");
     }
 
+    /**
+     * Binder to return on onBind method
+     */
     public class ServiceBinder extends Binder{
+        /**
+         * @return This service
+         */
         public FakeDownloadIntentService getService(){
             return FakeDownloadIntentService.this;
         }
@@ -44,26 +54,29 @@ public class FakeDownloadIntentService extends IntentService {
 
     @Override
     public IBinder onBind(Intent intent){
-        Log.v(TAG, "Service bound");
         bound = true;
+        Log.v(TAG, "Service bound");
         return binder;
     }
 
     @Override
     public void onRebind(Intent intent){
         bound = true;
+        Log.v(TAG, "Service rebound");
     }
 
     @Override
     public boolean onUnbind(Intent intent){
-        Log.v(TAG, "Service unbound");
         bound = false;
+        client = null;
+        Log.v(TAG, "Service unbound");
         return true;
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.v(TAG, "Called onHandleIntent");
+        Log.v(TAG, "onHandleIntent called");
+        //We want only one fake download at a time
         if(isRunning)
             return;
         isRunning = true;
@@ -71,32 +84,40 @@ public class FakeDownloadIntentService extends IntentService {
         String language = intent.getStringExtra(Values.EXTRA_LANGUAGE);
         String imageQuality = intent.getStringExtra(Values.EXTRA_IMAGE_QUALITY);
         createNotificationChannel();
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "notificationId")
+        //Build download notification
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "FakeDownloadNotification")
                 .setSmallIcon(android.R.drawable.stat_sys_download)
                 .setContentTitle("Downloading")
-                .setContentText("Downloading resources for: " + country)
+                .setContentText(getString(R.string.notification_download_message) + country)
                 .setPriority(NotificationCompat.PRIORITY_HIGH);
+
+        //Start the service and run in foreground
         startForeground(1, builder.build());
 
         try {
-            Thread.sleep(5000);
-        } catch (InterruptedException ignored) {
-        }
-
-        try {
-            boolean hasSpace = FakeDownload.copyAssetsToStorage(getApplicationContext(), country, language, imageQuality);
-            if(!hasSpace) {
-                Utilities.showToast(getApplicationContext(), getString(R.string.not_enough_space), Toast.LENGTH_SHORT);
+            boolean success = FakeDownload.copyAssetsToStorage(getApplicationContext(), country, language, imageQuality);
+            if(!success) {
+                Utilities.showToast(getApplicationContext(), getString(R.string.not_enough_space));
                 Log.d(TAG, "Not enough space to complete the download.");
             }
-        } catch (IOException e) {
+            else{
+                //Wait 5 seconds to simulate download
+                try { Thread.sleep(5000); }
+                catch (InterruptedException ignored) {}
+            }
+        }
+        catch (IOException e) {
+            Utilities.showToast(getApplicationContext(), getString(R.string.unexpected_error));
             Log.e(TAG, "Could not copy assets to storage: " + e.toString());
         }
-        stopSelf();
-        if(bound) {
+
+        //Notify bound client if there is one at the moment
+        if(bound && client != null) {
             client.notifyDownloadFinished();
             Log.v(TAG, "Notified client of download finished");
         }
+
+        stopSelf();
     }
 
     public void onDestroy(){
@@ -107,10 +128,10 @@ public class FakeDownloadIntentService extends IntentService {
 
     private void createNotificationChannel(){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            CharSequence name = "channel";
+            CharSequence name = "FakeDownloadNotificationChannel";
             String description = "Downloading";
             int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel channel = new NotificationChannel("notificationId", name, importance);
+            NotificationChannel channel = new NotificationChannel("FakeDownloadNotification", name, importance);
             channel.setDescription(description);
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
@@ -121,6 +142,10 @@ public class FakeDownloadIntentService extends IntentService {
         return isRunning;
     }
 
+    /**
+     * Method can be called by client to set itself as listener for download status
+     * @param callback The component implementing the DownloadCallbacks interface
+     */
     public void setCallback(DownloadCallbacks callback){
         client = callback;
     }

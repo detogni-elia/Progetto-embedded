@@ -75,7 +75,7 @@ public class SettingsActivity extends AppCompatActivity{
 
 
         String[] supportedLanguages= Utilities.getLocalizedSupportedLanguages(getApplicationContext());
-        String[] supportedImageQUality = Utilities.getSupportedImageQuality(getApplicationContext());
+        String[] supportedImageQUality = Utilities.getLocalizedImagesQualities(getApplicationContext());
 
         mSpinnerLanguages = findViewById(R.id.settings_spinner_languages);
         mSpinnerImageQuality = findViewById(R.id.settings_spinner_images_quality);
@@ -207,7 +207,7 @@ public class SettingsActivity extends AppCompatActivity{
 
     public void onClickDeleteCache(View v){
         Utilities.deleteCache(getApplicationContext());
-        Utilities.showToast(this, getString(R.string.resources_deleted_message), Toast.LENGTH_SHORT);
+        Utilities.showToast(this, getString(R.string.resources_deleted_message));
     }
 
     public void onClickDownloadResources(View v){

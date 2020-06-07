@@ -332,7 +332,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(countriesFolders == null)
             return;
         //Translate names of available countries to display them
-        String[] localizedCountries = Utilities.getLocalizedCountries(this, countriesFolders);
+        String[] localizedCountries = Utilities.localizeCountries(this, countriesFolders);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, localizedCountries);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinnerCountries.setAdapter(adapter);

@@ -18,7 +18,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.rem.progetto_embedded.Activities.AnimalDetailsActivity;
 import com.rem.progetto_embedded.Values;
@@ -169,7 +168,7 @@ public class SpeciesListFragment extends Fragment implements SpeciesListAdapter.
         //TODO: Show AlertDialog instead of Toast
         if(images == null || images.length == 0) {
             adapter = new SpeciesListAdapter(null, this);
-            Utilities.showToast(context, context.getString(R.string.images_load_error), Toast.LENGTH_SHORT);
+            Utilities.showToast(context, context.getString(R.string.images_load_error));
         }
 
         else{
