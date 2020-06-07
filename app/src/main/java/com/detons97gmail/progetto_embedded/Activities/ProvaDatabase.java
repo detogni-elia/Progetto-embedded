@@ -27,6 +27,7 @@ public class ProvaDatabase extends AppCompatActivity {
         //Apro il database
         final AppDatabase database=AppDatabase.getInstance(this);
         //Provo la query
+        //TODO: HO COMMENTATO QUESTA PARTE DI CODICE PERCHE' MI DAVA ERRORE E NON RIUSCIVO A TESTARE LE ALTRE ACTIVITIES
         executor.execute(new Runnable() {
             @Override
             public void run() {
