@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+//TODO: COMMENT EVERYTHING
 public class Utilities {
     public static void showToast(Context context, String message, int duration){
         Toast.makeText(context, message, duration).show();

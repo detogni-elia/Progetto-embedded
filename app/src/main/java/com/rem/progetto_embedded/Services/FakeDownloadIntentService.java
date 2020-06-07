@@ -19,6 +19,7 @@ import com.rem.progetto_embedded.Values;
 
 import java.io.IOException;
 
+//TODO: COMMENT EVERYTHING
 public class FakeDownloadIntentService extends IntentService {
     private final String TAG = getClass().getSimpleName();
     private final IBinder binder = new ServiceBinder();
