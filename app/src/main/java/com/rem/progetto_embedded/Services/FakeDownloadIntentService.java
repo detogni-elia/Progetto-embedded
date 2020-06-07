@@ -8,10 +8,13 @@ import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
 import com.rem.progetto_embedded.FakeDownload;
+import com.rem.progetto_embedded.R;
+import com.rem.progetto_embedded.Utilities;
 import com.rem.progetto_embedded.Values;
 
 import java.io.IOException;
@@ -80,14 +83,18 @@ public class FakeDownloadIntentService extends IntentService {
         }
 
         try {
-            FakeDownload.copyAssetsToStorage(getApplicationContext(), country, language, imageQuality);
+            boolean hasSpace = FakeDownload.copyAssetsToStorage(getApplicationContext(), country, language, imageQuality);
+            if(!hasSpace) {
+                Utilities.showToast(getApplicationContext(), getString(R.string.not_enough_space), Toast.LENGTH_SHORT);
+                Log.d(TAG, "Not enough space to complete the download.");
+            }
         } catch (IOException e) {
             Log.e(TAG, "Could not copy assets to storage: " + e.toString());
         }
         stopSelf();
         if(bound) {
             client.notifyDownloadFinished();
-            Log.v(TAG, "Notified client of donwload finished");
+            Log.v(TAG, "Notified client of download finished");
         }
     }
 

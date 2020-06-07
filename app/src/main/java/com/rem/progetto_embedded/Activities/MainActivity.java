@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Log.d(TAG, "Restored spinner");
         }
 
-        SharedPreferences sharedPreferences = getSharedPreferences("com.detons97gmail.progetto_embedded", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("com.rem.progetto_embedded", MODE_PRIVATE);
         permissionDialog=new Dialog(this);
 
         if (sharedPreferences.getBoolean("firstrun", true)) {
@@ -308,7 +308,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void checkResourcesAvailability(){
         //Check app's files to get downloaded resources
         //Contains the folders names of the resources stored
-        countriesFolders = Utilities.getDownloadedCountries(this);
+        countriesFolders = Utilities.getDownloadedCountries(getApplicationContext());
         Intent startIntent = new Intent(MainActivity.this, FakeDownloadIntentService.class);
         //Bind to FakeDownloadIntentService to listen to updates for the downloads
         bindService(startIntent, connection, Context.BIND_AUTO_CREATE);

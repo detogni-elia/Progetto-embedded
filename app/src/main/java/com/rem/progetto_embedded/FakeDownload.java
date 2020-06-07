@@ -1,24 +1,18 @@
 package com.rem.progetto_embedded;
 
-
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
-import android.os.Environment;
-import android.os.FileUtils;
 import android.util.Log;
+
 import java.io.File;
-import java.io.FileDescriptor;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 
 public class FakeDownload {
-    private static final String TAG = "FakeDownload";
+    private static final String TAG = FakeDownload.class.getSimpleName();
 
     private static void copyFile(InputStream in, OutputStream out) throws IOException
     {
@@ -28,49 +22,24 @@ public class FakeDownload {
             out.write(buffer, 0, read);
     }
 
-    public static void copyAsset(Context context, String fileName)
-    {
-        String path= Environment.getExternalStorageDirectory().getAbsolutePath() + "/PEFiles";
-        File dir=new File(path);
-        if(!dir.exists())
-            dir.mkdirs();
-
-        AssetManager assetManager = context.getAssets();
-        InputStream in = null;
-        OutputStream out = null;
-
-        try
-        {
-            in= assetManager.open(fileName);
-            File outFile = new File(path, fileName);
-            out = new FileOutputStream(outFile);
-            copyFile(in, out);
-            Log.d("ASSETS_COPY", "Asset copiato");
-        }
-        catch (IOException e)
-        {
-            Log.e("ASSETS_COPY", "Errore nella copia dell' asset");
-        }
-        finally
-        {
-            if(in != null)
-            {
-                try{in.close();} catch (IOException e){Log.e("ASSETS_COPY", "Errore chiusura InputStream");}
-            }
-            if(out != null)
-            {
-                try{out.close();} catch (IOException e){Log.e("ASSETS_COPY", "Errore chiusura OutputStream");}
-            }
-        }
-
-    }
-
-    //https://howtodoinjava.com/java/io/how-to-copy-directories-in-java/
     //Suppress NullPointerException warnings
     @SuppressWarnings("ConstantConditions")
-    public static void copyAssetsToStorage(Context context, String country, String language, String imageQuality) throws IOException {
+    public static boolean copyAssetsToStorage(Context context, String country, String language, String imageQuality) throws IOException {
+        //File root;
+        //if (Utilities.hasWritableSd(context) && Utilities.checkAvailableSpace(paths[1], 10)) {
+        //    root = paths[1];
+        //    sharedPreferences.edit().putString(Values.DOWNLOAD_LOCATION, Values.LOCATION_EXTERNAL).apply();
+        //}
+        File root = Utilities.getResourcesFolder(context);
+
+        if(root == null || !Utilities.checkAvailableSpace(root, 10)){
+            root = Utilities.requestNewResourcesFolder(context);
+            if(root == null)
+                return false;
+        }
+
         //Get app's dedicated files directory (either in sd card or in emulated sd card)
-        File root = context.getExternalFilesDir(null);
+        //File root = context.getExternalFilesDir(null);
         //Create the subfolder for the selected country, if it does not exist
         File countryFolder = new File(root, country);
         countryFolder.mkdirs();
@@ -108,52 +77,12 @@ public class FakeDownload {
         copyFile(src, dest);
         src.close();
         dest.close();
-
-
-        /*
-        String dbRes = "Databases-" + language;
-        File root = context.getExternalFilesDir(null);
-        String dest;
-        if(root != null)
-            dest = root.getAbsolutePath() + "/" + country;
-
-        //Check if folder already exists. If it does,
-
-        //String path= Environment.getExternalStorageDirectory().getAbsolutePath() + "/PEFiles";
-        File dir=new File(path);
-        if(!dir.exists())
-            dir.mkdirs();
-
-        AssetManager assetManager = context.getAssets();
-        InputStream in = null;
-        OutputStream out = null;
-
-        try
-        {
-            in= assetManager.open(fileName);
-            File outFile = new File(path, fileName);
-            out = new FileOutputStream(outFile);
-            copyFile(in, out);
-            Log.d("ASSETS_COPY", "Asset copiato");
-        }
-        catch (IOException e)
-        {
-            Log.e("ASSETS_COPY", "Errore nella copia dell' asset");
-        }
-        finally
-        {
-            if(in != null)
-            {
-                try{in.close();} catch (IOException e){Log.e("ASSETS_COPY", "Errore chiusura InputStream");}
-            }
-            if(out != null)
-            {
-                try{out.close();} catch (IOException e){Log.e("ASSETS_COPY", "Errore chiusura OutputStream");}
-            }
-        }
-
-         */
-
+        return true;
     }
 
+    private static boolean hasEnoughSpace(Context context){
+        long spaceInMb = context.getExternalFilesDir(null).getUsableSpace() / (1024 * 1024);
+        Log.v(TAG, "Available space: " + spaceInMb + " Mb");
+        return spaceInMb > 10;
+    }
 }

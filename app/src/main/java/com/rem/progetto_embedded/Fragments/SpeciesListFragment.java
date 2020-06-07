@@ -150,14 +150,9 @@ public class SpeciesListFragment extends Fragment implements SpeciesListAdapter.
         if(symptoms == null)
             //Adapter will have to query all elements
             ;
-        //Root path to our application specific storage (the "Files" directory)
-        File rootPath = context.getExternalFilesDir(null);
-        /**
-         * We should use getFilesDir() in the final version so that only our app has access to the resources
-         * The main difference is the absolute path of the folders, where getExternalFilesDir returns the path
-         * for the external storage, even when it's emulated.
-         * For now thought, since we need to move images and databases in and out of the devices, we should use the external path
-         */
+        //Get root path of app's files (either in external sd or in emulated)
+        File rootPath = Utilities.getResourcesFolder(requireContext());
+        //File rootPath = context.getExternalFilesDir(null);
         //File rootPath = context.getFilesDir();
         File[] images = null;
         if(rootPath != null) {

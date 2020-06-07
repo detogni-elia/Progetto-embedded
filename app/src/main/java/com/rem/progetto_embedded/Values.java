@@ -1,8 +1,11 @@
 package com.rem.progetto_embedded;
 
+/**
+ * Class contains values used throughout the app and maps ids of important strings
+ */
 public class Values {
     //String extras
-    private static final String BASE = "it.unipd.dei.esp1920.REM.";
+    private static final String BASE = "com.rem.progetto_embedded.";
     public static final String EXTRA_IMAGE_PATH = BASE + "ImagePath";
     public static final String EXTRA_COUNTRY = BASE + "Country";
     public static final String EXTRA_LANGUAGE = BASE + "Language";
@@ -13,6 +16,12 @@ public class Values {
     public static final String EXTRA_CONTACT = BASE + "Contact";
     public static final String EXTRA_SYMPTOMS = BASE + "Symptoms";
     public static final String EXTRA_IMAGE_QUALITY = BASE + "ImageQuality";
+
+    //SharedPreferences keys
+    public static final String DOWNLOAD_LOCATION = BASE + "downloadLocation";
+    public static final String LOCATION_INTERNAL = BASE + "locationInternal";
+    public static final String LOCATION_EXTERNAL = BASE + "locationExternal";
+    public static final String NOT_YET_DECIDED = BASE + "notYetDecided";
 
     //Ids of countries for localization
     private static final int[] COUNTRIES_IDS = {

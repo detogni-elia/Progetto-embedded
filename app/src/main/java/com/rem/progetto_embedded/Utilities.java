@@ -1,6 +1,9 @@
 package com.rem.progetto_embedded;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Environment;
+import android.os.storage.StorageManager;
 import android.widget.Toast;
 
 import com.rem.progetto_embedded.R;
@@ -18,11 +21,20 @@ public class Utilities {
     }
 
     public static String[] getDownloadedCountries(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences("com.rem.progetto_embedded", Context.MODE_PRIVATE);
+        File downloadPath = null;
+        switch (sharedPreferences.getString(Values.DOWNLOAD_LOCATION, Values.LOCATION_INTERNAL)){
+            case Values.LOCATION_INTERNAL:
+                downloadPath = context.getExternalFilesDir(null);
+                break;
+            case Values.LOCATION_EXTERNAL:
+                if(hasWritableSd(context))
+                    downloadPath = context.getExternalFilesDirs(null)[1];
+        }
         String[] downloadedCountries;
-        File appRootPath = context.getExternalFilesDir(null);
-        if(appRootPath != null){
+        if(downloadPath != null){
             //Get directories in app FilesDir
-            File[] resFolders = appRootPath.listFiles(new FileFilter() {
+            File[] resFolders = downloadPath.listFiles(new FileFilter() {
                 @Override
                 public boolean accept(File pathname) {
                     return pathname.isDirectory();
@@ -54,9 +66,50 @@ public class Utilities {
         return null;
     }
 
-    private static final Map<String, Integer> countriesHashMap = new HashMap<>();
+    public static File getResourcesFolder(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences("com.rem.progetto_embedded", Context.MODE_PRIVATE);
+        File downloadPath = null;
+        File[] folders = context.getExternalFilesDirs(null);
+        switch (sharedPreferences.getString(Values.DOWNLOAD_LOCATION, Values.NOT_YET_DECIDED)) {
+            case Values.LOCATION_INTERNAL:
+                downloadPath = folders[0];
+                break;
+            case Values.LOCATION_EXTERNAL:
+                if (hasWritableSd(context))
+                    downloadPath = folders[1];
+                break;
+            case Values.NOT_YET_DECIDED:
+                if(hasWritableSd(context) && checkAvailableSpace(folders[1], 10)){
+                    downloadPath = folders[1];
+                    sharedPreferences.edit().putString(Values.DOWNLOAD_LOCATION, Values.LOCATION_EXTERNAL).apply();
+                }
+                else{
+                    if(checkAvailableSpace(folders[0], 10)){
+                        downloadPath = folders[0];
+                        sharedPreferences.edit().putString(Values.DOWNLOAD_LOCATION, Values.LOCATION_INTERNAL).apply();
+                    }
+                }
+        }
+        return downloadPath;
+    }
 
-    //TODO: NON SO COSA CASPITA HO FATTO, VA TOLTA L'HASHMAP
+    public static File requestNewResourcesFolder(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences("com.rem.progetto_embedded", Context.MODE_PRIVATE);
+        File downloadPath = null;
+        File[] folders = context.getExternalFilesDirs(null);
+        if(hasWritableSd(context) && checkAvailableSpace(folders[1], 10)){
+            downloadPath = folders[1];
+            sharedPreferences.edit().putString(Values.DOWNLOAD_LOCATION, Values.LOCATION_EXTERNAL).apply();
+        }
+        else{
+            if(checkAvailableSpace(folders[0], 10)){
+                downloadPath = folders[0];
+                sharedPreferences.edit().putString(Values.DOWNLOAD_LOCATION, Values.LOCATION_INTERNAL).apply();
+            }
+        }
+        return downloadPath;
+    }
+
     public static String[] getLocalizedCountries(Context context, String[] toLocalize){
         ArrayList<String> localized = new ArrayList<>();
         int[] countriesIds = Values.getCountriesIds();
@@ -143,11 +196,10 @@ public class Utilities {
     }
 
     public static void deleteCache(Context context){
-        File baseDir = context.getExternalFilesDir(null);
+        File baseDir = getResourcesFolder(context);
         for(File file: baseDir.listFiles())
             deleteRecursively(file);
     }
-
 
     private static void deleteRecursively(File file) {
         if(file.isDirectory()) {
@@ -156,6 +208,20 @@ public class Utilities {
         }
 
         file.delete();
+    }
+
+    public static boolean hasWritableSd(Context context){
+        File[] paths = context.getExternalFilesDirs(null);
+        if(paths.length > 1){
+            String state = Environment.getExternalStorageState(paths[1]);
+            return state.equals(Environment.MEDIA_MOUNTED);
+        }
+        return false;
+    }
+
+    public static boolean checkAvailableSpace(File path, int requiredMb){
+        long spaceInMb = path.getUsableSpace() / (1024 * 1024);
+        return spaceInMb >= requiredMb;
     }
 
     public static class AnimalDetails {
