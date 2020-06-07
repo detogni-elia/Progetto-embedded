@@ -71,21 +71,19 @@ public class ResourcesDownloadDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 //Get selected item for each spinner
-                String country = (String) countries_spinner.getSelectedItem();
-                String language = (String)languages_spinner.getSelectedItem();
-                String imageQuality = (String)image_quality_spinner.getSelectedItem();
+                String country = Values.getCountriesDefaultNames()[countries_spinner.getSelectedItemPosition()];
+                String language = Values.getLanguagesDefaultNames()[languages_spinner.getSelectedItemPosition()];
+                String imageQuality = Values.getImageQualityNames()[image_quality_spinner.getSelectedItemPosition()];
+
                 //Save favourite language and image quality in app's SharedPreference
                 SharedPreferences prefs = context.getSharedPreferences("com.detons97gmail.progetto_embedded",Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor=prefs.edit();
                 editor.putString("selectedLanguage",language);
                 editor.putString("selectedImageQuality",imageQuality);
                 editor.apply();
+
                 //Start download of selected resources
-                startDownloadService(
-                        //Translate all items in english since all resources have english names
-                        Utilities.getCountryNameInEnglish(getContext(), country),
-                        Utilities.getLanguageNameInEnglish(getContext(), language),
-                        Utilities.getQualityValueInEnglish(getContext(),imageQuality));
+                startDownloadService(country, language, imageQuality);
 
                 //Close the dialog
                 dismiss();

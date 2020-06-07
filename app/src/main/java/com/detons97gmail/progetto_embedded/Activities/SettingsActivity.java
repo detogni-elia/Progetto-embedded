@@ -5,10 +5,12 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -21,6 +23,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.detons97gmail.progetto_embedded.Fragments.ConnectionDialogFragment;
 import com.detons97gmail.progetto_embedded.Fragments.ResourcesDownloadDialogFragment;
 import com.detons97gmail.progetto_embedded.R;
 import com.detons97gmail.progetto_embedded.Utilities;
@@ -208,6 +211,14 @@ public class SettingsActivity extends AppCompatActivity{
     }
 
     public void onClickDownloadResources(View v){
-        new ResourcesDownloadDialogFragment().show(getSupportFragmentManager(), "download");
+        //We show a cautionary message to the user about downloading with a metered connection if that's the case
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        boolean isConnectionMetered = cm != null && cm.isActiveNetworkMetered();
+        if(isConnectionMetered) {
+            new ConnectionDialogFragment().show(getSupportFragmentManager(), "alert");
+        }
+
+        else
+            new ResourcesDownloadDialogFragment().show(getSupportFragmentManager(), "download");
     }
 }

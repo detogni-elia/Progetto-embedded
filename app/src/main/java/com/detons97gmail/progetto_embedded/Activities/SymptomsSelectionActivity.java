@@ -41,7 +41,7 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
     private String[] symptomsDefaultNames;
     private String[] contactsDefaultNames;
     private ArrayList<SymptomsSearchAdapter.DataWrapper> data;
-    private String[] downloadedCountries;
+    private String[] countriesFolders;
     private RecyclerView.LayoutManager manager;
     private SymptomsSearchAdapter adapter;
     private Spinner countries_spinner;
@@ -51,6 +51,7 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
     private int checkedCounter = 0;
     private boolean areResourcesAvailable;
     private boolean bound;
+    private FakeDownloadIntentService mService;
 
     //Class's keys to restore instance state
     private static final String CHECKED_COUNTER = "SymptomsSelectionActivity.CHECKED_COUNTER";
@@ -147,6 +148,7 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
             unbindService(connection);
             bound = false;
             Log.v(TAG, "Service unbound");
+            mService = null;
         }
         super.onPause();
     }
@@ -197,7 +199,7 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
         }
         startIntent.putExtra(Values.EXTRA_CONTACT, contactsDefaultNames[contact_spinner.getSelectedItemPosition()]);
         startIntent.putExtra(Values.EXTRA_SYMPTOMS, querySymptoms.toArray(new String[]{}));
-        startIntent.putExtra(Values.EXTRA_COUNTRY, downloadedCountries[countries_spinner.getSelectedItemPosition()]);
+        startIntent.putExtra(Values.EXTRA_COUNTRY, countriesFolders[countries_spinner.getSelectedItemPosition()]);
 
         switch (species_spinner.getSelectedItemPosition()){
             case 0:
@@ -248,16 +250,17 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             FakeDownloadIntentService.ServiceBinder binder = (FakeDownloadIntentService.ServiceBinder) service;
-            FakeDownloadIntentService mService = binder.getService();
+            mService = binder.getService();
             Log.d(TAG, "Service bound");
             bound = true;
+            //Register as callback to get updates regarding downloads
+            mService.setCallback(SymptomsSelectionActivity.this);
             //If service is running we do nothing, we don't want to manage multiple downloads and we simply listen for updates from the service
-            if(mService.isRunning()) {
-                Log.v(TAG, "Service is already running");
+            if(mService.isRunning() || countriesFolders != null) {
+                Log.d(TAG, "Service is running or resources are already available");
             }
-            //If service is not running, it means we should ask the user to download resources
             else {
-                //We show a message only if there isn't one already on screen. We want to avoid overlap of identical DialogFragments
+                //We show a message only if there isn't one already on screen. We want to avoid overlap of identical DialogFragments in case of configuration changes
                 List<Fragment> fragments = getSupportFragmentManager().getFragments();
                 boolean alreadyShowing = false;
                 for (Fragment fragment : fragments) {
@@ -269,16 +272,14 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
                     //We show a cautionary message to the user about downloading with a metered connection if that's the case
                     ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                     boolean isConnectionMetered = cm != null && cm.isActiveNetworkMetered();
-                    if(isConnectionMetered)
+                    if(isConnectionMetered) {
                         new ConnectionDialogFragment().show(getSupportFragmentManager(), "alert");
-                        //new ResourcesDownloadDialogFragment().show(getSupportFragmentManager(), "download");
+                    }
 
                     else
                         new ResourcesDownloadDialogFragment().show(getSupportFragmentManager(), "download");
                 }
             }
-
-            mService.setCallback(SymptomsSelectionActivity.this);
         }
 
         @Override
@@ -292,36 +293,45 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
      * Checks the device's storage for the required resources. If those are not present asks the user to download them.
      */
     private void checkResourcesAvailability(){
-        //localizedCountries will contain translated country name to populate the spinner
-        String[] localizedCountries;
         //Check app's files to get downloaded resources
-        downloadedCountries = Utilities.getDownloadedCountries(this);
+        countriesFolders = Utilities.getDownloadedCountries(this);
+        Intent startIntent = new Intent(SymptomsSelectionActivity.this, FakeDownloadIntentService.class);
+        //Bind to FakeDownloadIntentService to listen to updates for the downloads
+        bindService(startIntent, connection, Context.BIND_AUTO_CREATE);
         //If no resources available, bind to FakeDownloadService to get updates about downloads
-        if(downloadedCountries == null || downloadedCountries.length == 0) {
+        if(countriesFolders == null) {
             //Reset adapter for spinner
             countries_spinner.setAdapter(null);
             Log.d(TAG, "No resources available");
-            Intent startIntent = new Intent(SymptomsSelectionActivity.this, FakeDownloadIntentService.class);
-            //Bind to FakeDownloadIntentService to listen to updates for the downloads
-            bindService(startIntent, connection, Context.BIND_AUTO_CREATE);
             areResourcesAvailable = false;
         }
-        else {
-            //Translate country names
-            localizedCountries = Utilities.getLocalizedCountries(this, downloadedCountries);
-            //If at least one country's resources are available
 
-            // Array adapter to set data in Spinner Widget
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, localizedCountries);
-            // Setting the array adapter containing country list to the spinner widget
-            countries_spinner.setAdapter(adapter);
-            areResourcesAvailable = true;
-        }
+        else
+            updateCountriesSpinner();
+
+        updateNavigationState();
+    }
+
+    private void updateNavigationState(){
         //Show FAB only when both resources are available and at least one symptom is checked
         if(checkedCounter > 0 && areResourcesAvailable)
             fab.setVisibility(View.VISIBLE);
         else
             fab.setVisibility(View.GONE);
+    }
+
+    private void updateCountriesSpinner(){
+        //Translate country names
+        countriesFolders = Utilities.getDownloadedCountries(this);
+        if(countriesFolders == null)
+            return;
+        String[] localizedCountries = Utilities.getLocalizedCountries(this, countriesFolders);
+        // Array adapter to set data in Spinner Widget
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, localizedCountries);
+        // Setting the array adapter containing country list to the spinner widget
+        countries_spinner.setAdapter(adapter);
+        areResourcesAvailable = true;
+        updateNavigationState();
     }
 
     //Implementation of FakeDownloadIntentService's interface callback method
@@ -332,7 +342,7 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                checkResourcesAvailability();
+                updateCountriesSpinner();
             }
         });
     }

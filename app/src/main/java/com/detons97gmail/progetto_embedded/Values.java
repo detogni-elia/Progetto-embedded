@@ -32,7 +32,7 @@ public class Values {
             "Italy"
     };
 
-    static String[] getCountriesDefaultNames(){
+    public static String[] getCountriesDefaultNames(){
         return COUNTRIES_DEFAULT_NAMES;
     }
 
@@ -70,7 +70,7 @@ public class Values {
         return IMAGE_QUALITY_IDS;
     }
 
-    static String[] getImageQualityNames(){
+    public static String[] getImageQualityNames(){
         return IMAGE_QUALITY_NAMES;
     }
 
@@ -78,7 +78,7 @@ public class Values {
         return LANGUAGES_IDS;
     }
 
-    static String[] getLanguagesDefaultNames(){
+    public static String[] getLanguagesDefaultNames(){
         return LANGUAGES_DEFAULT_NAMES;
     }
 

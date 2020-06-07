@@ -2,9 +2,6 @@ package com.detons97gmail.progetto_embedded;
 
 import android.content.Context;
 import android.widget.Toast;
-
-import androidx.core.content.ContextCompat;
-
 import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
@@ -29,6 +26,8 @@ public class Utilities {
                 }
             });
             if(resFolders != null){
+                if(resFolders.length == 0)
+                    return null;
                 //countriesNames contains the english name of all supported countries
                 //The resFolders will always use the english names of the countries
                 String[] countriesNames = Values.getCountriesDefaultNames();
@@ -37,9 +36,9 @@ public class Utilities {
                 for(int i = 0; i < resFolders.length; i++) {
                     String[] folderPath = resFolders[i].getAbsolutePath().split("/");
                     String folderName = folderPath[folderPath.length - 1];
-                    for (String countriesName : countriesNames) {
+                    for (String countryName : countriesNames) {
                         //If found folder with name matching one country, add it to the list
-                        if (folderName.equals(countriesName)) {
+                        if (folderName.equals(countryName)) {
                             downloadedCountries[i] = folderName;
                             break;
                         }
@@ -47,8 +46,6 @@ public class Utilities {
                 }
                 return downloadedCountries;
             }
-            else
-                return null;
         }
 
         return null;
@@ -58,6 +55,16 @@ public class Utilities {
 
     //TODO: NON SO COSA CASPITA HO FATTO, VA TOLTA L'HASHMAP
     public static String[] getLocalizedCountries(Context context, String[] toLocalize){
+        ArrayList<String> localized = new ArrayList<>();
+        int[] countriesIds = Values.getCountriesIds();
+        String[] countries = Values.getCountriesDefaultNames();
+        for(String s: toLocalize) {
+            for (int i = 0; i < countries.length; i++) {
+                if (s.equals(countries[i]))
+                    localized.add(context.getString(countriesIds[i]));
+            }
+        }
+        /*
         if(countriesHashMap.isEmpty()){
             int[] supportedCountriesIds = Values.getCountriesIds();
             String[] supportedCountriesDefaultNames = Values.getCountriesDefaultNames();
@@ -73,6 +80,10 @@ public class Utilities {
             }
         }
         return localizedCountries.toArray(new String[]{});
+
+         */
+        return localized.toArray(new String[]{});
+
     }
 
     public static String[] getLocalizedSymptoms(Context context){
@@ -102,30 +113,6 @@ public class Utilities {
         return localizedContactsTypes;
     }
 
-    public static String getCountryNameInEnglish(Context context, String localizedCountry){
-        String toReturn = "";
-        int[] countriesIds = Values.getCountriesIds();
-        for(int i = 0; i < countriesIds.length; i++){
-            if(context.getString(countriesIds[i]).equals(localizedCountry)) {
-                toReturn = Values.getCountriesDefaultNames()[i];
-                break;
-            }
-        }
-        return toReturn;
-    }
-
-    public static String getLanguageNameInEnglish(Context context, String localizedLanguage){
-        String toReturn = "";
-        int[] languagesIds = Values.getLanguagesIds();
-        for(int i = 0; i < languagesIds.length; i++){
-            if(context.getString(languagesIds[i]).equals(localizedLanguage)){
-                toReturn = Values.getLanguagesDefaultNames()[i];
-                break;
-            }
-        }
-        return toReturn;
-    }
-
     public static String[] getLocalizedSupportedLanguages(Context context){
         int[] languagesIds = Values.getLanguagesIds();
         String[] localizedLanguages = new String[languagesIds.length];
@@ -150,18 +137,6 @@ public class Utilities {
             supportedImageQuality[i] = context.getString(imageQualityIds[i]);
 
         return supportedImageQuality;
-    }
-
-    public static String getQualityValueInEnglish(Context context, String imageQuality) {
-        String toReturn = "";
-        int[] qualityIds = Values.getImageQualityIds();
-        for(int i = 0; i < qualityIds.length; i++){
-            if(context.getString((qualityIds[i])).equals(imageQuality)){
-                toReturn = Values.getImageQualityNames()[i];
-                break;
-            }
-        }
-        return toReturn;
     }
 
     public static void deleteCache(Context context){

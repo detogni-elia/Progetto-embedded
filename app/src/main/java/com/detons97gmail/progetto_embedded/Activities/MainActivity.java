@@ -20,19 +20,14 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.telephony.CellInfoWcdma;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -61,10 +56,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private LinearLayout animals_button;
     private LinearLayout insects_button;
     private LinearLayout plants_button;
+    private FakeDownloadIntentService mService;
 
     private Dialog permissionDialog;
 
     private boolean bound;
+    private String[] countriesFolders;
 
     //permissions codes
     private static final int REQUEST_CODE=100;
@@ -150,6 +147,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             unbindService(connection);
             bound = false;
             Log.v(TAG, "Service unbound");
+            mService = null;
         }
         super.onPause();
     }
@@ -206,7 +204,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SharedPreferences sharedPreferences = getSharedPreferences("com.detons97gmail.progetto_embedded", MODE_PRIVATE);
         permissionDialog=new Dialog(this);
 
-        //TODO: CONTROLLARE CHE CAMBIANDO ORIENTAMENTO NON VENGANO MOSTRATI PIU' DIALOG
         if (sharedPreferences.getBoolean("firstrun", true)) {
             Log.i(TAG, "onResume: first run started");
             // start code for first run
@@ -259,9 +256,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         else
             checkResourcesAvailability();
-
-        //Check whether app's resources are available or not, handling accordingly
-        //checkResourcesAvailability();
     }
 
     //Gestione delle callbacks legate alla memoria
@@ -273,6 +267,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             //Se l' app passa in background elimino i riferimenti all UI
             toolbar=null;
             Log.d(TAG,"Eliminata la toolbar");
+            mService = null;
+            Log.d(TAG, "Eliminato il service");
             mSpinnerCountries=null;
             Log.d(TAG,"Eliminato lo spinner");
             drawer=null;
@@ -307,34 +303,41 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /**
-     * Checks the device's storage for the required resources. If those are not present asks the user to download them.
+     * Checks the device's storage for the required resources. If those are not present asks the user to download them. If a download is in progress setup callback to get updates.
      */
     private void checkResourcesAvailability(){
-        //localizedCountries will contain translated country name to populate countriesSpinner
-        String[] localizedCountries;
         //Check app's files to get downloaded resources
         //Contains the folders names of the resources stored
-        String[] countriesFolders = Utilities.getDownloadedCountries(this);
-        //If no resources available, bind to FakeDownloadIntentService to get updates about downloads
-        if(countriesFolders == null || countriesFolders.length == 0) {
+        countriesFolders = Utilities.getDownloadedCountries(this);
+        Intent startIntent = new Intent(MainActivity.this, FakeDownloadIntentService.class);
+        //Bind to FakeDownloadIntentService to listen to updates for the downloads
+        bindService(startIntent, connection, Context.BIND_AUTO_CREATE);
+        //If no resources available, ask user to download them if there's not a download in progress
+        if(countriesFolders == null) {
             //Reset adapter if resources were removed while the app was in background
             mSpinnerCountries.setAdapter(null);
             Log.d(TAG, "No resources available");
-            Intent startIntent = new Intent(MainActivity.this, FakeDownloadIntentService.class);
-            //Bind to FakeDownloadIntentService to listen to updates for the downloads
-            bindService(startIntent, connection, Context.BIND_AUTO_CREATE);
             //Disable navigation until resources are available
             setUiButtonsEnabled(false);
         }
-        else {
-            //Translate names of available countries to display them
-            localizedCountries = Utilities.getLocalizedCountries(this, countriesFolders);
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, localizedCountries);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            mSpinnerCountries.setAdapter(adapter);
-            //Enable navigation now that there are resources
-            setUiButtonsEnabled(true);
-        }
+        else
+            updateSpinner();
+    }
+
+    /**
+     * Update countries spinner with available resources
+     */
+    private void updateSpinner(){
+        countriesFolders = Utilities.getDownloadedCountries(this);
+        if(countriesFolders == null)
+            return;
+        //Translate names of available countries to display them
+        String[] localizedCountries = Utilities.getLocalizedCountries(this, countriesFolders);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, localizedCountries);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinnerCountries.setAdapter(adapter);
+        //Enable navigation now that there are resources
+        setUiButtonsEnabled(true);
     }
 
     /**
@@ -343,7 +346,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     public void onClickCategory(View v){
         //Translate selected country's name to query SQLite database
-        String country = Utilities.getCountryNameInEnglish(this, (String)mSpinnerCountries.getSelectedItem());
+        //String country = Utilities.getCountryNameInEnglish(this, (String)mSpinnerCountries.getSelectedItem());
+        String country = countriesFolders[mSpinnerCountries.getSelectedItemPosition()];
         //String country = countriesFolders[mSpinnerCountries.getSelectedItemPosition()];
         String category;
         switch (v.getId()){
@@ -367,17 +371,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             FakeDownloadIntentService.ServiceBinder binder = (FakeDownloadIntentService.ServiceBinder) service;
-            FakeDownloadIntentService mService = binder.getService();
-            Log.d(TAG, "Service bound");
+            mService = binder.getService();
             bound = true;
-            //If service is running we do nothing, we don't want to manage multiple downloads and we simply listen for updates from the service
-            if(mService.isRunning()) {
-                Log.v(TAG, "Service is already running");
+            Log.d(TAG, "Service bound");
+            //Register as callback to get updates regarding downloads
+            mService.setCallback(MainActivity.this);
+            if(mService.isRunning() || countriesFolders != null) {
+                Log.d(TAG, "Service is running or resources are already available");
             }
 
             //If service is not running, it means we should ask the user to download resources
             else {
-                //We show a message only if there isn't one already on screen. We want to avoid overlap of identical DialogFragments
+                //We show a message only if there isn't one already on screen. We want to avoid overlap of identical DialogFragments in case of configuration changes
                 List<Fragment> fragments = getSupportFragmentManager().getFragments();
                 boolean alreadyShowing = false;
                 for (Fragment fragment : fragments) {
@@ -397,9 +402,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         new ResourcesDownloadDialogFragment().show(getSupportFragmentManager(), "download");
                 }
             }
-
-            //Register as callback to get updates regarding downloads
-            mService.setCallback(MainActivity.this);
             /*
             else {
                 permissionDialog.setContentView(R.layout.resources_download_dialog_layout);
@@ -506,10 +508,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //We unbind so that the service may stop
         unbindService(connection);
         bound = false;
+        Log.d(TAG, "Service unbound");
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                checkResourcesAvailability();
+                updateSpinner();
             }
         });
     }
