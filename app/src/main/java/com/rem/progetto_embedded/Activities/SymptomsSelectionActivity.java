@@ -44,9 +44,9 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
     private String[] countriesFolders;
     private RecyclerView.LayoutManager manager;
     private SymptomsSearchAdapter adapter;
-    private Spinner countries_spinner;
-    private Spinner species_spinner;
-    private Spinner contact_spinner;
+    private Spinner countriesSpinner;
+    private Spinner speciesSpinner;
+    private Spinner contactsSpinner;
     private FloatingActionButton fab;
     private int checkedCounter = 0;
     private boolean areResourcesAvailable;
@@ -63,9 +63,9 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
         setContentView(R.layout.activity_symptoms_selection);
 
         fab = findViewById(R.id.fab);
-        countries_spinner = findViewById(R.id.countries_spinner);
-        species_spinner = findViewById(R.id.species_spinner);
-        contact_spinner = findViewById(R.id.contact_spinner);
+        countriesSpinner = findViewById(R.id.countries_spinner);
+        speciesSpinner = findViewById(R.id.species_spinner);
+        contactsSpinner = findViewById(R.id.contact_spinner);
 
         //Get localized symptoms and species categories to display
         String[] symptoms = Utilities.getLocalizedSymptoms(this);
@@ -86,8 +86,12 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
             checkedCounter = savedInstanceState.getInt(CHECKED_COUNTER);
             //We hide the FloatingActionButton if no symptom is checked, we want at least a symptom to interrogate the database
         }
-        species_spinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, categories));
-        contact_spinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, contacts));
+        ArrayAdapter<String> speciesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
+        speciesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        speciesSpinner.setAdapter(speciesAdapter);
+        ArrayAdapter<String> contactsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, contacts);
+        contactsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        contactsSpinner.setAdapter(contactsAdapter);
 
         //Wrap the data for SymptomSearchAdapter
         data = SymptomsSearchAdapter.DataWrapper.wrapData(symptoms, selections);
@@ -197,11 +201,11 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
             }
 
         }
-        startIntent.putExtra(Values.EXTRA_CONTACT, contactsDefaultNames[contact_spinner.getSelectedItemPosition()]);
+        startIntent.putExtra(Values.EXTRA_CONTACT, contactsDefaultNames[contactsSpinner.getSelectedItemPosition()]);
         startIntent.putExtra(Values.EXTRA_SYMPTOMS, querySymptoms.toArray(new String[]{}));
-        startIntent.putExtra(Values.EXTRA_COUNTRY, countriesFolders[countries_spinner.getSelectedItemPosition()]);
+        startIntent.putExtra(Values.EXTRA_COUNTRY, countriesFolders[countriesSpinner.getSelectedItemPosition()]);
 
-        switch (species_spinner.getSelectedItemPosition()){
+        switch (speciesSpinner.getSelectedItemPosition()){
             case 0:
                 startIntent.putExtra(Values.EXTRA_CATEGORY, "Animals");
                 break;
@@ -222,12 +226,12 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
             fab = findViewById(R.id.fab);
             Log.d("ON_RESUME","Fab ripristinato");
         }
-        if(countries_spinner == null) {
-            countries_spinner = findViewById(R.id.countries_spinner);
+        if(countriesSpinner == null) {
+            countriesSpinner = findViewById(R.id.countries_spinner);
             Log.d("ON_RESUME","Countries_spinner ripristinato");
         }
-        if(species_spinner == null) {
-            species_spinner = findViewById(R.id.species_spinner);
+        if(speciesSpinner == null) {
+            speciesSpinner = findViewById(R.id.species_spinner);
             Log.d("ON_RESUME","Species_spinner ripristinato");
         }
         checkResourcesAvailability();
@@ -237,9 +241,9 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
     {
         if(level==ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN)
         {
-            countries_spinner=null;
+            countriesSpinner =null;
             Log.d("TRIM_MEMOTY_UI_HIDDEN","Contries_spinner eliminato");
-            species_spinner=null;
+            speciesSpinner =null;
             Log.d("TRIM_MEMOTY_UI_HIDDEN","Species_spinner eliminato");
             fab=null;
             Log.d("TRIM_MEMOTY_UI_HIDDEN","Fab eliminato");
@@ -301,7 +305,7 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
         //If no resources available, bind to FakeDownloadService to get updates about downloads
         if(countriesFolders == null) {
             //Reset adapter for spinner
-            countries_spinner.setAdapter(null);
+            countriesSpinner.setAdapter(null);
             Log.d(TAG, "No resources available");
             areResourcesAvailable = false;
         }
@@ -327,9 +331,10 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
             return;
         String[] localizedCountries = Utilities.localizeCountries(this, countriesFolders);
         // Array adapter to set data in Spinner Widget
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, localizedCountries);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, localizedCountries);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Setting the array adapter containing country list to the spinner widget
-        countries_spinner.setAdapter(adapter);
+        countriesSpinner.setAdapter(adapter);
         areResourcesAvailable = true;
         updateNavigationState();
     }
