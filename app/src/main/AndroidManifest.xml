@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.detons97gmail.progetto_embedded">
+    package="com.rem.progetto_embedded">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -18,7 +18,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/app_theme">
-        <activity android:name=".Activities.MainActivity"
+        <activity android:name="com.rem.progetto_embedded.Activities.MainActivity"
             tools:ignore="InnerclassSeparator" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,25 +27,25 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".Activities.SettingsActivity"
+        <activity android:name="com.rem.progetto_embedded.Activities.SettingsActivity"
 
             tools:ignore="InnerclassSeparator" />
         <activity
-            android:name=".Activities.SymptomsSelectionActivity"
+            android:name="com.rem.progetto_embedded.Activities.SymptomsSelectionActivity"
             tools:ignore="InnerclassSeparator" />
         <activity
-            android:name=".Activities.SpeciesListActivity"
+            android:name="com.rem.progetto_embedded.Activities.SpeciesListActivity"
             tools:ignore="InnerclassSeparator" />
         <activity
-            android:name=".Activities.AnimalDetailsActivity"
+            android:name="com.rem.progetto_embedded.Activities.AnimalDetailsActivity"
             tools:ignore="InnerclassSeparator" />
         <activity
-            android:name=".Activities.ProvaDatabase"
+            android:name="com.rem.progetto_embedded.Activities.ProvaDatabase"
             tools:ignore="InnerclassSeparator">
 
         </activity>
 
-        <service android:name=".Services.FakeDownloadIntentService"
+        <service android:name="com.rem.progetto_embedded.Services.FakeDownloadIntentService"
             android:exported="false"
             tools:ignore="InnerclassSeparator" />
     </application>
