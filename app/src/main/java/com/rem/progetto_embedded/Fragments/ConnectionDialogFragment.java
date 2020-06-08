@@ -10,6 +10,7 @@ import android.view.Window;
 import android.widget.Button;
 
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.rem.progetto_embedded.R;
 
@@ -34,7 +35,9 @@ public class ConnectionDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 dismiss();
-                new ResourcesDownloadDialogFragment().show(getFragmentManager(), "download");
+                FragmentManager manager = getFragmentManager();
+                if(manager != null)
+                    new ResourcesDownloadDialogFragment().show(manager, "download");
             }
         });
 

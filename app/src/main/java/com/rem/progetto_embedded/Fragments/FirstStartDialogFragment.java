@@ -14,7 +14,6 @@ import android.widget.Button;
 import androidx.fragment.app.DialogFragment;
 
 import com.rem.progetto_embedded.R;
-import com.rem.progetto_embedded.Values;
 
 public class FirstStartDialogFragment extends DialogFragment {
     public interface FirstStartListener{

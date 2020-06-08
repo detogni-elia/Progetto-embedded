@@ -134,7 +134,8 @@ public class FakeDownloadIntentService extends IntentService {
             NotificationChannel channel = new NotificationChannel("FakeDownloadNotification", name, importance);
             channel.setDescription(description);
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
+            if(notificationManager != null)
+                notificationManager.createNotificationChannel(channel);
         }
     }
 
