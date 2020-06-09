@@ -19,12 +19,10 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -231,44 +229,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (sharedPreferences.getBoolean("firstrun", true)) {
             Log.i(TAG, "onResume: first run started");
-            // start code for first run
-            /*
-            permissionDialog.setContentView(R.layout.first_start_permissions_dialog_layout);
-            //TextView permission_textView = permissionDialog.findViewById(R.id.permission_textView);
-            //ImageView permission_ImageView = permissionDialog.findViewById(R.id.permission_ImageView);
-            Button ok_button = permissionDialog.findViewById(R.id.ok_button);
 
-            //show dialog box
-            Window window = permissionDialog.getWindow();
-            if(window != null)
-                window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-            permissionDialog.show();
-
-            //ok button click listener, ask for permissions if not already granted
-            ok_button.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
-                            + ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.INTERNET)
-                            + ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.ACCESS_COARSE_LOCATION)
-                            + ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                            + ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
-                        //permission not granted
-                        ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.READ_EXTERNAL_STORAGE,
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE},REQUEST_CODE);
-                        permissionDialog.dismiss();
-
-                    }
-                    else{
-                        ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.READ_EXTERNAL_STORAGE,
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE},REQUEST_CODE);
-                        permissionDialog.dismiss();
-                        checkResourcesAvailability();
-                    }
-                }
-            });
-            */
             List<Fragment> fragments = getSupportFragmentManager().getFragments();
             boolean alreadyShowing = false;
             for (Fragment fragment : fragments) {
@@ -278,7 +239,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
             if(!alreadyShowing)
                 new FirstStartDialogFragment().show(getSupportFragmentManager(), "first_run");
-
 
             // set false if first run is completed
             sharedPreferences.edit().putBoolean("firstrun", false).apply();
@@ -298,9 +258,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         else
             checkResourcesAvailability();
-
-        //Check whether app's resources are available or not, handling accordingly
-        //checkResourcesAvailability();
 
 
         Log.i(TAG, "onResume: langChanged"+getSharedPreferences("com.rem.progetto_embedded", MODE_PRIVATE).getBoolean("langChanged",false));
@@ -466,78 +423,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         new ResourcesDownloadDialogFragment().show(getSupportFragmentManager(), "download");
                 }
             }
-            /*
-            else {
-                permissionDialog.setContentView(R.layout.resources_download_dialog_layout);
-                Button ok_button = permissionDialog.findViewById(R.id.ok_button);
-                Button cancel_button = permissionDialog.findViewById(R.id.cancel_button);
-
-                final Spinner countries_spinner = permissionDialog.findViewById(R.id.countries_spinner);
-                String[] supportedCountries = Utilities.getLocalizedSupportedCountries(getApplicationContext());
-                ArrayAdapter<String> countriesAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, supportedCountries);
-                countriesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                countries_spinner.setAdapter(countriesAdapter);
-
-                final Spinner languages_spinner = permissionDialog.findViewById(R.id.languages_spinner);
-                String[] supportedLanguages = Utilities.getLocalizedSupportedLanguages(getApplicationContext());
-                ArrayAdapter<String> languagesAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, supportedLanguages);
-                languagesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                languages_spinner.setAdapter(languagesAdapter);
-
-                final Spinner image_quality_spinner = permissionDialog.findViewById(R.id.image_quality_spinner);
-                String[] supportedImageQuality = Utilities.getSupportedImageQuality(getApplicationContext());
-                ArrayAdapter<String> imagesQualityAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, supportedImageQuality);
-                imagesQualityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                image_quality_spinner.setAdapter(imagesQualityAdapter);
-
-                //show dialog box
-                Window window = permissionDialog.getWindow();
-                if(window != null)
-                    //window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-                permissionDialog.show();
-
-                //Listener for the dialog's OK button
-                ok_button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String country = (String) countries_spinner.getSelectedItem();
-                        String language = (String)languages_spinner.getSelectedItem();
-                        String imageQuality = (String)image_quality_spinner.getSelectedItem();
-                        //save in SharedPreference for settings activity display information layout
-                        SharedPreferences prefs=getSharedPreferences("com.detons97gmail.progetto_embedded",MODE_PRIVATE);
-                        SharedPreferences.Editor editor=prefs.edit();
-                        editor.putString("selectedLanguage",language);
-                        editor.putString("selectedImageQuality",imageQuality);
-                        editor.apply();
-                        startDownloadService(Utilities.getDefaultCountryName(getApplicationContext(), country), Utilities.getDefaultLanguageName(getApplicationContext(), language));
-                        permissionDialog.dismiss();
-                    }
-                });
-                cancel_button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        permissionDialog.dismiss();
-                    }
-                });
-            }
-             */
         }
-        /*
-        private void startDownloadService(String country, String language){
-            Intent startIntent = new Intent(MainActivity.this, FakeDownloadIntentService.class);
-            startIntent.putExtra(Values.EXTRA_COUNTRY, country);
-            startIntent.putExtra(Values.EXTRA_LANGUAGE, language);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                startForegroundService(startIntent);
-            else
-                startService(startIntent);
-
-            mService.setCallback(MainActivity.this);
-        }
-
-         */
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
@@ -573,8 +459,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
     }
-
-
 
     @Override
     public void closingStartDialog() {
@@ -612,7 +496,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         android.content.res.Configuration configuration = res.getConfiguration();
         configuration.setLocale(new Locale(lang));
         res.updateConfiguration(configuration,res.getDisplayMetrics());
-
     }
 
     @Override

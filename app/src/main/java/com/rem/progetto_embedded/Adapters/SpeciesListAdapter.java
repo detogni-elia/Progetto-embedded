@@ -16,7 +16,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 /**
- * Adapter used in SpeciesListFragment loads implements filterable in order to filter the data displayed
+ * Adapter used in SpeciesListActivity loads implements filterable in order to filter the data displayed
  */
 public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemViewHolder> implements Filterable {
     /**
@@ -77,22 +77,35 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
     }
 
     public SpeciesListAdapter(ArrayList<DataWrapper> wrappedData, OnSpeciesSelectedListener listener) {
+        //50 Mb of cache
+        int cacheSize = 1024 * 1024 * 50;
+        //LruCache takes cacheSize in Kb
+        imageCache = new LruCache<String, Bitmap>(cacheSize / 1024){
+            @Override
+            protected int sizeOf(String key, Bitmap bitmap){
+                return bitmap.getByteCount() / 1024;
+            }
+        };
+        clickListener = listener;
+
         if(wrappedData != null) {
             fullData = wrappedData;
             //filteredData.addAll(fullData);
             filteredData.addAll(fullData);
-            clickListener = listener;
-
-            //50 Mb of cache
-            int cacheSize = 1024 * 1024 * 50;
-            //LruCache takes cacheSize in Kb
-            imageCache = new LruCache<String, Bitmap>(cacheSize / 1024){
-                @Override
-                protected int sizeOf(String key, Bitmap bitmap){
-                    return bitmap.getByteCount() / 1024;
-                }
-            };
         }
+    }
+
+    public SpeciesListAdapter(OnSpeciesSelectedListener listener){
+        //50 Mb of cache
+        int cacheSize = 1024 * 1024 * 50;
+        //LruCache takes cacheSize in Kb
+        imageCache = new LruCache<String, Bitmap>(cacheSize / 1024){
+            @Override
+            protected int sizeOf(String key, Bitmap bitmap){
+                return bitmap.getByteCount() / 1024;
+            }
+        };
+        clickListener = listener;
     }
 
     @Override
@@ -189,5 +202,31 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
     {
         //Make available to the Garbage Collector
         imageCache=null;
+    }
+
+    /**
+     * Set image cache after a configuration change
+     * @param cache The image cache to restore
+     */
+    public void setImageCache(LruCache<String, Bitmap> cache) {
+        imageCache = cache;
+    }
+
+    public LruCache<String, Bitmap> getImageCache(){
+        return imageCache;
+    }
+
+    public void setData(ArrayList<DataWrapper> data){
+        fullData = data;
+        filteredData.clear();
+        filteredData.addAll(fullData);
+    }
+
+    public DataWrapper getElementAt(int position){
+        return filteredData.get(position);
+    }
+
+    public void setClickListener(OnSpeciesSelectedListener listener){
+        this.clickListener = listener;
     }
 }

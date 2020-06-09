@@ -3,54 +3,101 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.ComponentCallbacks2;
+import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.rem.progetto_embedded.Adapters.SpeciesListAdapter;
 import com.rem.progetto_embedded.R;
-import com.rem.progetto_embedded.Fragments.SpeciesListFragment;
+import com.rem.progetto_embedded.SpeciesViewModel;
+import com.rem.progetto_embedded.Values;
+
+import java.util.ArrayList;
 
 /**
  * Activity to show a list of species with relative name and image
  */
 
-public class SpeciesListActivity extends AppCompatActivity implements ComponentCallbacks2 {
-    private Toolbar toolbar;
-    private ActionBar actionBar;
+public class SpeciesListActivity extends AppCompatActivity implements SpeciesListAdapter.OnSpeciesSelectedListener, ComponentCallbacks2 {
     private final String TAG = this.getClass().getSimpleName();
 
-   private SpeciesListFragment speciesListFragment;
+    private SpeciesListAdapter adapter;
+    private SpeciesViewModel viewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_species_list);
-        toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
         if(actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(R.string.species_list_toolbar_title);
         }
+    }
 
-        //Initialize and insert SpeciesListFragment
-        //If we are restoring from a previous state, do nothing as to not overlap fragments
-        if(savedInstanceState != null)
-            return;
+    @Override
+    public void onResume(){
+        super.onResume();
+        RecyclerView recyclerView = findViewById(R.id.species_list_recycler_view);
 
-        Bundle fragBundle = getIntent().getExtras();
-        speciesListFragment = new SpeciesListFragment();
-        speciesListFragment.setArguments(fragBundle);
-        getSupportFragmentManager().beginTransaction().add(R.id.species_list_fragment_container, speciesListFragment).commit();
+        //Display items as list if orientation is portrait, else display them in rows of 2 elements per row
+        int orientation = getResources().getConfiguration().orientation;
+        RecyclerView.LayoutManager layoutManager;
+        if(orientation == Configuration.ORIENTATION_PORTRAIT) {
+            layoutManager = new LinearLayoutManager(this);
+            recyclerView.setLayoutManager(layoutManager);
+        }
+        else {
+            layoutManager = new GridLayoutManager(this, 2);
+            recyclerView.setLayoutManager(layoutManager);
+        }
+
+        //Get SpeciesViewModel and query data
+        viewModel = new ViewModelProvider(this).get(SpeciesViewModel.class);
+        String country = getIntent().getStringExtra(Values.EXTRA_COUNTRY);
+        String category = getIntent().getStringExtra(Values.EXTRA_CATEGORY);
+        adapter = new SpeciesListAdapter(this);
+        viewModel.getSpecies(country, category, null).observe(this, new Observer<ArrayList<SpeciesListAdapter.DataWrapper>>() {
+            @Override
+            public void onChanged(ArrayList<SpeciesListAdapter.DataWrapper> dataWrappers) {
+                adapter.setData(dataWrappers);
+                if(viewModel.getStoredCache() != null)
+                    adapter.setImageCache(viewModel.getStoredCache());
+            }
+        });
+
+        recyclerView.setAdapter(adapter);
+        recyclerView.setHasFixedSize(true);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.search_menu, menu);
-        ((SearchView)menu.getItem(0).getActionView()).setQueryHint(getString(R.string.species_list_query_hint));
+        MenuItem item = menu.findItem(R.id.menu_search);
+        SearchView searchView = (SearchView) item.getActionView();
+        searchView.setQueryHint(getString(R.string.species_list_query_hint));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) { return false; }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
         return true;
     }
 
@@ -59,49 +106,65 @@ public class SpeciesListActivity extends AppCompatActivity implements ComponentC
     public boolean onOptionsItemSelected(MenuItem item){
         int id = item.getItemId();
         if(id == android.R.id.home){
-            //Should use NavUtils.navigateUpTo(this, new Intent(this, Activity.class))
-            //With NavUtils we can navigate to a custom destination while destroying this Activity
             finish();
         }
         return super.onOptionsItemSelected(item);
     }
 
-    //Se i riferimenti agli oggetti UI sono stati eliminati, li ripristino
     @Override
-    public void onResume()
-    {
-        super.onResume();
-        if(toolbar == null) {
-            toolbar = findViewById(R.id.toolbar);
-            Log.d(TAG, "Toolbar ripristinata");
-        }
-        if(actionBar == null){
-            actionBar=getSupportActionBar();
-            Log.d(TAG, "ActionBar ripristinata");
-        }
+    public void onPause(){
+        super.onPause();
+        //Store current adapter's cache to restore it after a configuration change
+        viewModel.storeCache(adapter.getImageCache());
+        adapter.setClickListener(null);
+        Log.v(TAG, "COSE");
     }
+
     //Release Memory when system resources becomes low
     //NON TESTATO NEI CASI DI MEMORY RUNNING LOW E CRITICAL
-    //If e non SWITCH perchè mi da un warning se no implemento tutti i casi, ma non serve nel nostro caso
     public void onTrimMemory(int level)
     {
         if(level == ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN) {
             //Sembrava funzionare correttamente anche senza onResume
             //App in background --> Remove UI widget
-            toolbar = null;
-            Log.d(TAG, "Toolbar eliminata");
-            actionBar = null;
-            Log.d(TAG, "ActionBar eliminata");
+            viewModel = null;
+            Log.d(TAG, "ViewModel eliminato");
+            adapter = null;
+            Log.d(TAG, "Adapter eliminata");
         }
-        else if(level== ComponentCallbacks2.TRIM_MEMORY_RUNNING_LOW) {
+        if(level== ComponentCallbacks2.TRIM_MEMORY_RUNNING_LOW) {
             //Memory is on low level ==> resize the cache
             //10 Mb of cache
-            speciesListFragment.resizeImageCache();
+            resizeImageCache();
         }
         else if(level == ComponentCallbacks2.TRIM_MEMORY_RUNNING_CRITICAL) {
             //Memory is on critical level ==> release the cache
             //Garbage Collector will clean
-            speciesListFragment.deleteImageCache();
+            deleteImageCache();
         }
+    }
+
+    @Override
+    public void onSpeciesListItemClick(int position) {
+        Intent startIntent = new Intent(this, AnimalDetailsActivity.class);
+        startIntent.putExtra(Values.EXTRA_IMAGE_PATH, adapter.getElementAt(position).getImage());
+        startIntent.putExtra(Values.EXTRA_NAME, adapter.getElementAt(position).getName());
+        //TODO: WE SHOULD GET THIS EXTRA INFO ONLY WHEN REQUESTED, QUERYING THE DATABASE.
+        startIntent.putExtra(Values.EXTRA_SPECIES, "Nome della specie");
+        startIntent.putExtra(Values.EXTRA_DIET, "Tipo di dieta");
+        //TODO: ADD VARIOUS SYMPTOMS AND LOCALIZATION
+        //TODO: ADD SYSTEM TO LOCALIZE ON MAP (FOR EXAMPLE, CENTER AND RADIUS TO DESCRIBE AN AREA WHERE THE ANIMAL, PLANT, INSECT CAN BE FOUND)
+        startIntent.putExtra(Values.EXTRA_SYMPTOMS, getString(R.string.details_symptom_bite) + ": Gonfiore, bruciore, dolore, sanguinamento, intorpidimento");
+        startActivity(startIntent);
+    }
+
+    public void resizeImageCache(){
+        adapter.resizeImageCache();
+        viewModel.storeCache(adapter.getImageCache());
+    }
+
+    public void deleteImageCache(){
+        adapter.deleteImageCache();
+        viewModel.storeCache(adapter.getImageCache());
     }
 }

@@ -35,7 +35,7 @@ public class SpeciesListItemViewHolder extends RecyclerView.ViewHolder implement
     void setName(String name){
         textView.setText(name);
     }
-    //Calls method onSpeciesListItemClick implemented in SpeciesListFragment
+    //Calls method onSpeciesListItemClick implemented in SpeciesListActivity
     @Override
     public void onClick(View v) {
         clickListener.onSpeciesListItemClick(getAdapterPosition());
