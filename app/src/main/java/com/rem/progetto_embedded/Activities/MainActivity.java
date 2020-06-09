@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private String[] countriesFolders;
 
 
-    public static Context appContext;
+    private Locale locale;
 
     //permissions codes
     private static final int REQUEST_CODE=100;
@@ -75,23 +75,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //find device language
+        locale=Locale.getDefault();
+        String deviceLang=locale.getDisplayLanguage();
+        Log.i(TAG, "onCreate: display language "+deviceLang);
 
 
         Boolean check=false;
-        Boolean destroyed=getSharedPreferences("com.rem.progetto_embedded", MODE_PRIVATE).getBoolean("destroyed",false);
+        Boolean destroyed=getSharedPreferences(Values.PREFERENCES_NAME, MODE_PRIVATE).getBoolean(Values.DESTROYED,false);
+        String settingsLanguage = PreferenceManager.getDefaultSharedPreferences(this).getString(Values.LANGUAGE,"");
 
         //if the app was previously destroyed set the correct language of settings
-        if(check!=destroyed){
-            SharedPreferences sharedPreferences= getSharedPreferences("com.rem.progetto_embedded",MODE_PRIVATE);
-            sharedPreferences.edit().putBoolean("destroyed",false).apply();
+        if(check!=destroyed && !(settingsLanguage.equalsIgnoreCase(deviceLang))){
+            SharedPreferences sharedPreferences= getSharedPreferences(Values.PREFERENCES_NAME,MODE_PRIVATE);
+            sharedPreferences.edit().putBoolean(Values.DESTROYED,false).apply();
             setLanguage(this);
             Intent refresh=new Intent(this,MainActivity.class);
             this.finish();
             startActivity(refresh);
         }
-
-
-        appContext=getApplicationContext();
 
 
         //set toolbar
@@ -226,10 +228,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Log.d(TAG, "Restored spinner");
         }
 
-        SharedPreferences sharedPreferences = getSharedPreferences("com.rem.progetto_embedded", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences(Values.PREFERENCES_NAME, MODE_PRIVATE);
         permissionDialog=new Dialog(this);
 
-        if (sharedPreferences.getBoolean("firstrun", true)) {
+        if (sharedPreferences.getBoolean(Values.FIRST_RUN, true)) {
             Log.i(TAG, "onResume: first run started");
             // start code for first run
             /*
@@ -280,21 +282,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 new FirstStartDialogFragment().show(getSupportFragmentManager(), "first_run");
 
 
-            // set false if first run is completed
-            sharedPreferences.edit().putBoolean("firstrun", false).apply();
             //set update position to true on first run
-            sharedPreferences.edit().putBoolean("updatePosition",true).apply();
+            sharedPreferences.edit().putBoolean(Values.UPDATE_POSITION,true).apply();
             //set delete cache to false on first run
-            sharedPreferences.edit().putBoolean("deleteCache",false).apply();
+            sharedPreferences.edit().putBoolean(Values.DELETE_CACHE,false).apply();
             //set boolean value of langChanged, becomes true if language is changed from settings activity
-            sharedPreferences.edit().putBoolean("langChanged",false).apply();
+            sharedPreferences.edit().putBoolean(Values.LANGUAGE_CHANGED,false).apply();
             //at first run app is not destroyed
-            sharedPreferences.edit().putBoolean("destroyed",false).apply();
+            sharedPreferences.edit().putBoolean(Values.DESTROYED,false).apply();
             //take note of the displayed language at first launch
             Locale mLocale;
             String mLang=Locale.getDefault().getDisplayLanguage();
             Log.i(TAG, "onResume: mLang first run displayed "+mLang);
-            PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext()).edit().putString("language",mLang).apply();
+            PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext()).edit().putString(Values.LANGUAGE,mLang).apply();
         }
         else
             checkResourcesAvailability();
@@ -309,10 +309,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Log.i(TAG, "onResume: savedLang "+savedLang);
 
         //if language was changed in settings activity updated res with the correct language and restart activity
-       if(getSharedPreferences("com.rem.progetto_embedded", MODE_PRIVATE).getBoolean("langChanged",false))
+       if(getSharedPreferences(Values.PREFERENCES_NAME, MODE_PRIVATE).getBoolean(Values.LANGUAGE_CHANGED,false))
        {
            setLanguage(this);
-           sharedPreferences.edit().putBoolean("langChanged",false).apply();
+           sharedPreferences.edit().putBoolean(Values.LANGUAGE_CHANGED,false).apply();
 
 
            Intent refresh=new Intent(this,MainActivity.class);
@@ -597,7 +597,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public static void setLanguage(Context context){
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
-        String lang = sharedPreferences.getString("language","");
+        String lang = sharedPreferences.getString(Values.LANGUAGE,"");
+
+        Log.i(TAG, "setLanguage: "+lang);
 
         //supported languages
         if(lang.equalsIgnoreCase("italiano"))
@@ -618,8 +620,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onDestroy() {
         //on destroy save the fact that the app has been destroyed
-        SharedPreferences sharedPreferences= getSharedPreferences("com.rem.progetto_embedded",MODE_PRIVATE);
-        sharedPreferences.edit().putBoolean("destroyed",true).apply();
+        SharedPreferences sharedPreferences= getSharedPreferences(Values.PREFERENCES_NAME,MODE_PRIVATE);
+        sharedPreferences.edit().putBoolean(Values.DESTROYED,true).apply();
         super.onDestroy();
     }
 }
