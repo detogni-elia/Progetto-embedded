@@ -4,6 +4,7 @@ package com.rem.progetto_embedded.Activities;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.preference.PreferenceManager;
 
 import android.content.Context;
 import android.content.Intent;
@@ -76,12 +77,17 @@ public class SettingsActivity extends AppCompatActivity{
 
         String[] supportedLanguages= Utilities.getLocalizedSupportedLanguages(getApplicationContext());
         String[] supportedImageQUality = Utilities.getLocalizedImagesQualities(getApplicationContext());
+        //String[] supportedLanguages= Utilities.getLocalizedSupportedLanguages(getApplicationContext());
+        //String[] supportedImageQuality = Utilities.getSupportedImageQuality(getApplicationContext());
 
         mSpinnerLanguages = findViewById(R.id.settings_spinner_languages);
         mSpinnerImageQuality = findViewById(R.id.settings_spinner_images_quality);
 
+        String[] supportedLanguages = getResources().getStringArray(R.array.settings_languages);
+        String[] supportedImageQuality = getResources().getStringArray(R.array.settings_quality);
+
         ArrayAdapter<String> languagesAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, supportedLanguages);
-        ArrayAdapter<String> imageQualityAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, supportedImageQUality);
+        ArrayAdapter<String> imageQualityAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, supportedImageQuality);
 
         languagesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         imageQualityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -90,14 +96,13 @@ public class SettingsActivity extends AppCompatActivity{
         mSpinnerImageQuality.setAdapter(imageQualityAdapter);
 
         String defaultLanguage=mPrefs.getString("selectedLanguage","");
-        String defaultImageQuality=mPrefs.getString("selectedImageQuality","");
-        Log.i("TAG", "onCreate:default language "+defaultLanguage);
+        int defaultImageQuality=mPrefs.getInt("selectedImageQuality",0);
+        Log.i("TAG", "onCreate: default language "+defaultLanguage);
         Log.i("TAG", "onCreate: default quality "+defaultImageQuality);
 
         int spinnerPos=languagesAdapter.getPosition(defaultLanguage);
         mSpinnerLanguages.setSelection(spinnerPos);
-        spinnerPos=imageQualityAdapter.getPosition(defaultImageQuality);
-        mSpinnerImageQuality.setSelection(spinnerPos);
+        mSpinnerImageQuality.setSelection(defaultImageQuality);
 
         mSpinnerLanguages.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -105,17 +110,23 @@ public class SettingsActivity extends AppCompatActivity{
 
                 TextView myTextLanguage=(TextView) view;
                 String selectedItem=myTextLanguage.getText().toString();
+                Log.i("TAG", "onItemSelected: " + selectedItem);
+                Log.i("TAG", "onItemSelected: "+checkLan);
                 if(++checkLan>1) {
+
+                    SharedPreferences.Editor editor=mPrefs.edit();
+                    editor.putBoolean("langChanged",true);
+                    editor.apply();
                     Log.i("TAG", "onItemSelected: " + selectedItem);
-                    if ((selectedItem).equalsIgnoreCase("italian")) {
-                        setLocale("it");
-                    } else
-                        setLocale("en");
+
+                    SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(SettingsActivity.this.getApplicationContext());
+                    sharedPreferences.edit().putString("language",selectedItem).apply();
+
+                    SettingsActivity.this.finish();
+
                 }
 
-                SharedPreferences.Editor editor=mPrefs.edit();
-                editor.putString("selectedLanguage",selectedItem);
-                editor.apply();
+
 
             }
 
@@ -134,17 +145,17 @@ public class SettingsActivity extends AppCompatActivity{
                 if(++checkIm>1)
                 {
                     Log.i("TAG", "onItemSelected: "+selectedItem);
-                    if((selectedItem).equalsIgnoreCase("low"))
-                        Toast.makeText(getApplicationContext(),"Selected low image quality",Toast.LENGTH_SHORT).show();
-                    else if ((selectedItem).equalsIgnoreCase("medium"))
-                        Toast.makeText(getApplicationContext(),"Selected medium image quality",Toast.LENGTH_SHORT).show();
+                    if(position==0)
+                        Toast.makeText(getApplicationContext(), R.string.selectedLowQ,Toast.LENGTH_SHORT).show();
+                    else if (position==1)
+                        Toast.makeText(getApplicationContext(), R.string.selectedMediumQ,Toast.LENGTH_SHORT).show();
                     else
-                        Toast.makeText(getApplicationContext(),"Selected high image quality",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.selectedHighQ,Toast.LENGTH_SHORT).show();
                 }
 
 
                 SharedPreferences.Editor editor1 = mPrefs.edit();
-                editor1.putString("selectedImageQuality",selectedItem);
+                editor1.putInt("selectedImageQuality",position);
                 editor1.apply();
             }
 

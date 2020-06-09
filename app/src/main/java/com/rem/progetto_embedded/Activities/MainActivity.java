@@ -8,6 +8,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import android.Manifest;
 import android.app.Dialog;
@@ -63,6 +64,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private boolean bound;
     private String[] countriesFolders;
 
+    private Locale currentLocal;
+
+    public static Context appContext;
+
     //permissions codes
     private static final int REQUEST_CODE=100;
 
@@ -70,6 +75,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
+        Boolean check=false;
+        Boolean destroyed=getSharedPreferences("com.detons97gmail.progetto_embedded", MODE_PRIVATE).getBoolean("destroyed",false);
+
+        if(check!=destroyed){
+            SharedPreferences sharedPreferences= getSharedPreferences("com.detons97gmail.progetto_embedded",MODE_PRIVATE);
+            sharedPreferences.edit().putBoolean("destroyed",false).apply();
+            Utilities.setLanguage(this);
+            Intent refresh=new Intent(this,MainActivity.class);
+            this.finish();
+            startActivity(refresh);
+        }
+
+
+        //Log.i(TAG, "onCreate: first start language "+lan);
+
+    /*    if(currentLocal.equalsIgnoreCase("italiano"))
+        {   Utilities.setLanguage(this);
+            Intent refresh=new Intent(this,MainActivity.class);
+            this.finish();
+            startActivity(refresh);
+        }
+*/
+
+        appContext=getApplicationContext();
+
 
         //set toolbar
         toolbar = findViewById(R.id.toolbar);
@@ -139,6 +172,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
          */
+
+
     }
 
     @Override
@@ -253,9 +288,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
             if(!alreadyShowing)
                 new FirstStartDialogFragment().show(getSupportFragmentManager(), "first_run");
+
+
+            // set false if first run is completed
+            sharedPreferences.edit().putBoolean("firstrun", false).apply();
+            //set update position to true on first run
+            sharedPreferences.edit().putBoolean("updatePosition",true).apply();
+            //set delete cache to false on first run
+            sharedPreferences.edit().putBoolean("deleteCache",false).apply();
+            sharedPreferences.edit().putBoolean("langChanged",false).apply();
+            //sharedPreferences.edit().putString("selectedLanguage", currentLocal).apply();
+            sharedPreferences.edit().putBoolean("destroyed",false).apply();
         }
         else
             checkResourcesAvailability();
+
+        //Check whether app's resources are available or not, handling accordingly
+        //checkResourcesAvailability();
+
+        Log.i(TAG, "onResume: currentLang "+currentLocal);
+        Log.i(TAG, "onResume: preferenceLanguage "+getSharedPreferences("com.detons97gmail.progetto_embedded", MODE_PRIVATE).getString("selectedLanguage",""));
+        Log.i(TAG, "onResume: langChanged"+getSharedPreferences("com.detons97gmail.progetto_embedded", MODE_PRIVATE).getBoolean("langChanged",false));
+
+        String savedLang = PreferenceManager.getDefaultSharedPreferences(this).getString("language","");
+        Log.i(TAG, "onResume: savedLang "+savedLang);
+
+
+       if(getSharedPreferences("com.detons97gmail.progetto_embedded", MODE_PRIVATE).getBoolean("langChanged",false))
+       {
+           Utilities.setLanguage(this);
+           sharedPreferences.edit().putBoolean("langChanged",false).apply();
+           //set language of the device into settings
+
+           Intent refresh=new Intent(this,MainActivity.class);
+           this.finish();
+           startActivity(refresh);
+       }
+
     }
 
     //Gestione delle callbacks legate alla memoria
@@ -446,13 +515,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         editor.putString("selectedLanguage",language);
                         editor.putString("selectedImageQuality",imageQuality);
                         editor.apply();
-                        //change language displayed in run time
-                        Log.i(TAG, "onClick: ");
-                        if(language.equalsIgnoreCase("italian"))
-                            setLocale("it");
-                        else
-                            setLocale("en");
-
                         startDownloadService(Utilities.getDefaultCountryName(getApplicationContext(), country), Utilities.getDefaultLanguageName(getApplicationContext(), language));
                         permissionDialog.dismiss();
                     }
@@ -517,17 +579,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-    //set language method called when language is selected at first launch
+
     public void setLocale(String lang) {
 
-        Locale myLocale = new Locale(lang);
-        Resources res = getResources();
-        DisplayMetrics dm = res.getDisplayMetrics();
-        Configuration conf = res.getConfiguration();
-        conf.locale = myLocale;
-        res.updateConfiguration(conf, dm);
-        Intent refresh = new Intent(this, MainActivity.class);
-        startActivity(refresh);
+        Locale locale = new Locale(lang);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration(getApplicationContext().getResources().getConfiguration());
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config,getBaseContext().getResources().getDisplayMetrics());
+        setContentView(R.layout.activity_main);
+
+
     }
 
     @Override
@@ -547,5 +609,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Manifest.permission.WRITE_EXTERNAL_STORAGE},REQUEST_CODE);
             checkResourcesAvailability();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        SharedPreferences sharedPreferences= getSharedPreferences("com.detons97gmail.progetto_embedded",MODE_PRIVATE);
+        sharedPreferences.edit().putBoolean("destroyed",true).apply();
+        super.onDestroy();
     }
 }

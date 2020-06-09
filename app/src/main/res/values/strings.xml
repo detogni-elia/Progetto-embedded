@@ -76,6 +76,20 @@
     <string name="not_enough_space">There is not enough space for new reources.</string>
     <string name="notification_download_message">"Downloading resources for: "</string>
     <string name="unexpected_error">Unexpected error.</string>
+    <string name="selectedLowQ">Selected low image quality</string>
+    <string name="selectedMediumQ">Selected medium image quality</string>
+    <string name="selectedHighQ">Selected high image quality</string>
+    <string name="download_new_resource">Download a new resource</string>
 
+    <string-array name="settings_languages">
+        <item>Italiano</item>
+        <item>English</item>
+    </string-array>
+
+    <string-array name="settings_quality">
+        <item>@string/low</item>
+        <item>@string/medium</item>
+        <item>@string/high</item>
+    </string-array>
 
 </resources>
