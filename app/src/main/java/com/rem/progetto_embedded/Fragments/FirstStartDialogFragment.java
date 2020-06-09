@@ -14,6 +14,7 @@ import android.widget.Button;
 import androidx.fragment.app.DialogFragment;
 
 import com.rem.progetto_embedded.R;
+import com.rem.progetto_embedded.Values;
 
 public class FirstStartDialogFragment extends DialogFragment {
     public interface FirstStartListener{
@@ -30,6 +31,7 @@ public class FirstStartDialogFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+        setCancelable(false);
         View view = inflater.inflate(R.layout.first_start_permissions_dialog_layout, container, false);
         if(getDialog() != null && getDialog().getWindow()!= null){
             getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -45,13 +47,10 @@ public class FirstStartDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 dismiss();
-                SharedPreferences sharedPreferences = requireContext().getSharedPreferences("com.rem.progetto_embedded", Context.MODE_PRIVATE);
+                SharedPreferences sharedPreferences = requireContext().getSharedPreferences(Values.PREFERENCES_NAME, Context.MODE_PRIVATE);
                 // set false if first run is completed
-                sharedPreferences.edit().putBoolean("firstrun", false).apply();
-                //set update position to true on first run
-                sharedPreferences.edit().putBoolean("updatePosition",true).apply();
-                //set delete cache to false on first run
-                sharedPreferences.edit().putBoolean("deleteCache",false).apply();
+                sharedPreferences.edit().putBoolean(Values.FIRST_RUN, false).apply();
+
                 listener.closingStartDialog();
             }
         });

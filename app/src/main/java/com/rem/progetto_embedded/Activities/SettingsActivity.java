@@ -28,6 +28,7 @@ import com.rem.progetto_embedded.Fragments.ConnectionDialogFragment;
 import com.rem.progetto_embedded.Fragments.ResourcesDownloadDialogFragment;
 import com.rem.progetto_embedded.R;
 import com.rem.progetto_embedded.Utilities;
+import com.rem.progetto_embedded.Values;
 
 
 import java.util.Locale;
@@ -60,7 +61,7 @@ public class SettingsActivity extends AppCompatActivity{
         setContentView(R.layout.activity_settings);
         Log.i("TAG", "onCreate: layout created");
 
-        final SharedPreferences mPrefs = getSharedPreferences("com.rem.progetto_embedded",MODE_PRIVATE);
+        final SharedPreferences mPrefs = getSharedPreferences(Values.PREFERENCES_NAME,MODE_PRIVATE);
 
         //Set the toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -96,8 +97,8 @@ public class SettingsActivity extends AppCompatActivity{
         mSpinnerImageQuality.setAdapter(imageQualityAdapter);
 
         //set settings for correct consistency
-        String defaultLanguage=PreferenceManager.getDefaultSharedPreferences(this).getString("language","");
-        int defaultImageQuality=mPrefs.getInt("selectedImageQuality",0);
+        String defaultLanguage=PreferenceManager.getDefaultSharedPreferences(this).getString(Values.LANGUAGE,"");
+        int defaultImageQuality=mPrefs.getInt(Values.IMAGE_QUALITY,0);
         Log.i("TAG", "onCreate: default language "+defaultLanguage);
         Log.i("TAG", "onCreate: default quality "+defaultImageQuality);
         int spinnerPos=languagesAdapter.getPosition(defaultLanguage);
@@ -115,12 +116,12 @@ public class SettingsActivity extends AppCompatActivity{
                 if(++checkLan>1) {
                     //if a language has been selected save the action and close settings activity
                     SharedPreferences.Editor editor=mPrefs.edit();
-                    editor.putBoolean("langChanged",true);
+                    editor.putBoolean(Values.LANGUAGE_CHANGED,true);
                     editor.apply();
                     Log.i("TAG", "onItemSelected: " + selectedItem);
 
                     SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(SettingsActivity.this.getApplicationContext());
-                    sharedPreferences.edit().putString("language",selectedItem).apply();
+                    sharedPreferences.edit().putString(Values.LANGUAGE,selectedItem).apply();
 
                     SettingsActivity.this.finish();
 
@@ -156,7 +157,7 @@ public class SettingsActivity extends AppCompatActivity{
 
                 //save the new value for settings consistency
                 SharedPreferences.Editor editor1 = mPrefs.edit();
-                editor1.putInt("selectedImageQuality",position);
+                editor1.putInt(Values.IMAGE_QUALITY,position);
                 editor1.apply();
             }
 

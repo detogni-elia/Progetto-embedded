@@ -23,6 +23,13 @@ public class Values {
     public static final String LOCATION_INTERNAL = BASE + "locationInternal";
     public static final String LOCATION_EXTERNAL = BASE + "locationExternal";
     public static final String NOT_YET_DECIDED = BASE + "notYetDecided";
+    public static final String FIRST_RUN = BASE + "firstRun";
+    public static final String DELETE_CACHE = BASE +"deleteCache";
+    public static final String LANGUAGE_CHANGED = BASE +"langChanged";
+    public static final String DESTROYED = BASE + "destroyed";
+    public static final String UPDATE_POSITION = BASE + "updatePosition";
+    public static final String LANGUAGE = BASE + "language";
+    public static final String IMAGE_QUALITY = BASE +"selectedImageQuality";
 
     //Ids of countries for localization
     private static final int[] COUNTRIES_IDS = {

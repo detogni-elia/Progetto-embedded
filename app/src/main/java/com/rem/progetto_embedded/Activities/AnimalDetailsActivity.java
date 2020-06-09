@@ -1,7 +1,9 @@
 package com.rem.progetto_embedded.Activities;
 
+import android.Manifest;
 import android.content.ComponentCallbacks2;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,11 +12,15 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+
+import com.rem.progetto_embedded.Fragments.FirstStartDialogFragment;
 import com.rem.progetto_embedded.Values;
 import com.rem.progetto_embedded.R;
 import com.rem.progetto_embedded.Utilities;
@@ -82,7 +88,16 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.gps_button)
-            Utilities.showToast(this, "Connettere alla mappa");
+            {
+                if(checkPermissions())
+                    {
+
+                        Intent mapActivity = new Intent(getApplicationContext(),MapActivity.class);
+                        startActivity(mapActivity);
+                    }
+                else
+                    {Toast.makeText(getApplicationContext(),R.string.permissions_not_granted,Toast.LENGTH_SHORT).show();}
+            }
 
         if(item.getItemId() == android.R.id.home)
             finish();
@@ -135,5 +150,13 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
             speciesDescription=null;
             Log.d(TAG," Eliminati i riferimenti a tutti i widget UI");
         }
+    }
+
+    private boolean checkPermissions(){
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+            return true;
+        }
+        return false;
     }
 }

@@ -19,10 +19,12 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -63,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private String[] countriesFolders;
 
 
-    public static Context appContext;
+    private Locale locale;
 
     //permissions codes
     private static final int REQUEST_CODE=100;
@@ -73,23 +75,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //find device language
+        locale=Locale.getDefault();
+        String deviceLang=locale.getDisplayLanguage();
+        Log.i(TAG, "onCreate: display language "+deviceLang);
 
 
         Boolean check=false;
-        Boolean destroyed=getSharedPreferences("com.rem.progetto_embedded", MODE_PRIVATE).getBoolean("destroyed",false);
+        Boolean destroyed=getSharedPreferences(Values.PREFERENCES_NAME, MODE_PRIVATE).getBoolean(Values.DESTROYED,false);
+        String settingsLanguage = PreferenceManager.getDefaultSharedPreferences(this).getString(Values.LANGUAGE,"");
 
         //if the app was previously destroyed set the correct language of settings
-        if(check!=destroyed){
-            SharedPreferences sharedPreferences= getSharedPreferences("com.rem.progetto_embedded",MODE_PRIVATE);
-            sharedPreferences.edit().putBoolean("destroyed",false).apply();
+        if(check!=destroyed && !(settingsLanguage.equalsIgnoreCase(deviceLang))){
+            SharedPreferences sharedPreferences= getSharedPreferences(Values.PREFERENCES_NAME,MODE_PRIVATE);
+            sharedPreferences.edit().putBoolean(Values.DESTROYED,false).apply();
             setLanguage(this);
             Intent refresh=new Intent(this,MainActivity.class);
             this.finish();
             startActivity(refresh);
         }
-
-
-        appContext=getApplicationContext();
 
 
         //set toolbar
@@ -224,12 +228,49 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Log.d(TAG, "Restored spinner");
         }
 
-        SharedPreferences sharedPreferences = getSharedPreferences("com.rem.progetto_embedded", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences(Values.PREFERENCES_NAME, MODE_PRIVATE);
         permissionDialog=new Dialog(this);
 
-        if (sharedPreferences.getBoolean("firstrun", true)) {
+        if (sharedPreferences.getBoolean(Values.FIRST_RUN, true)) {
             Log.i(TAG, "onResume: first run started");
+            // start code for first run
+            /*
+            permissionDialog.setContentView(R.layout.first_start_permissions_dialog_layout);
+            //TextView permission_textView = permissionDialog.findViewById(R.id.permission_textView);
+            //ImageView permission_ImageView = permissionDialog.findViewById(R.id.permission_ImageView);
+            Button ok_button = permissionDialog.findViewById(R.id.ok_button);
 
+            //show dialog box
+            Window window = permissionDialog.getWindow();
+            if(window != null)
+                window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+            permissionDialog.show();
+
+            //ok button click listener, ask for permissions if not already granted
+            ok_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                            + ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.INTERNET)
+                            + ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.ACCESS_COARSE_LOCATION)
+                            + ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            + ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+                        //permission not granted
+                        ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE},REQUEST_CODE);
+                        permissionDialog.dismiss();
+
+                    }
+                    else{
+                        ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE},REQUEST_CODE);
+                        permissionDialog.dismiss();
+                        checkResourcesAvailability();
+                    }
+                }
+            });
+            */
             List<Fragment> fragments = getSupportFragmentManager().getFragments();
             boolean alreadyShowing = false;
             for (Fragment fragment : fragments) {
@@ -240,24 +281,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if(!alreadyShowing)
                 new FirstStartDialogFragment().show(getSupportFragmentManager(), "first_run");
 
-            // set false if first run is completed
-            sharedPreferences.edit().putBoolean("firstrun", false).apply();
+
             //set update position to true on first run
-            sharedPreferences.edit().putBoolean("updatePosition",true).apply();
+            sharedPreferences.edit().putBoolean(Values.UPDATE_POSITION,true).apply();
             //set delete cache to false on first run
-            sharedPreferences.edit().putBoolean("deleteCache",false).apply();
+            sharedPreferences.edit().putBoolean(Values.DELETE_CACHE,false).apply();
             //set boolean value of langChanged, becomes true if language is changed from settings activity
-            sharedPreferences.edit().putBoolean("langChanged",false).apply();
+            sharedPreferences.edit().putBoolean(Values.LANGUAGE_CHANGED,false).apply();
             //at first run app is not destroyed
-            sharedPreferences.edit().putBoolean("destroyed",false).apply();
+            sharedPreferences.edit().putBoolean(Values.DESTROYED,false).apply();
             //take note of the displayed language at first launch
             Locale mLocale;
             String mLang=Locale.getDefault().getDisplayLanguage();
             Log.i(TAG, "onResume: mLang first run displayed "+mLang);
-            PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext()).edit().putString("language",mLang).apply();
+            PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext()).edit().putString(Values.LANGUAGE,mLang).apply();
         }
         else
             checkResourcesAvailability();
+
+        //Check whether app's resources are available or not, handling accordingly
+        //checkResourcesAvailability();
 
 
         Log.i(TAG, "onResume: langChanged"+getSharedPreferences("com.rem.progetto_embedded", MODE_PRIVATE).getBoolean("langChanged",false));
@@ -266,10 +309,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Log.i(TAG, "onResume: savedLang "+savedLang);
 
         //if language was changed in settings activity updated res with the correct language and restart activity
-       if(getSharedPreferences("com.rem.progetto_embedded", MODE_PRIVATE).getBoolean("langChanged",false))
+       if(getSharedPreferences(Values.PREFERENCES_NAME, MODE_PRIVATE).getBoolean(Values.LANGUAGE_CHANGED,false))
        {
            setLanguage(this);
-           sharedPreferences.edit().putBoolean("langChanged",false).apply();
+           sharedPreferences.edit().putBoolean(Values.LANGUAGE_CHANGED,false).apply();
 
 
            Intent refresh=new Intent(this,MainActivity.class);
@@ -423,7 +466,78 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         new ResourcesDownloadDialogFragment().show(getSupportFragmentManager(), "download");
                 }
             }
+            /*
+            else {
+                permissionDialog.setContentView(R.layout.resources_download_dialog_layout);
+                Button ok_button = permissionDialog.findViewById(R.id.ok_button);
+                Button cancel_button = permissionDialog.findViewById(R.id.cancel_button);
+
+                final Spinner countries_spinner = permissionDialog.findViewById(R.id.countries_spinner);
+                String[] supportedCountries = Utilities.getLocalizedSupportedCountries(getApplicationContext());
+                ArrayAdapter<String> countriesAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, supportedCountries);
+                countriesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                countries_spinner.setAdapter(countriesAdapter);
+
+                final Spinner languages_spinner = permissionDialog.findViewById(R.id.languages_spinner);
+                String[] supportedLanguages = Utilities.getLocalizedSupportedLanguages(getApplicationContext());
+                ArrayAdapter<String> languagesAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, supportedLanguages);
+                languagesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                languages_spinner.setAdapter(languagesAdapter);
+
+                final Spinner image_quality_spinner = permissionDialog.findViewById(R.id.image_quality_spinner);
+                String[] supportedImageQuality = Utilities.getSupportedImageQuality(getApplicationContext());
+                ArrayAdapter<String> imagesQualityAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, supportedImageQuality);
+                imagesQualityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                image_quality_spinner.setAdapter(imagesQualityAdapter);
+
+                //show dialog box
+                Window window = permissionDialog.getWindow();
+                if(window != null)
+                    //window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+                permissionDialog.show();
+
+                //Listener for the dialog's OK button
+                ok_button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String country = (String) countries_spinner.getSelectedItem();
+                        String language = (String)languages_spinner.getSelectedItem();
+                        String imageQuality = (String)image_quality_spinner.getSelectedItem();
+                        //save in SharedPreference for settings activity display information layout
+                        SharedPreferences prefs=getSharedPreferences("com.detons97gmail.progetto_embedded",MODE_PRIVATE);
+                        SharedPreferences.Editor editor=prefs.edit();
+                        editor.putString("selectedLanguage",language);
+                        editor.putString("selectedImageQuality",imageQuality);
+                        editor.apply();
+                        startDownloadService(Utilities.getDefaultCountryName(getApplicationContext(), country), Utilities.getDefaultLanguageName(getApplicationContext(), language));
+                        permissionDialog.dismiss();
+                    }
+                });
+                cancel_button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        permissionDialog.dismiss();
+                    }
+                });
+            }
+             */
         }
+        /*
+        private void startDownloadService(String country, String language){
+            Intent startIntent = new Intent(MainActivity.this, FakeDownloadIntentService.class);
+            startIntent.putExtra(Values.EXTRA_COUNTRY, country);
+            startIntent.putExtra(Values.EXTRA_LANGUAGE, language);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                startForegroundService(startIntent);
+            else
+                startService(startIntent);
+
+            mService.setCallback(MainActivity.this);
+        }
+
+         */
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
@@ -460,6 +574,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
+
+
     @Override
     public void closingStartDialog() {
         if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -481,7 +597,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public static void setLanguage(Context context){
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
-        String lang = sharedPreferences.getString("language","");
+        String lang = sharedPreferences.getString(Values.LANGUAGE,"");
+
+        Log.i(TAG, "setLanguage: "+lang);
 
         //supported languages
         if(lang.equalsIgnoreCase("italiano"))
@@ -496,13 +614,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         android.content.res.Configuration configuration = res.getConfiguration();
         configuration.setLocale(new Locale(lang));
         res.updateConfiguration(configuration,res.getDisplayMetrics());
+
     }
 
     @Override
     protected void onDestroy() {
         //on destroy save the fact that the app has been destroyed
-        SharedPreferences sharedPreferences= getSharedPreferences("com.rem.progetto_embedded",MODE_PRIVATE);
-        sharedPreferences.edit().putBoolean("destroyed",true).apply();
+        SharedPreferences sharedPreferences= getSharedPreferences(Values.PREFERENCES_NAME,MODE_PRIVATE);
+        sharedPreferences.edit().putBoolean(Values.DESTROYED,true).apply();
         super.onDestroy();
     }
 }
