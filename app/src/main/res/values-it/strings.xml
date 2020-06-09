@@ -83,10 +83,10 @@
     <string name="download_new_resource">Scarica una nuova risorsa</string>
 
 
-    <string-array name="settings_languages">
+<!--    <string-array name="settings_languages">
         <item>@string/italian</item>
         <item>@string/english</item>
-    </string-array>
+    </string-array>-->
 
     <string-array name="settings_quality">
         <item>@string/low</item>

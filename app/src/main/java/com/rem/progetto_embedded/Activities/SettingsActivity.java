@@ -60,7 +60,7 @@ public class SettingsActivity extends AppCompatActivity{
         setContentView(R.layout.activity_settings);
         Log.i("TAG", "onCreate: layout created");
 
-        final SharedPreferences mPrefs = getSharedPreferences("com.detons97gmail.progetto_embedded",MODE_PRIVATE);
+        final SharedPreferences mPrefs = getSharedPreferences("com.rem.progetto_embedded",MODE_PRIVATE);
 
         //Set the toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -75,8 +75,8 @@ public class SettingsActivity extends AppCompatActivity{
         deleteCache = findViewById(R.id.cache_button);
 
 
-        String[] supportedLanguages= Utilities.getLocalizedSupportedLanguages(getApplicationContext());
-        String[] supportedImageQUality = Utilities.getLocalizedImagesQualities(getApplicationContext());
+        /*String[] supportedLanguages= Utilities.getLocalizedSupportedLanguages(getApplicationContext());
+        String[] supportedImageQUality = Utilities.getLocalizedImagesQualities(getApplicationContext());*/
         //String[] supportedLanguages= Utilities.getLocalizedSupportedLanguages(getApplicationContext());
         //String[] supportedImageQuality = Utilities.getSupportedImageQuality(getApplicationContext());
 
@@ -95,11 +95,11 @@ public class SettingsActivity extends AppCompatActivity{
         mSpinnerLanguages.setAdapter(languagesAdapter);
         mSpinnerImageQuality.setAdapter(imageQualityAdapter);
 
-        String defaultLanguage=mPrefs.getString("selectedLanguage","");
+        //set settings for correct consistency
+        String defaultLanguage=PreferenceManager.getDefaultSharedPreferences(this).getString("language","");
         int defaultImageQuality=mPrefs.getInt("selectedImageQuality",0);
         Log.i("TAG", "onCreate: default language "+defaultLanguage);
         Log.i("TAG", "onCreate: default quality "+defaultImageQuality);
-
         int spinnerPos=languagesAdapter.getPosition(defaultLanguage);
         mSpinnerLanguages.setSelection(spinnerPos);
         mSpinnerImageQuality.setSelection(defaultImageQuality);
@@ -113,7 +113,7 @@ public class SettingsActivity extends AppCompatActivity{
                 Log.i("TAG", "onItemSelected: " + selectedItem);
                 Log.i("TAG", "onItemSelected: "+checkLan);
                 if(++checkLan>1) {
-
+                    //if a language has been selected save the action and close settings activity
                     SharedPreferences.Editor editor=mPrefs.edit();
                     editor.putBoolean("langChanged",true);
                     editor.apply();
@@ -144,6 +144,7 @@ public class SettingsActivity extends AppCompatActivity{
                 String selectedItem = myTextQuality.getText().toString();
                 if(++checkIm>1)
                 {
+                    //if a new image quality has been selected display a toast
                     Log.i("TAG", "onItemSelected: "+selectedItem);
                     if(position==0)
                         Toast.makeText(getApplicationContext(), R.string.selectedLowQ,Toast.LENGTH_SHORT).show();
@@ -153,7 +154,7 @@ public class SettingsActivity extends AppCompatActivity{
                         Toast.makeText(getApplicationContext(), R.string.selectedHighQ,Toast.LENGTH_SHORT).show();
                 }
 
-
+                //save the new value for settings consistency
                 SharedPreferences.Editor editor1 = mPrefs.edit();
                 editor1.putInt("selectedImageQuality",position);
                 editor1.apply();
@@ -165,6 +166,7 @@ public class SettingsActivity extends AppCompatActivity{
             }
         });
 
+        //the user requires a new position
         updatePosition.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -198,17 +200,6 @@ public class SettingsActivity extends AppCompatActivity{
     }
 
 
-
-    public void setLocale(String lang) {
-        myLocale = new Locale(lang);
-        Resources res = getResources();
-        DisplayMetrics dm = res.getDisplayMetrics();
-        Configuration conf = res.getConfiguration();
-        conf.locale = myLocale;
-        res.updateConfiguration(conf, dm);
-        Intent refresh = new Intent(this, MainActivity.class);
-        startActivity(refresh);
-    }
 
     protected void onPause()
     {

@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private boolean bound;
     private String[] countriesFolders;
 
-    private Locale currentLocal;
 
     public static Context appContext;
 
@@ -79,27 +78,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         Boolean check=false;
-        Boolean destroyed=getSharedPreferences("com.detons97gmail.progetto_embedded", MODE_PRIVATE).getBoolean("destroyed",false);
+        Boolean destroyed=getSharedPreferences("com.rem.progetto_embedded", MODE_PRIVATE).getBoolean("destroyed",false);
 
+        //if the app was previously destroyed set the correct language of settings
         if(check!=destroyed){
-            SharedPreferences sharedPreferences= getSharedPreferences("com.detons97gmail.progetto_embedded",MODE_PRIVATE);
+            SharedPreferences sharedPreferences= getSharedPreferences("com.rem.progetto_embedded",MODE_PRIVATE);
             sharedPreferences.edit().putBoolean("destroyed",false).apply();
-            Utilities.setLanguage(this);
+            setLanguage(this);
             Intent refresh=new Intent(this,MainActivity.class);
             this.finish();
             startActivity(refresh);
         }
 
-
-        //Log.i(TAG, "onCreate: first start language "+lan);
-
-    /*    if(currentLocal.equalsIgnoreCase("italiano"))
-        {   Utilities.setLanguage(this);
-            Intent refresh=new Intent(this,MainActivity.class);
-            this.finish();
-            startActivity(refresh);
-        }
-*/
 
         appContext=getApplicationContext();
 
@@ -296,9 +286,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             sharedPreferences.edit().putBoolean("updatePosition",true).apply();
             //set delete cache to false on first run
             sharedPreferences.edit().putBoolean("deleteCache",false).apply();
+            //set boolean value of langChanged, becomes true if language is changed from settings activity
             sharedPreferences.edit().putBoolean("langChanged",false).apply();
-            //sharedPreferences.edit().putString("selectedLanguage", currentLocal).apply();
+            //at first run app is not destroyed
             sharedPreferences.edit().putBoolean("destroyed",false).apply();
+            //take note of the displayed language at first launch
+            Locale mLocale;
+            String mLang=Locale.getDefault().getDisplayLanguage();
+            Log.i(TAG, "onResume: mLang first run displayed "+mLang);
+            PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext()).edit().putString("language",mLang).apply();
         }
         else
             checkResourcesAvailability();
@@ -306,19 +302,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Check whether app's resources are available or not, handling accordingly
         //checkResourcesAvailability();
 
-        Log.i(TAG, "onResume: currentLang "+currentLocal);
-        Log.i(TAG, "onResume: preferenceLanguage "+getSharedPreferences("com.detons97gmail.progetto_embedded", MODE_PRIVATE).getString("selectedLanguage",""));
-        Log.i(TAG, "onResume: langChanged"+getSharedPreferences("com.detons97gmail.progetto_embedded", MODE_PRIVATE).getBoolean("langChanged",false));
+
+        Log.i(TAG, "onResume: langChanged"+getSharedPreferences("com.rem.progetto_embedded", MODE_PRIVATE).getBoolean("langChanged",false));
 
         String savedLang = PreferenceManager.getDefaultSharedPreferences(this).getString("language","");
         Log.i(TAG, "onResume: savedLang "+savedLang);
 
-
-       if(getSharedPreferences("com.detons97gmail.progetto_embedded", MODE_PRIVATE).getBoolean("langChanged",false))
+        //if language was changed in settings activity updated res with the correct language and restart activity
+       if(getSharedPreferences("com.rem.progetto_embedded", MODE_PRIVATE).getBoolean("langChanged",false))
        {
-           Utilities.setLanguage(this);
+           setLanguage(this);
            sharedPreferences.edit().putBoolean("langChanged",false).apply();
-           //set language of the device into settings
+
 
            Intent refresh=new Intent(this,MainActivity.class);
            this.finish();
@@ -580,17 +575,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    public void setLocale(String lang) {
-
-        Locale locale = new Locale(lang);
-        Locale.setDefault(locale);
-        Configuration config = new Configuration(getApplicationContext().getResources().getConfiguration());
-        config.locale = locale;
-        getBaseContext().getResources().updateConfiguration(config,getBaseContext().getResources().getDisplayMetrics());
-        setContentView(R.layout.activity_main);
-
-
-    }
 
     @Override
     public void closingStartDialog() {
@@ -611,9 +595,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    public static void setLanguage(Context context){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        String lang = sharedPreferences.getString("language","");
+
+        //supported languages
+        if(lang.equalsIgnoreCase("italiano"))
+            lang="it";
+        else if (lang.equalsIgnoreCase("english"))
+            lang="en";
+
+        lang = lang.isEmpty() ? Locale.getDefault().getLanguage() : lang;
+
+        Resources res = context.getResources();
+
+        android.content.res.Configuration configuration = res.getConfiguration();
+        configuration.setLocale(new Locale(lang));
+        res.updateConfiguration(configuration,res.getDisplayMetrics());
+
+    }
+
     @Override
     protected void onDestroy() {
-        SharedPreferences sharedPreferences= getSharedPreferences("com.detons97gmail.progetto_embedded",MODE_PRIVATE);
+        //on destroy save the fact that the app has been destroyed
+        SharedPreferences sharedPreferences= getSharedPreferences("com.rem.progetto_embedded",MODE_PRIVATE);
         sharedPreferences.edit().putBoolean("destroyed",true).apply();
         super.onDestroy();
     }
