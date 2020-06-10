@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import android.Manifest;
-import android.app.Dialog;
 import android.content.ComponentCallbacks2;
 import android.content.ComponentName;
 import android.content.Context;
@@ -19,12 +18,10 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -59,13 +56,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private LinearLayout plants_button;
     private FakeDownloadIntentService mService;
 
-    private Dialog permissionDialog;
-
     private boolean bound;
     private String[] countriesFolders;
 
-
-    private Locale locale;
 
     //permissions codes
     private static final int REQUEST_CODE=100;
@@ -76,13 +69,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         //find device language
-        locale=Locale.getDefault();
-        String deviceLang=locale.getDisplayLanguage();
+        Locale locale = Locale.getDefault();
+        String deviceLang= locale.getDisplayLanguage();
         Log.i(TAG, "onCreate: display language "+deviceLang);
 
 
         Boolean check=false;
-        Boolean destroyed=getSharedPreferences(Values.PREFERENCES_NAME, MODE_PRIVATE).getBoolean(Values.DESTROYED,false);
+        Boolean destroyed = getSharedPreferences(Values.PREFERENCES_NAME, MODE_PRIVATE).getBoolean(Values.DESTROYED,false);
+
         String settingsLanguage = PreferenceManager.getDefaultSharedPreferences(this).getString(Values.LANGUAGE,"");
 
         //if the app was previously destroyed set the correct language of settings
@@ -94,8 +88,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             this.finish();
             startActivity(refresh);
         }
-
-
         //set toolbar
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -229,7 +221,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         SharedPreferences sharedPreferences = getSharedPreferences(Values.PREFERENCES_NAME, MODE_PRIVATE);
-        permissionDialog=new Dialog(this);
 
         if (sharedPreferences.getBoolean(Values.FIRST_RUN, true)) {
             Log.i(TAG, "onResume: first run started");
@@ -281,7 +272,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if(!alreadyShowing)
                 new FirstStartDialogFragment().show(getSupportFragmentManager(), "first_run");
 
-
             //set update position to true on first run
             sharedPreferences.edit().putBoolean(Values.UPDATE_POSITION,true).apply();
             //set delete cache to false on first run
@@ -291,7 +281,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             //at first run app is not destroyed
             sharedPreferences.edit().putBoolean(Values.DESTROYED,false).apply();
             //take note of the displayed language at first launch
-            Locale mLocale;
             String mLang=Locale.getDefault().getDisplayLanguage();
             Log.i(TAG, "onResume: mLang first run displayed "+mLang);
             PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext()).edit().putString(Values.LANGUAGE,mLang).apply();

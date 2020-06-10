@@ -53,8 +53,8 @@
         android:weightSum="5">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:src="@drawable/ic_animals_480"
             android:layout_weight="1"
             android:contentDescription="@string/animals" />
@@ -84,8 +84,8 @@
         android:weightSum="5">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:src="@drawable/ic_insect_480"
             android:layout_weight="1"
             android:contentDescription="@string/insects" />
@@ -116,8 +116,8 @@
         android:weightSum="5">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:src="@drawable/ic_plants_480"
             android:layout_weight="1"
             android:contentDescription="@string/plants" />
