@@ -1,6 +1,7 @@
 package com.rem.progetto_embedded.Database.Entity;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -30,6 +31,10 @@ public class Creatures
     public String category;
     @ColumnInfo(name="image")
     public String image;
+    @ColumnInfo(name="latitude")
+    public Double latitude;
+    @ColumnInfo(name="longitude")
+    public Double longitude;
 
     public String getLatinName() {return latinName;}
     public String getCommonName() {return commonName;}
@@ -38,9 +43,11 @@ public class Creatures
     public String getDescription() {return description;}
     public String getCategory() {return category;}
     public String getImage() {return image;}
+    public double getLatitude() {return latitude;}
+    public double getLongitude() {return longitude;}
 
     public String toString()
     {
-        return latinName+" , "+commonName+" , "+specieName+" , "+description+" , "+category;
+        return latinName+" , "+commonName+" , "+specieName+" , "+description+" , "+category+" , "+Double.toString(latitude)+" , "+Double.toString(longitude);
     }
 }

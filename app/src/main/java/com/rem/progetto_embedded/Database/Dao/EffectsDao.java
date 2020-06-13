@@ -14,15 +14,9 @@ import java.util.List;
 @Dao
 public interface EffectsDao
 {
-    /*
-    @Insert
-    void insert(Effects effects);
-    @Delete
-    void delete(Effects effect);
-     */
     @Query("SELECT * FROM Effects")
     LiveData<List<Effects>> getAll();
     //List<Effects> getAll();
-    @Query("SELECT creature FROM Effects WHERE contact = :c AND symptom IN (:s)")
-    LiveData<List<String>> getCreatures(String c, List<String> s);
+    @Query("SELECT * FROM Effects JOIN Creatures ON Effects.creature=Creatures.latin_name WHERE Effects.contact = :c AND Effects.symptom IN (:s)")
+    LiveData<List<Creatures>> getCreatures(String c, List<String> s);
 }

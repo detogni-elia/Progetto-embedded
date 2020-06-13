@@ -13,12 +13,6 @@ import java.util.List;
 @Dao
 public interface SymptomsDao
 {
-    /*
-    @Insert
-    void insert(Symptoms symptoms);
-    @Delete
-    void delete(Symptoms symptom);
-     */
     @Query("SELECT * FROM Symptoms")
     LiveData<List<Symptoms>> getAll();
 }

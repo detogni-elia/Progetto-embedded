@@ -8,9 +8,11 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.rem.progetto_embedded.Database.AppDatabase;
+import com.rem.progetto_embedded.Database.Entity.Creatures;
 import com.rem.progetto_embedded.Database.Entity.Effects;
 import com.rem.progetto_embedded.R;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -30,12 +32,16 @@ public class ProvaDatabase extends AppCompatActivity {
         //TODO: HO COMMENTATO QUESTA PARTE DI CODICE PERCHE' MI DAVA ERRORE E NON RIUSCIVO A TESTARE LE ALTRE ACTIVITIES
         executor.execute(new Runnable() {
             @Override
-            public void run() {/*
-                List<Effects> effects =database.effectsDao().getAll();
+            public void run() {
+                /*
+                String[] sym={"Vomiting", "Swelling"};
+                List<Creatures> creatures =database.effectsDao().getCreatures("Bite", sym);
                 Log.d("DATABASE", "Query ok");
-                String s=effects.get(0).toString();
+                String s=creatures.get(0).toString();
                 tw.setText(s);
                 */
+
+
             }
         });
     }

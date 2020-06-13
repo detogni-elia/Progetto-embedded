@@ -13,12 +13,6 @@ import java.util.List;
 @Dao
 public interface CreaturesDao
 {
-    /*
-    @Insert
-    void insert(Creatures creatures);
-    @Delete
-    void delete(Creatures creature);
-     */
     @Query("SELECT * FROM Creatures")
     LiveData<List<Creatures>> getAll();
     @Query("SELECT * FROM Creatures WHERE latin_name = :latinName")

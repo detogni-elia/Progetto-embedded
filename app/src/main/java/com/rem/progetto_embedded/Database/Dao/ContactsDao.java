@@ -13,12 +13,6 @@ import java.util.List;
 @Dao
 public interface ContactsDao
 {
-    /*
-    @Insert
-    void insert(Contacts contacts);
-    @Delete
-    void delete(Contacts contact);
-     */
     @Query("SELECT * FROM Contacts")
     LiveData<List<Contacts>> getAll();
 }
