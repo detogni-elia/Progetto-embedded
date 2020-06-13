@@ -92,8 +92,8 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
                 if(checkPermissions())
                     {
 
-                        Intent mapActivity = new Intent(getApplicationContext(),MapActivity.class);
-                        startActivity(mapActivity);
+                        //Intent mapActivity = new Intent(getApplicationContext(),MapActivity.class);
+                        //startActivity(mapActivity);
                     }
                 else
                     {Toast.makeText(getApplicationContext(),R.string.permissions_not_granted,Toast.LENGTH_SHORT).show();}

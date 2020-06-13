@@ -94,3 +94,7 @@ APPUNTI ROCCO
     --> Paper Wasp e Indian Wasp [India] sono la stessa bestia sostanzialmente
     --> Plumeria saltata, ci sono un sacco di specie poco documentate
     --> Dumbcane secondo wikipedia non c'è in south africa
+
+
+
+Path esempio: /COUNTRY/Images/[Plants-Insects-Animals]/nome.webp
