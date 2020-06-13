@@ -9,7 +9,7 @@ Cose da fare
     --> Tasto aggiorna posizione
     --> {Se la memoria è poca ==> salvataggio in SD [DikLRUCache]} --> Tasto rimuovi cache dalla memoria
 
-3) {Struttura file in memoria ==> Database} --> Più avanti
+3) {Struttura file in memoria ==> com.detons97gmail.progetto_embedded.Database} --> Più avanti
 
 4) Navigazione tra le activity --> ELIA
     --> Intent con i giusti extra
@@ -33,7 +33,7 @@ Cose da fare
 
 9) Report --> ROCCO
 
-10) Database --> ELIA
+10) com.detons97gmail.progetto_embedded.Database --> ELIA
     --> Databse differente per ogni nazione e per ogni lingua
     --> Attributi
             - Path Immagine
@@ -89,3 +89,8 @@ Se scheda SD, download in SD, altrimenti no
 Show progress bar: https://stuff.mit.edu/afs/sipb/project/android/docs/training/notify-user/display-progress.html
 
 DA CHIEDERE: Non ricordo perchè chiediamo il permesso di accedere alla memoria esterna.
+
+APPUNTI ROCCO
+    --> Paper Wasp e Indian Wasp [India] sono la stessa bestia sostanzialmente
+    --> Plumeria saltata, ci sono un sacco di specie poco documentate
+    --> Dumbcane secondo wikipedia non c'è in south africa

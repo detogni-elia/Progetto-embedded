@@ -12,4 +12,6 @@ public class Contacts
     @NonNull
     @ColumnInfo(name="contact_name")
     public String contact_name;
+
+    public String toString(){return contact_name;}
 }

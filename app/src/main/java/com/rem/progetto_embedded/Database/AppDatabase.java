@@ -2,6 +2,7 @@ package com.rem.progetto_embedded.Database;
 
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.room.Database;
 import androidx.room.Room;
@@ -29,8 +30,10 @@ public abstract class AppDatabase extends RoomDatabase
     //Bisogna rendere relativo il file sorgente del database
     public static synchronized AppDatabase getInstance(Context context)
     {
-        if(instance == null)
-            instance = Room.databaseBuilder(context, AppDatabase.class, "DatProva.db").createFromAsset("PD.db").build();
+        if(instance == null) {
+            instance = Room.databaseBuilder(context, AppDatabase.class, "DatabaseSAEng.db").createFromAsset("India/Databases/DatIndiaEng.db").build();
+            Log.d("DATABASE", "database trovato");
+        }
         return instance;
     }
 }

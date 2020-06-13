@@ -12,4 +12,6 @@ public class Symptoms
     @NonNull
     @ColumnInfo(name="symptom_name")
     public String symptom_name;
+
+    public String toString(){return symptom_name;}
 }
