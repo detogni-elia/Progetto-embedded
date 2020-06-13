@@ -90,10 +90,45 @@ Show progress bar: https://stuff.mit.edu/afs/sipb/project/android/docs/training/
 
 DA CHIEDERE: Non ricordo perchè chiediamo il permesso di accedere alla memoria esterna.
 
-APPUNTI ROCCO
-    --> Paper Wasp e Indian Wasp [India] sono la stessa bestia sostanzialmente
-    --> Plumeria saltata, ci sono un sacco di specie poco documentate
-    --> Dumbcane secondo wikipedia non c'è in south africa
+
+
+
+SINTOMI
+
+Abdominals Cramps
+Muscolar Paralysis
+Ptosis
+Vomiting
+Diarrhoea
+Dizziness
+Allergic Reactions
+Pain at the site of the bite
+Swelling
+Local burning sensation
+Urticaria
+Inflammation
+Redness
+Vesication
+Tetanic convulsions
+Headache
+Convulsions
+Endema
+Discoloration
+Vomiting
+Acute Pain
+Soreness
+Ulcer
+Pain
+Muscular paralysis
+Choking sensation
+Diarrhea
+Necrosis
+Swelling
+Sleepiness
+Itchiness
+Abdominal cramps
+Irritation
+Hallucinations
 
 
 
