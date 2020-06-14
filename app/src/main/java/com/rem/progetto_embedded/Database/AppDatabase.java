@@ -2,6 +2,7 @@ package com.rem.progetto_embedded.Database;
 
 
 import android.content.Context;
+import android.util.ArrayMap;
 import android.util.Log;
 
 import androidx.room.Database;
@@ -28,20 +29,19 @@ public abstract class AppDatabase extends RoomDatabase
     public abstract ContactsDao contactsDao();
     public abstract SymptomsDao symptomsDao();
     public abstract EffectsDao effectsDao();
+    private static ArrayMap<String, AppDatabase> instances=new ArrayMap<>();
 
-    private static AppDatabase instance;
-    //Bisogna rendere relativo il file sorgente del database
     public static synchronized AppDatabase getInstance(Context context, String country)
     {
-        if(instance == null) {
+        //Controllo se la chiave è presente nel dizionario, se non c'è apro il database e salvo l'istanza
+        if(!instances.containsKey(country)) {
+            AppDatabase instance;
             File resFolder = Utilities.getResourcesFolder(context);
             File dbPath = new File(resFolder, country + "/Database/database.db/");
-            //instance = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "en.db").createFromAsset("India/Databases/it.db").allowMainThreadQueries().build();
             instance = Room.databaseBuilder(context, AppDatabase.class, country).createFromFile(dbPath).build();
-            //https://developer.android.com/training/data-storage/room/prepopulate
-            Log.d("DATABASE", "database trovato");
+            instances.put(country, instance);
         }
-        return instance;
+        return instances.get(country);
     }
 }
 
