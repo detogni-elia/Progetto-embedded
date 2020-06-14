@@ -339,19 +339,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode){
-            case REQUEST_CODE:
-                if((grantResults.length>0)&&(grantResults[0]+grantResults[1]+grantResults[2]+grantResults[3]==PackageManager.PERMISSION_GRANTED))
-                {
-                    //permissions have been granted
-                    Log.i("TAG", "onRequestPermissionsResult: Permission granted");
-                    checkResourcesAvailability();
-                }
-                else
-                {
-                    Toast.makeText(this, R.string.permissions_not_granted,Toast.LENGTH_SHORT).show();
-                }
-                break;
+        if (requestCode == REQUEST_CODE) {
+            if ((grantResults.length > 0) && (grantResults[0] + grantResults[1] + grantResults[2] + grantResults[3] == PackageManager.PERMISSION_GRANTED)) {
+                //permissions have been granted
+                Log.i("TAG", "onRequestPermissionsResult: Permission granted");
+                checkResourcesAvailability();
+            } else {
+                Toast.makeText(this, R.string.permissions_not_granted, Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

@@ -35,9 +35,8 @@ public class ConnectionDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 dismiss();
-                FragmentManager manager = getFragmentManager();
-                if(manager != null)
-                    new ResourcesDownloadDialogFragment().show(manager, "download");
+                FragmentManager manager = getParentFragmentManager();
+                new ResourcesDownloadDialogFragment().show(manager, "download");
             }
         });
 

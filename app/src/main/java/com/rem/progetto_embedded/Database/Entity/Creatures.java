@@ -48,6 +48,6 @@ public class Creatures
 
     public String toString()
     {
-        return latinName+" , "+commonName+" , "+specieName+" , "+description+" , "+category+" , "+Double.toString(latitude)+" , "+Double.toString(longitude);
+        return latinName+" , "+commonName+" , "+specieName+" , "+description+" , "+category+" , " + latitude + " , " + longitude;
     }
 }
