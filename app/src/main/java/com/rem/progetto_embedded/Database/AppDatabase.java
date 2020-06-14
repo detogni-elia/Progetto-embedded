@@ -2,8 +2,11 @@ package com.rem.progetto_embedded.Database;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.ArrayMap;
 import android.util.Log;
 
+import androidx.preference.PreferenceManager;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
@@ -18,6 +21,7 @@ import com.rem.progetto_embedded.Database.Entity.Effects;
 import com.rem.progetto_embedded.Database.Entity.Symptoms;
 import com.rem.progetto_embedded.Database.Entity.Contacts;
 import com.rem.progetto_embedded.Utilities;
+import com.rem.progetto_embedded.Values;
 
 import java.io.File;
 
@@ -28,20 +32,24 @@ public abstract class AppDatabase extends RoomDatabase
     public abstract ContactsDao contactsDao();
     public abstract SymptomsDao symptomsDao();
     public abstract EffectsDao effectsDao();
+    private static ArrayMap<String, AppDatabase> instances=new ArrayMap<>();
 
-    private static AppDatabase instance;
-    //Bisogna rendere relativo il file sorgente del database
     public static synchronized AppDatabase getInstance(Context context, String country)
     {
-        if(instance == null) {
+        SharedPreferences sharedPreferences=PreferenceManager.getDefaultSharedPreferences(context);
+        String lang=sharedPreferences.getString(Values.LANGUAGE,"");
+        Log.d("DATABASE", lang);
+        //Controllo se la chiave è presente nel dizionario, se non c'è apro il database e salvo l'istanza
+        if(!instances.containsKey(lang+country)) {
+            AppDatabase instance;
             File resFolder = Utilities.getResourcesFolder(context);
             File dbPath = new File(resFolder, country + "/Database/database.db/");
-            //instance = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "en.db").createFromAsset("India/Databases/it.db").allowMainThreadQueries().build();
             instance = Room.databaseBuilder(context, AppDatabase.class, country).createFromFile(dbPath).build();
-            //https://developer.android.com/training/data-storage/room/prepopulate
-            Log.d("DATABASE", "database trovato");
+            Log.d("DATABASE", lang+country+"Inserito");
+            instances.put(lang+country, instance);
         }
-        return instance;
+        Log.d("DATABASE", lang+country+"restituito");
+        return instances.get(lang+country);
     }
 }
 
