@@ -31,7 +31,7 @@ public abstract class AppDatabase extends RoomDatabase
     public static synchronized AppDatabase getInstance(Context context)
     {
         if(instance == null) {
-            instance = Room.databaseBuilder(context, AppDatabase.class, "DatabaseSAEng.db").createFromAsset("India/Databases/DatIndiaEng.db").build();
+            instance = Room.databaseBuilder(context, AppDatabase.class, "DatabaseSAEng.db").createFromAsset("India/Databases/DatSAIT.db").build();
             //instance = Room.databaseBuilder(context, AppDatabase.class, "DatabaseSAEng.db").createFromFile(new File(Path del file .db)).build();
             //https://developer.android.com/training/data-storage/room/prepopulate
             Log.d("DATABASE", "database trovato");
