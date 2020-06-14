@@ -1,6 +1,7 @@
 package com.rem.progetto_embedded.Activities;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.ComponentCallbacks2;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -19,11 +20,15 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.Observer;
 
-import com.rem.progetto_embedded.Fragments.FirstStartDialogFragment;
+import com.rem.progetto_embedded.Database.AppDatabase;
+import com.rem.progetto_embedded.Database.Entity.Contacts;
+import com.rem.progetto_embedded.Database.Entity.Symptoms;
 import com.rem.progetto_embedded.Values;
 import com.rem.progetto_embedded.R;
-import com.rem.progetto_embedded.Utilities;
+
+import java.util.List;
 
 
 public class AnimalDetailsActivity extends AppCompatActivity implements ComponentCallbacks2 {
@@ -34,9 +39,12 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
     private LinearLayout dietEntry;
     private LinearLayout symptomsEntry;
     private TextView speciesDescription;
+    private String contactType;
+    private String[] symptoms;
 
     private final String TAG = this.getClass().getSimpleName();
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -47,9 +55,6 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
         imageView = findViewById(R.id.detailsImage);
         imageView.setImageURI(Uri.parse(intent.getStringExtra(Values.EXTRA_IMAGE_PATH)));
 
-        speciesDescription = findViewById(R.id.speciesDescription);
-        speciesDescription.setText(R.string.lorem_ipsum);
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -58,16 +63,24 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
             actionBar.setTitle(R.string.details_toolbar_title);
         }
 
+        speciesDescription = findViewById(R.id.speciesDescription);
+        speciesDescription.setText(intent.getStringExtra(Values.EXTRA_DESCRIPTION));
+
+        if(savedInstanceState != null){
+            contactType = savedInstanceState.getString(Values.EXTRA_CONTACT);
+            symptoms = savedInstanceState.getStringArray(Values.EXTRA_SYMPTOMS);
+        }
+
         //If nameEntry is not present, we are in landscape layout and we do not have to update the TextViews
         if(findViewById(R.id.nameEntry) == null)
             return;
+
+        final String speciesName = intent.getStringExtra(Values.EXTRA_SPECIES);
 
         nameEntry = findViewById(R.id.nameEntry);
         speciesEntry = findViewById(R.id.speciesEntry);
         dietEntry = findViewById(R.id.dietEntry);
         symptomsEntry = findViewById(R.id.symptomsEntry);
-        speciesDescription = findViewById(R.id.speciesDescription);
-
 
         ((TextView)nameEntry.findViewById(R.id.layoutLabel)).setText(R.string.details_name);
         ((TextView)speciesEntry.findViewById(R.id.layoutLabel)).setText(R.string.details_species);
@@ -77,8 +90,44 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
         ((TextView)nameEntry.findViewById(R.id.layoutEntry)).setText(intent.getStringExtra(Values.EXTRA_NAME));
         ((TextView)speciesEntry.findViewById(R.id.layoutEntry)).setText(intent.getStringExtra(Values.EXTRA_SPECIES));
         ((TextView)dietEntry.findViewById(R.id.layoutEntry)).setText(intent.getStringExtra(Values.EXTRA_DIET));
-        ((TextView)symptomsEntry.findViewById(R.id.layoutEntry)).setText(intent.getStringExtra(Values.EXTRA_SYMPTOMS));
-        speciesDescription.setText(intent.getStringExtra(Values.EXTRA_DESCRIPTION));
+
+
+        if(savedInstanceState == null){
+            final AppDatabase db = AppDatabase.getInstance(this, intent.getStringExtra(Values.EXTRA_COUNTRY));
+            db.creaturesDao().getContactOfCreature(speciesName).observe(this, new Observer<Contacts>() {
+                @Override
+                public void onChanged(Contacts contacts) {
+                    contactType = contacts.toString();
+                    db.creaturesDao().getSymptomsOfCreature(speciesName).observe(AnimalDetailsActivity.this, new Observer<List<Symptoms>>() {
+                        @SuppressLint("SetTextI18n")
+                        @Override
+                        public void onChanged(List<Symptoms> symptomsList) {
+                            int i = 0;
+                            symptoms = new String[symptomsList.size()];
+                            for(Symptoms s: symptomsList)
+                                symptoms[i++] = s.toString();
+
+                            StringBuilder builder = new StringBuilder();
+                            for(i = 0; i < symptoms.length - 1; i++)
+                                builder.append(symptoms[i]).append(", ");
+
+                            builder.append(symptoms[symptoms.length - 1]);
+                            ((TextView)symptomsEntry.findViewById(R.id.layoutEntry)).setText(contactType + ": " + builder.toString());
+                        }
+                    });
+                }
+            });
+        }
+        else {
+            StringBuilder builder = new StringBuilder();
+            for(int i = 0; i < symptoms.length - 1; i++)
+                builder.append(symptoms[i]).append(", ");
+
+            builder.append(symptoms[symptoms.length - 1]);
+
+            ((TextView) symptomsEntry.findViewById(R.id.layoutEntry)).setText(contactType + ": " + builder.toString());
+        }
+        //((TextView)symptomsEntry.findViewById(R.id.layoutEntry)).setText(contactType + ": " + builder.toString());
     }
 
     @Override
@@ -136,6 +185,13 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
             speciesDescription = findViewById(R.id.speciesDescription);
             Log.d(TAG,"SpeciesDescription ripristinata");
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState){
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putString(Values.EXTRA_CONTACT, contactType);
+        savedInstanceState.putStringArray(Values.EXTRA_SYMPTOMS, symptoms);
     }
 
     //METODO NON TESTATO, DA PROVARE QUANDO LA NAVIGAZIONE è' COMPLETA

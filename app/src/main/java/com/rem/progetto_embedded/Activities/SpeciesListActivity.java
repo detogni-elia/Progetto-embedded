@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.rem.progetto_embedded.Adapters.SpeciesListAdapter;
+import com.rem.progetto_embedded.Database.Entity.Contacts;
 import com.rem.progetto_embedded.Database.Entity.Creatures;
 import com.rem.progetto_embedded.R;
 import com.rem.progetto_embedded.SpeciesViewModel;
@@ -71,9 +72,9 @@ public class SpeciesListActivity extends AppCompatActivity implements SpeciesLis
         viewModel = new ViewModelProvider(this).get(SpeciesViewModel.class);
         String country = getIntent().getStringExtra(Values.EXTRA_COUNTRY);
         String category = getIntent().getStringExtra(Values.EXTRA_CATEGORY);
-        viewModel.getData(country, category, null);
+        //viewModel.getData(country, category, null);
         adapter = new SpeciesListAdapter(getApplicationContext(), this);
-        viewModel.getSpecies().observe(this, new Observer<List<Creatures>>() {
+        viewModel.getSpecies(country, category, null).observe(this, new Observer<List<Creatures>>() {
             @Override
             public void onChanged(List<Creatures> dataWrappers) {
                 adapter.setData(dataWrappers);
@@ -150,19 +151,20 @@ public class SpeciesListActivity extends AppCompatActivity implements SpeciesLis
     }
 
     @Override
-    public void onSpeciesListItemClick(int position) {
-        Intent startIntent = new Intent(this, AnimalDetailsActivity.class);
+    public void onSpeciesListItemClick(final int position) {
+        final Intent startIntent = new Intent(this, AnimalDetailsActivity.class);
         Creatures element = adapter.getElementAt(position);
         startIntent.putExtra(Values.EXTRA_IMAGE_PATH, Utilities.getResourcesFolder(getApplicationContext()) + element.getImage());
         startIntent.putExtra(Values.EXTRA_NAME, element.getCommonName());
         //TODO: WE SHOULD GET THIS EXTRA INFO ONLY WHEN REQUESTED, QUERYING THE DATABASE.
-        startIntent.putExtra(Values.EXTRA_SPECIES, element.getSpecieName());
+        startIntent.putExtra(Values.EXTRA_SPECIES, element.getLatinName());
         startIntent.putExtra(Values.EXTRA_DIET, element.getDiet());
         //TODO: ADD VARIOUS SYMPTOMS AND LOCALIZATION
         //TODO: ADD SYSTEM TO LOCALIZE ON MAP (FOR EXAMPLE, CENTER AND RADIUS TO DESCRIBE AN AREA WHERE THE ANIMAL, PLANT, INSECT CAN BE FOUND)
-        startIntent.putExtra(Values.EXTRA_SYMPTOMS, getString(R.string.details_symptom_bite) + ": Gonfiore, bruciore, dolore, sanguinamento, intorpidimento");
-        //startIntent.putExtra(Values.EXTRA_SYMPTOMS, element.)
+        //startIntent.putExtra(Values.EXTRA_SYMPTOMS, getString(R.string.details_symptom_bite) + ": Gonfiore, bruciore, dolore, sanguinamento, intorpidimento");
+        //startIntent.putExtra(Values.EXTRA_SYMPTOMS, viewModel.getSymptoms(position).toArray(new String[]{}));
         startIntent.putExtra(Values.EXTRA_DESCRIPTION, element.getDescription());
+        startIntent.putExtra(Values.EXTRA_COUNTRY, getIntent().getStringExtra(Values.EXTRA_COUNTRY));
         startActivity(startIntent);
     }
 

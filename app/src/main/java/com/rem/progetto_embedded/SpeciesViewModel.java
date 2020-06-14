@@ -1,19 +1,20 @@
 package com.rem.progetto_embedded;
 
 import android.app.Application;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.LruCache;
+
+import androidx.collection.ArrayMap;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import com.rem.progetto_embedded.Adapters.SpeciesListAdapter;
-import com.rem.progetto_embedded.Database.AppDatabase;
-import com.rem.progetto_embedded.Database.Entity.Creatures;
+import androidx.lifecycle.Observer;
 
-import java.io.File;
+import com.rem.progetto_embedded.Database.AppDatabase;
+import com.rem.progetto_embedded.Database.Entity.Contacts;
+import com.rem.progetto_embedded.Database.Entity.Creatures;
+import com.rem.progetto_embedded.Database.Entity.Symptoms;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -23,32 +24,24 @@ import java.util.List;
 public class SpeciesViewModel extends AndroidViewModel {
     private LruCache<String, Bitmap> adapterCache;
     private LiveData<List<Creatures>> data;
+    private ArrayMap<String, List<String>> symptomsMap;
+    private AppDatabase db;
 
     public SpeciesViewModel(Application application) {
         super(application);
         data = null;
         adapterCache = null;
+        symptomsMap = new ArrayMap<>();
     }
 
-    /**
-     * Query database for species of a certain country and category and provoking certain symptoms
-     * @param country The country of the species
-     * @param category The category of the species
-     * @param symptoms The symptoms caused by the species
-     * @return The species relative to country, category and that provoke each and every one of the selected symptoms, if symptoms is null then returns all species without filtering them
-     */
-
-    public void getData(String country, String category, String[] symptoms){
+    public LiveData<List<Creatures>> getSpecies(String country, String category, String[] symptoms) {
         if(data == null) {
             if (symptoms == null) {
-                AppDatabase db = AppDatabase.getInstance(getApplication().getApplicationContext(), country);
+                db = AppDatabase.getInstance(getApplication().getApplicationContext(), country);
                 data = db.creaturesDao().getFromCategory(category);
                 //data = (AppDatabase.getInstance(getApplication().getApplicationContext(), country).creaturesDao().getFromCategory(category).getValue());
             }
         }
-    }
-
-    public LiveData<List<Creatures>> getSpecies() {
         return data;
             /*
             data = new MutableLiveData<>();
