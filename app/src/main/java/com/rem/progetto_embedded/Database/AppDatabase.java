@@ -36,10 +36,19 @@ public abstract class AppDatabase extends RoomDatabase
 
     public static synchronized AppDatabase getInstance(Context context, String country)
     {
-        SharedPreferences sharedPreferences=PreferenceManager.getDefaultSharedPreferences(context);
-        String lang=sharedPreferences.getString(Values.LANGUAGE,"");
-        Log.d("DATABASE", lang);
+        File resFolder = Utilities.getResourcesFolder(context);
+        File dbPath = new File(resFolder, country + "/Database/database.db");
+        //SharedPreferences sharedPreferences=PreferenceManager.getDefaultSharedPreferences(context);
+        //String lang=sharedPreferences.getString(Values.LANGUAGE,"");
+        //Log.d("DATABASE", lang);
         //Controllo se la chiave è presente nel dizionario, se non c'è apro il database e salvo l'istanza
+        if(!instances.containsKey(country + dbPath.lastModified())){
+            AppDatabase instance = Room.databaseBuilder(context, AppDatabase.class, country + dbPath.lastModified()).createFromFile(dbPath).build();
+            instances.put(country + dbPath.lastModified(), instance);
+        }
+        return instances.get(country + dbPath.lastModified());
+
+        /*
         if(!instances.containsKey(lang+country)) {
             AppDatabase instance;
             File resFolder = Utilities.getResourcesFolder(context);
@@ -48,8 +57,10 @@ public abstract class AppDatabase extends RoomDatabase
             Log.d("DATABASE", lang+country+"Inserito");
             instances.put(lang+country, instance);
         }
-        Log.d("DATABASE", lang+country+"restituito");
-        return instances.get(lang+country);
+
+         */
+        //Log.d("DATABASE", lang+country+"restituito");
+        //return instances.get(lang+country);
     }
 }
 

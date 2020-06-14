@@ -57,33 +57,38 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:weightSum="3"
-                    android:layout_marginBottom="8dp"
-                    android:orientation="horizontal"
-                    android:baselineAligned="false">
+                    android:layout_marginBottom="8dp">
 
                     <include layout="@layout/details_data_entry_layout"
                         android:id="@+id/nameEntry"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:layout_marginEnd="4dp"
                         />
 
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="2"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="horizontal"
+                    android:baselineAligned="false">
+
+                    <!-- Weight is 2 because for plants we don't have a Diet field, so we want to
+                     collapse the Diet field and make sure that Species Name field fills the space-->
                     <include layout="@layout/details_data_entry_layout"
                         android:id="@+id/speciesEntry"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginEnd="4dp"/>
+                        android:layout_weight="2" />
 
                     <include layout="@layout/details_data_entry_layout"
                         android:id="@+id/dietEntry"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginStart="4dp" />
+                        android:layout_marginStart="8dp" />
 
                 </LinearLayout>
 

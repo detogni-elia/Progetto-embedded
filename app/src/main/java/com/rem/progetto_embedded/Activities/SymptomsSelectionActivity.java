@@ -68,7 +68,7 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
         contactsSpinner = findViewById(R.id.contact_spinner);
 
         //Get localized symptoms and species categories to display
-        String[] symptoms = Utilities.getLocalizedSymptoms(this);
+        String[] symptoms = Utilities.localizeSymptoms(this, null);
         String[] categories = Utilities.getLocalizedCategories(this);
         String[] contacts = Utilities.getLocalizedContacts(this);
 
@@ -202,8 +202,9 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
 
         }
         startIntent.putExtra(Values.EXTRA_CONTACT, contactsDefaultNames[contactsSpinner.getSelectedItemPosition()]);
-        startIntent.putExtra(Values.EXTRA_SYMPTOMS, querySymptoms.toArray(new String[]{}));
+        startIntent.putExtra(Values.EXTRA_SYMPTOMS, querySymptoms);
         startIntent.putExtra(Values.EXTRA_COUNTRY, countriesFolders[countriesSpinner.getSelectedItemPosition()]);
+        startIntent.putExtra(Values.EXTRA_CONTACT, contactsDefaultNames[contactsSpinner.getSelectedItemPosition()]);
 
         switch (speciesSpinner.getSelectedItemPosition()){
             case 0:

@@ -24,22 +24,22 @@ import java.util.List;
 public class SpeciesViewModel extends AndroidViewModel {
     private LruCache<String, Bitmap> adapterCache;
     private LiveData<List<Creatures>> data;
-    private ArrayMap<String, List<String>> symptomsMap;
-    private AppDatabase db;
 
     public SpeciesViewModel(Application application) {
         super(application);
         data = null;
         adapterCache = null;
-        symptomsMap = new ArrayMap<>();
     }
 
-    public LiveData<List<Creatures>> getSpecies(String country, String category, String[] symptoms) {
+    public LiveData<List<Creatures>> getSpecies(String country, String category, List<String> symptoms, String contact) {
         if(data == null) {
-            if (symptoms == null) {
-                db = AppDatabase.getInstance(getApplication().getApplicationContext(), country);
+            AppDatabase db = AppDatabase.getInstance(getApplication().getApplicationContext(), country);
+            if (symptoms == null || symptoms.isEmpty()) {
                 data = db.creaturesDao().getFromCategory(category);
                 //data = (AppDatabase.getInstance(getApplication().getApplicationContext(), country).creaturesDao().getFromCategory(category).getValue());
+            }
+            else{
+                data = db.effectsDao().getCreatures(contact, category, symptoms);
             }
         }
         return data;

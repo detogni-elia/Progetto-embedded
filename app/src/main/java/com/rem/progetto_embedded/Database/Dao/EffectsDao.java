@@ -17,6 +17,6 @@ public interface EffectsDao
     @Query("SELECT * FROM Effects")
     LiveData<List<Effects>> getAll();
     //List<Effects> getAll();
-    @Query("SELECT * FROM Effects JOIN Creatures ON Effects.creature=Creatures.latin_name WHERE Effects.contact = :c AND Effects.symptom IN (:s)")
-    LiveData<List<Creatures>> getCreatures(String c, List<String> s);
+    @Query("SELECT * FROM Effects JOIN Creatures ON Effects.creature=Creatures.latin_name WHERE Effects.contact = :contact AND Creatures.category = :category AND Effects.symptom IN (:s)")
+    LiveData<List<Creatures>> getCreatures(String contact, String category, List<String> s);
 }

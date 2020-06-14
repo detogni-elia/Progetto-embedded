@@ -3,6 +3,7 @@ package com.rem.progetto_embedded;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Environment;
+import android.util.ArrayMap;
 import android.widget.Toast;
 import java.io.File;
 import java.io.FileFilter;
@@ -147,6 +148,8 @@ public class Utilities {
         return spaceInMb >= requiredMb;
     }
 
+    private static final ArrayMap<String, String> countriesTranslations = new ArrayMap<>();
+
     /**
      * Translate countries names from english to current device's language
      * @param context The application context
@@ -154,31 +157,46 @@ public class Utilities {
      * @return String array containing the localizations
      */
     public static String[] localizeCountries(Context context, String[] toLocalize){
-        ArrayList<String> localized = new ArrayList<>();
-        //Mapping english names and android ids allows to translate
-        int[] countriesIds = Values.getCountriesIds();
-        String[] countries = Values.getCountriesDefaultNames();
-        for(String s: toLocalize) {
-            for (int i = 0; i < countries.length; i++) {
-                if (s.equals(countries[i]))
-                    localized.add(context.getString(countriesIds[i]));
-            }
+        if(countriesTranslations.isEmpty()){
+            //Mapping english names and android ids allows to translate
+            int[] countriesIds = Values.getCountriesIds();
+            String[] countries = Values.getCountriesDefaultNames();
+            for(int i = 0; i < countries.length; i++)
+                countriesTranslations.put(countries[i], context.getString(countriesIds[i]));
         }
-        //We assume this method is always called correctly with at least one valid country inside toLocalize
-        return localized.toArray(new String[]{});
+        String[] localized = new String[toLocalize.length];
+        for(int i = 0; i < toLocalize.length; i++)
+            localized[i] = countriesTranslations.get(toLocalize[i]);
+
+        return localized;
     }
+
+    private static final ArrayMap<String, String> symptomsTranslations = new ArrayMap<>();
 
     /**
      * Get all defined symptoms translated to the device's current language
      * @param context The application context
      * @return String array containing all localized symptoms
      */
-    public static String[] getLocalizedSymptoms(Context context){
-        int[] symptomsIds = Values.getSymptomsIds();
-        String[] localizedSymptoms = new String[symptomsIds.length];
-        for(int i = 0; i < localizedSymptoms.length; i++)
-            localizedSymptoms[i] = context.getString(symptomsIds[i]);
-
+    public static String[] localizeSymptoms(Context context, String[] toLocalize){
+        if(symptomsTranslations.isEmpty()){
+            int[] symptomsIds = Values.getSymptomsIds();
+            String[] symptoms = Values.getSymptomsDefaultNames();
+            for(int i = 0; i < symptoms.length; i++)
+                symptomsTranslations.put(symptoms[i], context.getString(symptomsIds[i]));
+        }
+        String[] localizedSymptoms;
+        if(toLocalize == null) {
+            localizedSymptoms = new String[symptomsTranslations.size()];
+            String[] allSymptoms = Values.getSymptomsDefaultNames();
+            for(int i = 0; i < localizedSymptoms.length; i++)
+                localizedSymptoms[i] = symptomsTranslations.get(allSymptoms[i]);
+        }
+        else {
+            localizedSymptoms = new String[toLocalize.length];
+            for(int i = 0; i < toLocalize.length; i++)
+                localizedSymptoms[i] = symptomsTranslations.get(toLocalize[i]);
+        }
         return localizedSymptoms;
     }
 
@@ -196,18 +214,37 @@ public class Utilities {
         return localizedSpecies;
     }
 
+    private static ArrayMap<String, String> contactsTranslations = new ArrayMap<>();
+
+    public static String localizeContact(Context context, String toLocalize){
+        if(contactsTranslations.isEmpty()) {
+            int[] contactsIds = Values.getContactsTypeIds();
+            String[] contacts = Values.getContactTypesDefaultNames();
+            for (int i = 0; i < contacts.length; i++)
+                //localizedContactsTypes[i] = context.getString(contactsIds[i]);
+                contactsTranslations.put(contacts[i], context.getString(contactsIds[i]));
+        }
+        return contactsTranslations.get(toLocalize);
+    }
+
     /**
      * Same as above
      * @param context same
      * @return same
      */
     public static String[] getLocalizedContacts(Context context){
-        int[] contactsIds = Values.getContactsTypeIds();
-        String[] localizedContactsTypes = new String[contactsIds.length];
-        for(int i = 0; i < localizedContactsTypes.length; i++)
-            localizedContactsTypes[i] = context.getString(contactsIds[i]);
+        String[] contacts = Values.getContactTypesDefaultNames();
+        if(contactsTranslations.isEmpty()) {
+            int[] contactsIds = Values.getContactsTypeIds();
+            for (int i = 0; i < contacts.length; i++)
+                //localizedContactsTypes[i] = context.getString(contactsIds[i]);
+                contactsTranslations.put(contacts[i], context.getString(contactsIds[i]));
+        }
+        String[] toReturn  = new String[contacts.length];
+        for(int i = 0; i < toReturn.length; i++)
+            toReturn[i] = contactsTranslations.get(contacts[i]);
 
-        return localizedContactsTypes;
+        return toReturn;
     }
 
     /**

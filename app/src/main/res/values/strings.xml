@@ -28,24 +28,6 @@
     <string name="details_toolbar_title">Details</string>
     <string name="species_list_toolbar_title">List of species</string>
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
-    <string name="symptom_swelling">Swelling</string>
-    <string name="symptom_pain">Pain in the byte/contact area</string>
-    <string name="symptom_breathing">Difficulty breathing</string>
-    <string name="symptom_vomiting">Nausea/vomiting</string>
-    <string name="symptom_blurred">Blurred vision</string>
-    <string name="symptom_sweating">Sweating</string>
-    <string name="symptom_salivating">Excessive salivation</string>
-    <string name="symptom_numbness">Face/muscle numbess</string>
-    <string name="symptom_itching">Itching</string>
-    <string name="symptom_rash">Rash</string>
-    <string name="symptom_headache">Strong headache</string>
-    <string name="symptom_cramping">Muscle pain/cramping</string>
-    <string name="symptom_fever">High fever</string>
-    <string name="sympton_chills">Chills</string>
-    <string name="symptoms_swollen_lymph_glands">Swollen lymph glands</string>
-    <string name="weakess">General weakness</string>
-    <string name="symptom_burning">Burning/throbbing pain</string>
-    <string name="irregular_heartbeat">Irregular hearbeat</string>
     <string name="contact_bite">Bite</string>
     <string name="contact_stung">Stung</string>
     <string name="contact_eaten">Eaten</string>
@@ -91,5 +73,34 @@
         <item>@string/medium</item>
         <item>@string/high</item>
     </string-array>
+    <string name="symptoms_abdominal_cramps">Abdominal cramps</string>
+    <string name="symptoms_ptosis">Ptosis</string>
+    <string name="symptoms_vomiting">Vomiting</string>
+    <string name="symptoms_diarrhea">Diarrhea</string>
+    <string name="symptoms_dizziness">Dizziness</string>
+    <string name="symptoms_allergic_reaction">Allergic reaction</string>
+    <string name="symptoms_pain_at_bite_site">Pain in the bite area</string>
+    <string name="symptoms_swelling">Swelling</string>
+    <string name="symptoms_local_burning">Localized burning sensation</string>
+    <string name="symptoms_urticaria">Urticaria</string>
+    <string name="symptoms_inflammation">Inflammation</string>
+    <string name="symptoms_redness">Redness</string>
+    <string name="symptoms_vesication">Vesication</string>
+    <string name="symptoms_tetanic_convulsion">Tetanic convulsion</string>
+    <string name="symptoms_headache">Headache</string>
+    <string name="symptoms_convulsions">Convulsions</string>
+    <string name="symptoms_endema">Endema</string>
+    <string name="symptoms_discoloration">Discoloration</string>
+    <string name="symptoms_acute_pain">Acute pain</string>
+    <string name="symptoms_soreness">Soreness</string>
+    <string name="symptoms_ulcer">Ulcers</string>
+    <string name="symptoms_pain">Pain</string>
+    <string name="symptoms_muscular_paralysis">Muscular paralysis</string>
+    <string name="symptoms_chocking">Chocking sensation</string>
+    <string name="symptoms_necrosis">Necrosis</string>
+    <string name="symptoms_sleepiness">Sleepiness</string>
+    <string name="symptoms_itchiness">Itchiness</string>
+    <string name="symptoms_irritation">Irritation</string>
+    <string name="symptoms_hallucinations">Hallucinations</string>
 
 </resources>

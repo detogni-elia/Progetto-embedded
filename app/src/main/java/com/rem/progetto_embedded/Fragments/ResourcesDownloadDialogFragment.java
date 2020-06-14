@@ -22,6 +22,8 @@ import com.rem.progetto_embedded.Services.FakeDownloadIntentService;
 import com.rem.progetto_embedded.Utilities;
 import com.rem.progetto_embedded.Values;
 
+import java.util.Locale;
+
 /**
  * Dialog fragment asks the user to download resources when those are not present
  */
@@ -107,7 +109,19 @@ public class ResourcesDownloadDialogFragment extends DialogFragment {
     private void startDownloadService(String country, String language, String imageQuality){
         Intent startIntent = new Intent(getContext(), FakeDownloadIntentService.class);
         startIntent.putExtra(Values.EXTRA_COUNTRY, country);
-        startIntent.putExtra(Values.EXTRA_LANGUAGE, language);
+        String locale = Locale.getDefault().getLanguage();
+        String[] languages = Values.getLanguagesDefaultNames();
+        boolean supported = false;
+        for(String lang: languages){
+            if(locale.equals(lang)) {
+                supported = true;
+                break;
+            }
+        }
+        if(!supported)
+            locale = "en";
+
+        startIntent.putExtra(Values.EXTRA_LANGUAGE, locale);
         startIntent.putExtra(Values.EXTRA_IMAGE_QUALITY, imageQuality);
 
         if(getActivity() != null) {

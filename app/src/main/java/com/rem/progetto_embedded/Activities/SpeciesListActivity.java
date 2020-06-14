@@ -18,7 +18,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.rem.progetto_embedded.Adapters.SpeciesListAdapter;
-import com.rem.progetto_embedded.Database.Entity.Contacts;
 import com.rem.progetto_embedded.Database.Entity.Creatures;
 import com.rem.progetto_embedded.R;
 import com.rem.progetto_embedded.SpeciesViewModel;
@@ -72,9 +71,11 @@ public class SpeciesListActivity extends AppCompatActivity implements SpeciesLis
         viewModel = new ViewModelProvider(this).get(SpeciesViewModel.class);
         String country = getIntent().getStringExtra(Values.EXTRA_COUNTRY);
         String category = getIntent().getStringExtra(Values.EXTRA_CATEGORY);
+        List<String> symptoms = getIntent().getStringArrayListExtra(Values.EXTRA_SYMPTOMS);
+        String contact = getIntent().getStringExtra(Values.EXTRA_CONTACT);
         //viewModel.getData(country, category, null);
         adapter = new SpeciesListAdapter(getApplicationContext(), this);
-        viewModel.getSpecies(country, category, null).observe(this, new Observer<List<Creatures>>() {
+        viewModel.getSpecies(country, category, symptoms, contact).observe(this, new Observer<List<Creatures>>() {
             @Override
             public void onChanged(List<Creatures> dataWrappers) {
                 adapter.setData(dataWrappers);

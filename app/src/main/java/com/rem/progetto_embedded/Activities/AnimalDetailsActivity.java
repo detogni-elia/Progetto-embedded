@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,6 +26,7 @@ import androidx.lifecycle.Observer;
 import com.rem.progetto_embedded.Database.AppDatabase;
 import com.rem.progetto_embedded.Database.Entity.Contacts;
 import com.rem.progetto_embedded.Database.Entity.Symptoms;
+import com.rem.progetto_embedded.Utilities;
 import com.rem.progetto_embedded.Values;
 import com.rem.progetto_embedded.R;
 
@@ -89,7 +91,11 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
 
         ((TextView)nameEntry.findViewById(R.id.layoutEntry)).setText(intent.getStringExtra(Values.EXTRA_NAME));
         ((TextView)speciesEntry.findViewById(R.id.layoutEntry)).setText(intent.getStringExtra(Values.EXTRA_SPECIES));
-        ((TextView)dietEntry.findViewById(R.id.layoutEntry)).setText(intent.getStringExtra(Values.EXTRA_DIET));
+        String diet = intent.getStringExtra(Values.EXTRA_DIET);
+        if(diet == null)
+            dietEntry.setVisibility(View.GONE);
+        else
+            ((TextView)dietEntry.findViewById(R.id.layoutEntry)).setText(diet);
 
 
         if(savedInstanceState == null){
@@ -97,7 +103,7 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
             db.creaturesDao().getContactOfCreature(speciesName).observe(this, new Observer<Contacts>() {
                 @Override
                 public void onChanged(Contacts contacts) {
-                    contactType = contacts.toString();
+                    contactType = Utilities.localizeContact(getApplicationContext(), contacts.toString());
                     db.creaturesDao().getSymptomsOfCreature(speciesName).observe(AnimalDetailsActivity.this, new Observer<List<Symptoms>>() {
                         @SuppressLint("SetTextI18n")
                         @Override
@@ -106,6 +112,8 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
                             symptoms = new String[symptomsList.size()];
                             for(Symptoms s: symptomsList)
                                 symptoms[i++] = s.toString();
+
+                            symptoms = Utilities.localizeSymptoms(getApplicationContext(), symptoms);
 
                             StringBuilder builder = new StringBuilder();
                             for(i = 0; i < symptoms.length - 1; i++)
