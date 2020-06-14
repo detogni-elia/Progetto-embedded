@@ -1,15 +1,20 @@
 package com.rem.progetto_embedded;
 
 import android.app.Application;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.LruCache;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import com.rem.progetto_embedded.Adapters.SpeciesListAdapter;
+import com.rem.progetto_embedded.Database.AppDatabase;
+import com.rem.progetto_embedded.Database.Entity.Creatures;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * SpeciesViewModel queries the database and is used inside SpeciesListActivity
@@ -17,7 +22,7 @@ import java.util.Arrays;
 
 public class SpeciesViewModel extends AndroidViewModel {
     private LruCache<String, Bitmap> adapterCache;
-    private MutableLiveData<ArrayList<SpeciesListAdapter.DataWrapper>> data;
+    private LiveData<List<Creatures>> data;
 
     public SpeciesViewModel(Application application) {
         super(application);
@@ -33,8 +38,19 @@ public class SpeciesViewModel extends AndroidViewModel {
      * @return The species relative to country, category and that provoke each and every one of the selected symptoms, if symptoms is null then returns all species without filtering them
      */
 
-    public LiveData<ArrayList<SpeciesListAdapter.DataWrapper>> getSpecies(String country, String category, String[] symptoms) {
+    public void getData(String country, String category, String[] symptoms){
         if(data == null) {
+            if (symptoms == null) {
+                AppDatabase db = AppDatabase.getInstance(getApplication().getApplicationContext(), country);
+                data = db.creaturesDao().getFromCategory(category);
+                //data = (AppDatabase.getInstance(getApplication().getApplicationContext(), country).creaturesDao().getFromCategory(category).getValue());
+            }
+        }
+    }
+
+    public LiveData<List<Creatures>> getSpecies() {
+        return data;
+            /*
             data = new MutableLiveData<>();
             //Get path of downloaded resources (either in external sd or in emulated)
             File rootPath = Utilities.getResourcesFolder(getApplication().getApplicationContext());
@@ -65,8 +81,7 @@ public class SpeciesViewModel extends AndroidViewModel {
                 ArrayList<SpeciesListAdapter.DataWrapper> wrappedData = SpeciesListAdapter.DataWrapper.fromArrayList(new ArrayList<>(Arrays.asList(images)), speciesNames);
                 data.setValue(wrappedData);
             }
-        }
-        return data;
+            */
     }
 
     /**

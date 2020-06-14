@@ -15,6 +15,7 @@ public class Values {
     public static final String EXTRA_DIET = BASE + "Diet";
     public static final String EXTRA_CONTACT = BASE + "Contact";
     public static final String EXTRA_SYMPTOMS = BASE + "Symptoms";
+    public static final String EXTRA_DESCRIPTION = BASE + "Description";
     public static final String EXTRA_IMAGE_QUALITY = BASE + "ImageQuality";
 
     //SharedPreferences keys
@@ -105,10 +106,10 @@ public class Values {
 
     //Contacts default values for database queries
     private static final String[] CONTACTS_STRINGS = {
-            "bite",
-            "stung",
-            "eaten",
-            "contact"
+            "Bite",
+            "Sting",
+            "Eaten",
+            "Skin contact"
     };
 
     public static String[] getContactTypesDefaultNames(){

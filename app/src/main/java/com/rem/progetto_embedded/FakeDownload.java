@@ -46,7 +46,7 @@ public class FakeDownload {
         File imagesFolder = new File(countryFolder, "Images");
         imagesFolder.mkdirs();
         //Create the subfolder for the databases and the subfolder for the selected language
-        File dbFolder = new File(countryFolder, "Databases/" + language);
+        File dbFolder = new File(countryFolder, "Database");
         dbFolder.mkdirs();
 
         AssetManager assetManager = context.getAssets();
@@ -70,8 +70,8 @@ public class FakeDownload {
             }
         }
         //Copy database
-        src = assetManager.open(country + "/Databases/" + language + ".tar");
-        dest = new FileOutputStream(dbFolder + "/" + "db.tar");
+        src = assetManager.open(country + "/Databases/" + language + ".db");
+        dest = new FileOutputStream(dbFolder + "/" + "database.db");
 
         copyFile(src, dest);
         src.close();

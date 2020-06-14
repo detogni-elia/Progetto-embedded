@@ -1,5 +1,6 @@
 package com.rem.progetto_embedded.Adapters;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -10,10 +11,14 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.rem.progetto_embedded.Database.Entity.Creatures;
 import com.rem.progetto_embedded.R;
+import com.rem.progetto_embedded.Utilities;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Adapter used in SpeciesListActivity loads implements filterable in order to filter the data displayed
@@ -22,6 +27,7 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
     /**
      * Private class wraps the data in order to bind species name with relative image for the purpose of filtering the data
      */
+    /*
     public static class DataWrapper{
         //Path to the image
         private String image;
@@ -33,12 +39,15 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
             name = n;
         }
 
+
+     */
         /**
          * Build ArrayList of DataWrapper objects from 2 ArrayLists containing Strings
          * @param paths List of paths for the images
          * @param names List of names for each entry
          * @return The ArrayList of DataWrapper objects
          */
+        /*
         public static ArrayList<DataWrapper> fromArrayList(ArrayList<File> paths, ArrayList<String> names){
             if(paths.size() != names.size())
                 return null;
@@ -58,16 +67,20 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
         }
     }
 
+         */
     //Store all the data loaded
-    private ArrayList<DataWrapper> fullData = new ArrayList<>();
+    private List<Creatures> fullData = new ArrayList<>();
     //Store the filtered data, this is the actual data shown in the RecyclerView
-    private ArrayList<DataWrapper> filteredData = new ArrayList<>();
+    private List<Creatures> filteredData = new ArrayList<>();
     //Listener fo clicks on the elements of the RecyclerView
     private OnSpeciesSelectedListener clickListener;
     //Cache to store images's Bitmaps
     private LruCache<String, Bitmap> imageCache;
+
+    private final String ROOT_PATH;
+
     //Tag for logging
-    private static final String TAG = "SpeciesListAdapter";
+    private final String TAG = getClass().getSimpleName();
 
     /**
      * Interface defines method to handle click of an item in the RecyclerView
@@ -76,7 +89,7 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
         void onSpeciesListItemClick(int position);
     }
 
-    public SpeciesListAdapter(ArrayList<DataWrapper> wrappedData, OnSpeciesSelectedListener listener) {
+    public SpeciesListAdapter(Context context, List<Creatures> wrappedData, OnSpeciesSelectedListener listener) {
         //50 Mb of cache
         int cacheSize = 1024 * 1024 * 50;
         //LruCache takes cacheSize in Kb
@@ -93,9 +106,10 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
             //filteredData.addAll(fullData);
             filteredData.addAll(fullData);
         }
+        ROOT_PATH = Utilities.getResourcesFolder(context).toString();
     }
 
-    public SpeciesListAdapter(OnSpeciesSelectedListener listener){
+    public SpeciesListAdapter(Context context, OnSpeciesSelectedListener listener){
         //50 Mb of cache
         int cacheSize = 1024 * 1024 * 50;
         //LruCache takes cacheSize in Kb
@@ -106,6 +120,8 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
             }
         };
         clickListener = listener;
+
+        ROOT_PATH = Utilities.getResourcesFolder(context).toString();
     }
 
     @Override
@@ -119,13 +135,13 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
         Bitmap cachedImage = null;
         //Try loading image from cache, if cache is available
         if(imageCache != null)
-            cachedImage = imageCache.get(filteredData.get(position).getImage());
+            cachedImage = imageCache.get(ROOT_PATH + filteredData.get(position).getImage());
 
         //Load image from storage if image was not in cache or if cache was not present at all due to low memory
         if(cachedImage == null){
             //TODO: Load image in background thread instead of UI thread, AsyncTask deprecated in api level R
             //https://android-developers.googleblog.com/2009/05/painless-threading.html  contains threading solutions
-            Bitmap loadedImage = BitmapFactory.decodeFile(filteredData.get(position).getImage());
+            Bitmap loadedImage = BitmapFactory.decodeFile(ROOT_PATH + filteredData.get(position).getImage());
             //If image not available set placeholder image
             if(loadedImage == null)
                 holder.setPlaceholderImage();
@@ -134,16 +150,16 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
             else {
                 holder.setImage(loadedImage);
                 //Save image to cache
-                imageCache.put(filteredData.get(position).getImage(), loadedImage);
-                Log.v(TAG, "Added image to cache: " + filteredData.get(position).getImage());
+                imageCache.put(ROOT_PATH + filteredData.get(position).getImage(), loadedImage);
+                Log.v(TAG, "Added image to cache: " + ROOT_PATH + filteredData.get(position).getImage());
             }
         }
         else {
             holder.setImage(cachedImage);
-            Log.v(TAG, "Loaded image from cache: " + filteredData.get(position).getImage());
+            Log.v(TAG, "Loaded image from cache: " + ROOT_PATH + filteredData.get(position).getImage());
         }
 
-        holder.setName(filteredData.get(position).getName());
+        holder.setName(filteredData.get(position).getCommonName());
     }
 
     @Override
@@ -162,12 +178,12 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
         //Checks the text filter passed and returns only the items containing the filter text in their names
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            ArrayList<DataWrapper> filteredData = new ArrayList<>();
+            ArrayList<Creatures> filteredData = new ArrayList<>();
             if(constraint.toString().isEmpty())
                 filteredData.addAll(fullData);
             else{
-                for(DataWrapper wrapper: fullData){
-                    String name = wrapper.getName();
+                for(Creatures wrapper: fullData){
+                    String name = wrapper.getCommonName();
                     if(name.toLowerCase().contains(constraint.toString().toLowerCase())){
                         filteredData.add(wrapper);
                     }
@@ -181,7 +197,7 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             filteredData.clear();
-            filteredData.addAll((ArrayList<DataWrapper>) results.values);
+            filteredData.addAll((ArrayList<Creatures>) results.values);
             notifyDataSetChanged();
         }
     };
@@ -216,13 +232,13 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
         return imageCache;
     }
 
-    public void setData(ArrayList<DataWrapper> data){
+    public void setData(List<Creatures> data){
         fullData = data;
         filteredData.clear();
         filteredData.addAll(fullData);
     }
 
-    public DataWrapper getElementAt(int position){
+    public Creatures getElementAt(int position){
         return filteredData.get(position);
     }
 

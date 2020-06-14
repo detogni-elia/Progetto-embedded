@@ -132,3 +132,6 @@ Hallucinations
 
 
 Path esempio: /COUNTRY/Images/[Plants-Insects-Animals]/nome.webp
+
+
+Cambio globale qualità immagini

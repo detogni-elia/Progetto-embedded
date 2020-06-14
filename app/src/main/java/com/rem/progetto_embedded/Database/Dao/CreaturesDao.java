@@ -15,6 +15,8 @@ public interface CreaturesDao
 {
     @Query("SELECT * FROM Creatures")
     LiveData<List<Creatures>> getAll();
+    @Query("SELECT * FROM Creatures")
+    List<Creatures> getAllAsList();
     @Query("SELECT * FROM Creatures WHERE latin_name = :latinName")
     Creatures getCreature(String latinName);
     @Query("SELECT * FROM Creatures WHERE category = :cat")

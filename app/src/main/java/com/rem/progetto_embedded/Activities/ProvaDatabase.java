@@ -26,7 +26,7 @@ public class ProvaDatabase extends AppCompatActivity {
         ExecutorService executor= Executors.newSingleThreadExecutor();
         final TextView tw=findViewById(R.id.textView2);
         //Apro il database
-        final AppDatabase database=AppDatabase.getInstance(this);
+        //final AppDatabase database=AppDatabase.getInstance(this);
         Log.d("DATABASE", "Apertura ok");
         //Provo la query
         //TODO: HO COMMENTATO QUESTA PARTE DI CODICE PERCHE' MI DAVA ERRORE E NON RIUSCIVO A TESTARE LE ALTRE ACTIVITIES

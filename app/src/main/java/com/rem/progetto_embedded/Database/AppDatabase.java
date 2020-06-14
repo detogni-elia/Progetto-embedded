@@ -17,6 +17,9 @@ import com.rem.progetto_embedded.Database.Entity.Creatures;
 import com.rem.progetto_embedded.Database.Entity.Effects;
 import com.rem.progetto_embedded.Database.Entity.Symptoms;
 import com.rem.progetto_embedded.Database.Entity.Contacts;
+import com.rem.progetto_embedded.Utilities;
+
+import java.io.File;
 
 @Database(entities = {Creatures.class, Contacts.class, Symptoms.class, Effects.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase
@@ -28,11 +31,14 @@ public abstract class AppDatabase extends RoomDatabase
 
     private static AppDatabase instance;
     //Bisogna rendere relativo il file sorgente del database
-    public static synchronized AppDatabase getInstance(Context context)
+    public static synchronized AppDatabase getInstance(Context context, String country)
     {
         if(instance == null) {
-            instance = Room.databaseBuilder(context, AppDatabase.class, "DatabaseSAEng.db").createFromAsset("India/Databases/DatSAIT.db").build();
-            //instance = Room.databaseBuilder(context, AppDatabase.class, "DatabaseSAEng.db").createFromFile(new File(Path del file .db)).build();
+            File resFolder = Utilities.getResourcesFolder(context);
+            File dbPath = new File(resFolder, country + "/Database/database.db/");
+            instance = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "en.db").createFromAsset("India/Databases/it.db").allowMainThreadQueries().build();
+            boolean exists = dbPath.exists();
+            //instance = Room.databaseBuilder(context, AppDatabase.class, country).createFromFile(dbPath).build();
             //https://developer.android.com/training/data-storage/room/prepopulate
             Log.d("DATABASE", "database trovato");
         }

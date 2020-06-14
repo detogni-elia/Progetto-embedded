@@ -66,6 +66,7 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
         speciesEntry = findViewById(R.id.speciesEntry);
         dietEntry = findViewById(R.id.dietEntry);
         symptomsEntry = findViewById(R.id.symptomsEntry);
+        speciesDescription = findViewById(R.id.speciesDescription);
 
 
         ((TextView)nameEntry.findViewById(R.id.layoutLabel)).setText(R.string.details_name);
@@ -77,6 +78,7 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
         ((TextView)speciesEntry.findViewById(R.id.layoutEntry)).setText(intent.getStringExtra(Values.EXTRA_SPECIES));
         ((TextView)dietEntry.findViewById(R.id.layoutEntry)).setText(intent.getStringExtra(Values.EXTRA_DIET));
         ((TextView)symptomsEntry.findViewById(R.id.layoutEntry)).setText(intent.getStringExtra(Values.EXTRA_SYMPTOMS));
+        speciesDescription.setText(intent.getStringExtra(Values.EXTRA_DESCRIPTION));
     }
 
     @Override
