@@ -36,9 +36,8 @@ public abstract class AppDatabase extends RoomDatabase
         if(instance == null) {
             File resFolder = Utilities.getResourcesFolder(context);
             File dbPath = new File(resFolder, country + "/Database/database.db/");
-            instance = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "en.db").createFromAsset("India/Databases/it.db").allowMainThreadQueries().build();
-            boolean exists = dbPath.exists();
-            //instance = Room.databaseBuilder(context, AppDatabase.class, country).createFromFile(dbPath).build();
+            //instance = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "en.db").createFromAsset("India/Databases/it.db").allowMainThreadQueries().build();
+            instance = Room.databaseBuilder(context, AppDatabase.class, country).createFromFile(dbPath).build();
             //https://developer.android.com/training/data-storage/room/prepopulate
             Log.d("DATABASE", "database trovato");
         }
