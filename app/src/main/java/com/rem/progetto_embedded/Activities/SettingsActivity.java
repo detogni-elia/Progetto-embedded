@@ -33,6 +33,7 @@ import com.rem.progetto_embedded.Values;
 
 import java.util.Locale;
 
+//TODO: COMMENT EVERYTHING
 public class SettingsActivity extends AppCompatActivity implements ConnectionDialogFragment.ConnectionDialogDismissListener, FakeDownloadIntentService.DownloadCallbacks, FirstStartDialogFragment.FirstStartListener {
     private static final int REQUEST_CODE = 100;
     private String[] countries;
