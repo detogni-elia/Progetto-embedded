@@ -61,45 +61,7 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_symptoms_selection);
 
-        fab = findViewById(R.id.fab);
-        countriesSpinner = findViewById(R.id.countries_spinner);
-        speciesSpinner = findViewById(R.id.species_spinner);
-        contactsSpinner = findViewById(R.id.contact_spinner);
-
-        //Get localized symptoms and species categories to display
-        String[] symptoms = Utilities.localizeSymptoms(this, null);
-        String[] categories = Utilities.getLocalizedCategories(this);
-        String[] contacts = Utilities.getLocalizedContacts(this);
-
-        //Get english symptoms names to pass via intent to SpeciesListActivity to interrogate the database
-        symptomsDefaultNames = Values.getSymptomsDefaultNames();
-        contactsDefaultNames = Values.getContactTypesDefaultNames();
-
-        boolean[] selections;
-        //If not restoring after orientation change
-        if(savedInstanceState == null)
-            selections = new boolean[symptoms.length];
-
-        else{
-            selections = savedInstanceState.getBooleanArray(SELECTIONS);
-            checkedCounter = savedInstanceState.getInt(CHECKED_COUNTER);
-            //We hide the FloatingActionButton if no symptom is checked, we want at least a symptom to interrogate the database
-        }
-        ArrayAdapter<String> speciesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
-        speciesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        speciesSpinner.setAdapter(speciesAdapter);
-        ArrayAdapter<String> contactsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, contacts);
-        contactsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        contactsSpinner.setAdapter(contactsAdapter);
-
-        //Wrap the data for SymptomSearchAdapter
-        data = SymptomsSearchAdapter.DataWrapper.wrapData(symptoms, selections);
-
-        adapter = new SymptomsSearchAdapter(data, this);
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
-        manager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(manager);
-        recyclerView.setAdapter(adapter);
+        setActivity(savedInstanceState);
 
         //Set the toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -113,8 +75,8 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.search_menu, menu);
-        MenuItem searchItem = menu.getItem(0);
+        getMenuInflater().inflate(R.menu.search_menu_symptoms, menu);
+        MenuItem searchItem = menu.getItem(1);
         SearchView searchView = (SearchView) searchItem.getActionView();
         searchView.setQueryHint(getString(R.string.symptoms_search_query_hint));
         //Listener for the search button on the ToolBar
@@ -164,13 +126,63 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
-        int id = item.getItemId();
-        if(id == android.R.id.home){
-            //Should use NavUtils.navigateUpTo(this, new Intent(this, Activity.class))
-            //With NavUtils we can navigate to a custom destination while destroying this Activity
-            finish();
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finish();
+                break;
+            case R.id.menu_reset:
+                setActivity(null);
+                break;
+
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setActivity(Bundle savedInstanceState){
+        fab = findViewById(R.id.fab);
+        countriesSpinner = findViewById(R.id.countries_spinner);
+        speciesSpinner = findViewById(R.id.species_spinner);
+        contactsSpinner = findViewById(R.id.contact_spinner);
+
+        //Get localized symptoms and species categories to display
+        String[] symptoms = Utilities.localizeSymptoms(this, null);
+        String[] categories = Utilities.getLocalizedCategories(this);
+        String[] contacts = Utilities.getLocalizedContacts(this);
+
+        //Get english symptoms names to pass via intent to SpeciesListActivity to interrogate the database
+        symptomsDefaultNames = Values.getSymptomsDefaultNames();
+        contactsDefaultNames = Values.getContactTypesDefaultNames();
+
+        boolean[] selections;
+        //If not restoring after orientation change
+        if(savedInstanceState == null) {
+            selections = new boolean[symptoms.length];
+            checkedCounter = 0;
+        }
+
+        else{
+            selections = savedInstanceState.getBooleanArray(SELECTIONS);
+            checkedCounter = savedInstanceState.getInt(CHECKED_COUNTER);
+            //We hide the FloatingActionButton if no symptom is checked, we want at least a symptom to interrogate the database
+        }
+
+        updateNavigationState();
+
+        ArrayAdapter<String> speciesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
+        speciesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        speciesSpinner.setAdapter(speciesAdapter);
+        ArrayAdapter<String> contactsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, contacts);
+        contactsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        contactsSpinner.setAdapter(contactsAdapter);
+
+        //Wrap the data for SymptomSearchAdapter
+        data = SymptomsSearchAdapter.DataWrapper.wrapData(symptoms, selections);
+
+        adapter = new SymptomsSearchAdapter(data, this);
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        manager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(manager);
+        recyclerView.setAdapter(adapter);
     }
 
     //Update checkedCounter to determine if FloatingActionButton should be shown or not

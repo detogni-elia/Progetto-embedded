@@ -7,6 +7,8 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorControlNormal">#ffffff</item>
         <item name="android:scrollbarThumbVertical">@color/colorAccent</item>
+        <item name="android:editTextColor">@android:color/white</item>
+
         <!-- We want to draw the status bar background -->
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@color/colorPrimaryDark</item>

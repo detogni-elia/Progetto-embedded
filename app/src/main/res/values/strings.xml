@@ -19,7 +19,7 @@
     <string name="details_name">COMMON NAME</string>
     <string name="details_species">SPECIES NAME</string>
     <string name="details_diet">DIET</string>
-    <string name="details_symptoms">SYMPTOMS</string>
+    <string name="details_symptoms">Search by symptom</string>
     <string name="details_symptom_bite">BITE</string>
     <string name="details_symptom_contact">CONTACT</string>
     <string name="details_symptom_ingested">INGESTED</string>
@@ -103,5 +103,6 @@
     <string name="symptoms_irritation">Irritation</string>
     <string name="symptoms_hallucinations">Hallucinations</string>
     <string name="change_image_quality_button_text">CHANGE IMAGE QUALITY</string>
+    <string name="reset_selections">Reset selections</string>
 
 </resources>

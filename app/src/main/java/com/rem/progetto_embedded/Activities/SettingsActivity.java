@@ -56,8 +56,6 @@ public class SettingsActivity extends AppCompatActivity implements ConnectionDia
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(R.string.settings);
         }
-
-        updateSpinners();
     }
 
     @Override
@@ -65,6 +63,7 @@ public class SettingsActivity extends AppCompatActivity implements ConnectionDia
         super.onResume();
         Intent bindIntent = new Intent(SettingsActivity.this, FakeDownloadIntentService.class);
         bindService(bindIntent, connection, Context.BIND_AUTO_CREATE);
+        updateSpinners();
     }
 
     @Override
