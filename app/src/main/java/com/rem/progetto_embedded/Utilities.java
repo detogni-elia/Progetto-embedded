@@ -7,7 +7,6 @@ import android.util.ArrayMap;
 import android.widget.Toast;
 import java.io.File;
 import java.io.FileFilter;
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 /**
@@ -106,7 +105,7 @@ public class Utilities {
      * @param context The application context
      * @return File relative to the app's folder in the selected storage, null if both are full.
      */
-    public static File requestNewResourcesFolder(Context context){
+    static File requestNewResourcesFolder(Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences(Values.PREFERENCES_NAME, Context.MODE_PRIVATE);
         File downloadPath = null;
         File[] folders = context.getExternalFilesDirs(null);
@@ -128,7 +127,7 @@ public class Utilities {
      * @param context The application context
      * @return true if sd is present and we can write on it, false otherwise
      */
-    public static boolean hasWritableSd(Context context){
+    private static boolean hasWritableSd(Context context){
         File[] paths = context.getExternalFilesDirs(null);
         if(paths.length > 1){
             String state = Environment.getExternalStorageState(paths[1]);
@@ -143,7 +142,7 @@ public class Utilities {
      * @param requiredMb Minimum number of Mb required
      * @return true if filesystem has at least requiredMb Mb of space, false otherwise
      */
-    public static boolean checkAvailableSpace(File path, int requiredMb){
+    static boolean checkAvailableSpace(File path, int requiredMb){
         long spaceInMb = path.getUsableSpace() / (1024 * 1024);
         return spaceInMb >= requiredMb;
     }

@@ -2,8 +2,6 @@ package com.rem.progetto_embedded.Database.Dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
-import androidx.room.Insert;
 import androidx.room.Query;
 
 import com.rem.progetto_embedded.Database.Entity.Creatures;
@@ -17,6 +15,6 @@ public interface EffectsDao
     @Query("SELECT * FROM Effects")
     LiveData<List<Effects>> getAll();
     //List<Effects> getAll();
-    @Query("SELECT * FROM Effects JOIN Creatures ON Effects.creature=Creatures.latin_name WHERE Effects.contact = :contact AND Creatures.category = :category AND Effects.symptom IN (:s)")
+    @Query("SELECT DISTINCT latin_name, common_name, specie_name, category, diet, description, image, latitude, longitude FROM Effects JOIN Creatures ON Effects.creature=Creatures.latin_name WHERE Effects.contact = :contact AND Creatures.category = :category AND Effects.symptom IN (:s)")
     LiveData<List<Creatures>> getCreatures(String contact, String category, List<String> s);
 }

@@ -1,10 +1,6 @@
 package com.rem.progetto_embedded.Adapters;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Log;
-import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.Filter;
@@ -16,7 +12,6 @@ import com.rem.progetto_embedded.Database.Entity.Creatures;
 import com.rem.progetto_embedded.R;
 import com.rem.progetto_embedded.Utilities;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,50 +19,6 @@ import java.util.List;
  * Adapter used in SpeciesListActivity loads implements filterable in order to filter the data displayed
  */
 public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemViewHolder> implements Filterable {
-    /**
-     * Private class wraps the data in order to bind species name with relative image for the purpose of filtering the data
-     */
-    /*
-    public static class DataWrapper{
-        //Path to the image
-        private String image;
-        //Name of the animal/plant depicted in the image
-        private String name;
-
-        DataWrapper(String img, String n){
-            image = img;
-            name = n;
-        }
-
-
-     */
-        /**
-         * Build ArrayList of DataWrapper objects from 2 ArrayLists containing Strings
-         * @param paths List of paths for the images
-         * @param names List of names for each entry
-         * @return The ArrayList of DataWrapper objects
-         */
-        /*
-        public static ArrayList<DataWrapper> fromArrayList(ArrayList<File> paths, ArrayList<String> names){
-            if(paths.size() != names.size())
-                return null;
-
-            ArrayList<DataWrapper> toReturn = new ArrayList<>();
-            for(int i = 0; i < paths.size(); i++)
-                toReturn.add(new DataWrapper(paths.get(i).getAbsolutePath(), names.get(i)));
-
-            return toReturn;
-        }
-
-        public String getImage(){
-            return image;
-        }
-        public String getName(){
-            return name;
-        }
-    }
-
-         */
     //Store all the data loaded
     private List<Creatures> fullData = new ArrayList<>();
     //Store the filtered data, this is the actual data shown in the RecyclerView
@@ -75,7 +26,6 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
     //Listener fo clicks on the elements of the RecyclerView
     private OnSpeciesSelectedListener clickListener;
     //Cache to store images's Bitmaps
-    private LruCache<String, Bitmap> imageCache;
 
     private final String ROOT_PATH;
 
@@ -89,38 +39,8 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
         void onSpeciesListItemClick(int position);
     }
 
-    public SpeciesListAdapter(Context context, List<Creatures> wrappedData, OnSpeciesSelectedListener listener) {
-        //50 Mb of cache
-        int cacheSize = 1024 * 1024 * 50;
-        //LruCache takes cacheSize in Kb
-        imageCache = new LruCache<String, Bitmap>(cacheSize / 1024){
-            @Override
-            protected int sizeOf(String key, Bitmap bitmap){
-                return bitmap.getByteCount() / 1024;
-            }
-        };
-        clickListener = listener;
-
-        if(wrappedData != null) {
-            fullData = wrappedData;
-            //filteredData.addAll(fullData);
-            filteredData.addAll(fullData);
-        }
-        ROOT_PATH = Utilities.getResourcesFolder(context).toString();
-    }
-
     public SpeciesListAdapter(Context context, OnSpeciesSelectedListener listener){
-        //50 Mb of cache
-        int cacheSize = 1024 * 1024 * 50;
-        //LruCache takes cacheSize in Kb
-        imageCache = new LruCache<String, Bitmap>(cacheSize / 1024){
-            @Override
-            protected int sizeOf(String key, Bitmap bitmap){
-                return bitmap.getByteCount() / 1024;
-            }
-        };
         clickListener = listener;
-
         ROOT_PATH = Utilities.getResourcesFolder(context).toString();
     }
 
@@ -132,33 +52,7 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
 
     @Override
     public void onBindViewHolder(SpeciesListItemViewHolder holder, int position) {
-        Bitmap cachedImage = null;
-        //Try loading image from cache, if cache is available
-        if(imageCache != null)
-            cachedImage = imageCache.get(ROOT_PATH + filteredData.get(position).getImage());
-
-        //Load image from storage if image was not in cache or if cache was not present at all due to low memory
-        if(cachedImage == null){
-            //TODO: Load image in background thread instead of UI thread, AsyncTask deprecated in api level R
-            //https://android-developers.googleblog.com/2009/05/painless-threading.html  contains threading solutions
-            Bitmap loadedImage = BitmapFactory.decodeFile(ROOT_PATH + filteredData.get(position).getImage());
-            //If image not available set placeholder image
-            if(loadedImage == null)
-                holder.setPlaceholderImage();
-
-            //Set image to ViewHolder and add it to cache
-            else {
-                holder.setImage(loadedImage);
-                //Save image to cache
-                imageCache.put(ROOT_PATH + filteredData.get(position).getImage(), loadedImage);
-                Log.v(TAG, "Added image to cache: " + ROOT_PATH + filteredData.get(position).getImage());
-            }
-        }
-        else {
-            holder.setImage(cachedImage);
-            Log.v(TAG, "Loaded image from cache: " + ROOT_PATH + filteredData.get(position).getImage());
-        }
-
+        holder.setImage(ROOT_PATH + filteredData.get(position).getImage());
         holder.setName(filteredData.get(position).getCommonName());
     }
 
@@ -201,36 +95,6 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
             notifyDataSetChanged();
         }
     };
-
-    /**
-     * Resize adapter's cache's size to 10Mb, called from activities on OnTrimMemory method
-     */
-    public void resizeImageCache()
-    {
-        //10 Mb of Cache
-        imageCache.trimToSize(1024 * 10);
-    }
-
-    /**
-     * Stop using cache altogether when memory is too low, called from activities on OnTrimMemory method
-     */
-    public void deleteImageCache()
-    {
-        //Make available to the Garbage Collector
-        imageCache=null;
-    }
-
-    /**
-     * Set image cache after a configuration change
-     * @param cache The image cache to restore
-     */
-    public void setImageCache(LruCache<String, Bitmap> cache) {
-        imageCache = cache;
-    }
-
-    public LruCache<String, Bitmap> getImageCache(){
-        return imageCache;
-    }
 
     public void setData(List<Creatures> data){
         fullData = data;

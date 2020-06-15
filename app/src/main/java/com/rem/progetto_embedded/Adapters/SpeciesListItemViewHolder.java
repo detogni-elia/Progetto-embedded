@@ -1,5 +1,4 @@
 package com.rem.progetto_embedded.Adapters;
-import android.graphics.Bitmap;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -7,6 +6,7 @@ import android.widget.TextView;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.rem.progetto_embedded.R;
 
 /**
@@ -26,11 +26,9 @@ public class SpeciesListItemViewHolder extends RecyclerView.ViewHolder implement
         //Sets click listener for the card, which will be called when a click is detected
         itemView.setOnClickListener(this);
     }
-    void setImage(final Bitmap image){
-        imageView.setImageBitmap(image);
-    }
-    void setPlaceholderImage(){
-        imageView.setImageResource(R.drawable.ic_placeholder_icon_vector);
+    void setImage(String image){
+        //imageView.setImageBitmap(image);
+        Glide.with(imageView).load(image).placeholder(R.drawable.ic_placeholder_icon_vector).into(imageView);
     }
     void setName(String name){
         textView.setText(name);

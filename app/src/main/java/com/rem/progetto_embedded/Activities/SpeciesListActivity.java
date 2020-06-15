@@ -80,8 +80,6 @@ public class SpeciesListActivity extends AppCompatActivity implements SpeciesLis
             public void onChanged(List<Creatures> dataWrappers) {
                 adapter.setData(dataWrappers);
                 adapter.notifyDataSetChanged();
-                if(viewModel.getStoredCache() != null)
-                    adapter.setImageCache(viewModel.getStoredCache());
             }
         });
 
@@ -122,9 +120,8 @@ public class SpeciesListActivity extends AppCompatActivity implements SpeciesLis
     public void onPause(){
         super.onPause();
         //Store current adapter's cache to restore it after a configuration change
-        viewModel.storeCache(adapter.getImageCache());
         adapter.setClickListener(null);
-        Log.v(TAG, "COSE");
+        Log.v(TAG, "onPause");
     }
 
     //Release Memory when system resources becomes low
@@ -139,16 +136,6 @@ public class SpeciesListActivity extends AppCompatActivity implements SpeciesLis
             adapter = null;
             Log.d(TAG, "Adapter eliminata");
         }
-        if(level== ComponentCallbacks2.TRIM_MEMORY_RUNNING_LOW) {
-            //Memory is on low level ==> resize the cache
-            //10 Mb of cache
-            resizeImageCache();
-        }
-        else if(level == ComponentCallbacks2.TRIM_MEMORY_RUNNING_CRITICAL) {
-            //Memory is on critical level ==> release the cache
-            //Garbage Collector will clean
-            deleteImageCache();
-        }
     }
 
     @Override
@@ -157,25 +144,10 @@ public class SpeciesListActivity extends AppCompatActivity implements SpeciesLis
         Creatures element = adapter.getElementAt(position);
         startIntent.putExtra(Values.EXTRA_IMAGE_PATH, Utilities.getResourcesFolder(getApplicationContext()) + element.getImage());
         startIntent.putExtra(Values.EXTRA_NAME, element.getCommonName());
-        //TODO: WE SHOULD GET THIS EXTRA INFO ONLY WHEN REQUESTED, QUERYING THE DATABASE.
         startIntent.putExtra(Values.EXTRA_SPECIES, element.getLatinName());
         startIntent.putExtra(Values.EXTRA_DIET, element.getDiet());
-        //TODO: ADD VARIOUS SYMPTOMS AND LOCALIZATION
-        //TODO: ADD SYSTEM TO LOCALIZE ON MAP (FOR EXAMPLE, CENTER AND RADIUS TO DESCRIBE AN AREA WHERE THE ANIMAL, PLANT, INSECT CAN BE FOUND)
-        //startIntent.putExtra(Values.EXTRA_SYMPTOMS, getString(R.string.details_symptom_bite) + ": Gonfiore, bruciore, dolore, sanguinamento, intorpidimento");
-        //startIntent.putExtra(Values.EXTRA_SYMPTOMS, viewModel.getSymptoms(position).toArray(new String[]{}));
         startIntent.putExtra(Values.EXTRA_DESCRIPTION, element.getDescription());
         startIntent.putExtra(Values.EXTRA_COUNTRY, getIntent().getStringExtra(Values.EXTRA_COUNTRY));
         startActivity(startIntent);
-    }
-
-    public void resizeImageCache(){
-        adapter.resizeImageCache();
-        viewModel.storeCache(adapter.getImageCache());
-    }
-
-    public void deleteImageCache(){
-        adapter.deleteImageCache();
-        viewModel.storeCache(adapter.getImageCache());
     }
 }

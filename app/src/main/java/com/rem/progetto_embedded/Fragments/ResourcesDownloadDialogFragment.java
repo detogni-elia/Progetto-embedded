@@ -85,7 +85,7 @@ public class ResourcesDownloadDialogFragment extends DialogFragment {
                 editor.apply();
 
                 //Start download of selected resources
-                startDownloadService(country, language, imageQuality);
+                startDownloadService(country, imageQuality);
 
                 //Close the dialog
                 dismiss();
@@ -103,10 +103,9 @@ public class ResourcesDownloadDialogFragment extends DialogFragment {
     /**
      * Start FakeDownloadIntentService to simulate download of resources
      * @param country The english name of the selected country
-     * @param language The english name of the selected language for the database
      * @param imageQuality The english name of the selected image quality
      */
-    private void startDownloadService(String country, String language, String imageQuality){
+    private void startDownloadService(String country, String imageQuality){
         Intent startIntent = new Intent(getContext(), FakeDownloadIntentService.class);
         startIntent.putExtra(Values.EXTRA_COUNTRY, country);
         String locale = Locale.getDefault().getLanguage();

@@ -20,10 +20,10 @@ public class Values {
 
     //SharedPreferences keys
     public static final String PREFERENCES_NAME = BASE;
-    public static final String DOWNLOAD_LOCATION = BASE + "downloadLocation";
-    public static final String LOCATION_INTERNAL = BASE + "locationInternal";
-    public static final String LOCATION_EXTERNAL = BASE + "locationExternal";
-    public static final String NOT_YET_DECIDED = BASE + "notYetDecided";
+    static final String DOWNLOAD_LOCATION = BASE + "downloadLocation";
+    static final String LOCATION_INTERNAL = BASE + "locationInternal";
+    static final String LOCATION_EXTERNAL = BASE + "locationExternal";
+    static final String NOT_YET_DECIDED = BASE + "notYetDecided";
     public static final String FIRST_RUN = BASE + "firstRun";
     public static final String DELETE_CACHE = BASE +"deleteCache";
     public static final String LANGUAGE_CHANGED = BASE +"langChanged";
@@ -92,7 +92,7 @@ public class Values {
         return IMAGE_QUALITY_NAMES;
     }
 
-    public static int[] getLanguagesIds(){
+    static int[] getLanguagesIds(){
         return LANGUAGES_IDS;
     }
 
@@ -100,7 +100,7 @@ public class Values {
         return LANGUAGES_DEFAULT_NAMES;
     }
 
-    public static int[] getContactsTypeIds(){
+    static int[] getContactsTypeIds(){
         return CONTACTS_IDS;
     }
 
