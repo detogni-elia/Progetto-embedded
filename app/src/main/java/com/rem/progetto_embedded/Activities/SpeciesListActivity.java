@@ -48,11 +48,7 @@ public class SpeciesListActivity extends AppCompatActivity implements SpeciesLis
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(R.string.species_list_toolbar_title);
         }
-    }
 
-    @Override
-    public void onResume(){
-        super.onResume();
         RecyclerView recyclerView = findViewById(R.id.species_list_recycler_view);
 
         //Display items as list if orientation is portrait, else display them in rows of 2 elements per row
@@ -85,6 +81,11 @@ public class SpeciesListActivity extends AppCompatActivity implements SpeciesLis
 
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
     }
 
     @Override

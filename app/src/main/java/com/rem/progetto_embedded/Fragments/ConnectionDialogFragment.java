@@ -1,5 +1,6 @@
 package com.rem.progetto_embedded.Fragments;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -9,12 +10,26 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 
 import com.rem.progetto_embedded.R;
 
 public class ConnectionDialogFragment extends DialogFragment {
+
+    public interface ConnectionDialogDismissListener{
+        void onConnectionDialogDismiss();
+    }
+
+    private ConnectionDialogDismissListener listener;
+
+    @Override
+    public void onAttach(Context context){
+        super.onAttach(context);
+        if(getActivity() instanceof ConnectionDialogDismissListener)
+            listener = (ConnectionDialogDismissListener) getActivity();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -30,13 +45,20 @@ public class ConnectionDialogFragment extends DialogFragment {
     public void onViewCreated(View view, Bundle savedInstanceState){
         Button okButton = view.findViewById(R.id.ok_button);
         Button cancelButton = view.findViewById(R.id.cancel_button);
+        setCancelable(false);
 
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();
-                FragmentManager manager = getParentFragmentManager();
-                new ResourcesDownloadDialogFragment().show(manager, "download");
+                String tag = getTag();
+                if(tag != null && tag.equals("alert-no-dialog")){
+                    listener.onConnectionDialogDismiss();
+                }
+                else {
+                    FragmentManager manager = getParentFragmentManager();
+                    new ResourcesDownloadDialogFragment().show(manager, "download");
+                }
             }
         });
 

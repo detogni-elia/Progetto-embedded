@@ -17,6 +17,7 @@ public class Values {
     public static final String EXTRA_SYMPTOMS = BASE + "Symptoms";
     public static final String EXTRA_DESCRIPTION = BASE + "Description";
     public static final String EXTRA_IMAGE_QUALITY = BASE + "ImageQuality";
+    public static final String EXTRA_SKIP_DATABASE = BASE + "SkipDatabase";
 
     //SharedPreferences keys
     public static final String PREFERENCES_NAME = BASE;

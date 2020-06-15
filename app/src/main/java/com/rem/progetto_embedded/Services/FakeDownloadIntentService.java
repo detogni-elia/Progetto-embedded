@@ -31,7 +31,7 @@ public class FakeDownloadIntentService extends IntentService {
      * Interface for notifying clients about the completion of a download
      */
     public interface DownloadCallbacks{
-        void notifyDownloadFinished();
+        void onNotifyDownloadFinished();
     }
 
     private DownloadCallbacks client;
@@ -83,6 +83,7 @@ public class FakeDownloadIntentService extends IntentService {
         String country = intent.getStringExtra(Values.EXTRA_COUNTRY);
         String language = intent.getStringExtra(Values.EXTRA_LANGUAGE);
         String imageQuality = intent.getStringExtra(Values.EXTRA_IMAGE_QUALITY);
+        boolean skipDatabase = intent.getBooleanExtra(Values.EXTRA_SKIP_DATABASE, false);
         createNotificationChannel();
         //Build download notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "FakeDownloadNotification")
@@ -95,7 +96,7 @@ public class FakeDownloadIntentService extends IntentService {
         startForeground(1, builder.build());
 
         try {
-            boolean success = FakeDownload.copyAssetsToStorage(getApplicationContext(), country, language, imageQuality);
+            boolean success = FakeDownload.copyAssetsToStorage(getApplicationContext(), country, language, imageQuality, skipDatabase);
             if(!success) {
                 Utilities.showToast(getApplicationContext(), getString(R.string.not_enough_space));
                 Log.d(TAG, "Not enough space to complete the download.");
@@ -113,7 +114,7 @@ public class FakeDownloadIntentService extends IntentService {
 
         //Notify bound client if there is one at the moment
         if(bound && client != null) {
-            client.notifyDownloadFinished();
+            client.onNotifyDownloadFinished();
             Log.v(TAG, "Notified client of download finished");
         }
 

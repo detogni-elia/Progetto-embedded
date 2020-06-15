@@ -36,40 +36,11 @@
         android:background="@drawable/spinner_layout_background"
         app:layout_constraintTop_toBottomOf="@id/country_label"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/languages_spinner_layout"
+        app:layout_constraintEnd_toStartOf="@id/image_quality_layout"
         android:layout_marginEnd="4dp">
 
         <Spinner
             android:id="@+id/countries_spinner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="4dp"/>
-
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/language_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:text="@string/select_the_language"
-        app:layout_constraintStart_toStartOf="@id/languages_spinner_layout"
-        app:layout_constraintTop_toTopOf="@id/country_label"
-        app:layout_constraintBottom_toBottomOf="@id/country_label"/>
-
-    <LinearLayout
-        android:id="@+id/languages_spinner_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@drawable/spinner_layout_background"
-        app:layout_constraintTop_toBottomOf="@id/language_label"
-        app:layout_constraintStart_toEndOf="@id/countries_spinner_layout"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="4dp">
-
-        <Spinner
-            android:id="@+id/languages_spinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="4dp"/>
@@ -83,7 +54,7 @@
         android:textColor="@android:color/white"
         android:text="@string/select_image_quality"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/languages_spinner_layout"
+        app:layout_constraintTop_toBottomOf="@id/textView"
         app:layout_constraintStart_toStartOf="@id/image_quality_layout"/>
 
     <LinearLayout
@@ -92,8 +63,9 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@drawable/spinner_layout_background"
+        android:layout_marginStart="4dp"
         app:layout_constraintTop_toBottomOf="@id/image_label"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/countries_spinner_layout"
         app:layout_constraintEnd_toEndOf="parent">
 
         <Spinner

@@ -40,21 +40,21 @@
     <string name="symptoms_search_toolbar_title">Ricerca sintomi</string>
     <string name="symptoms_search_query_hint">Ricerca sintomi specifici</string>
     <string name="change_language">Seleziona la lingua</string>
-    <string name="ask_permission">I permessi che seguiranno dovranno essere accettati se si vuole utilizzare l\'applicazione</string>
-    <string name="permissions_not_granted">Permissi non garantiti</string>
+    <string name="ask_permission">Questa applicazione richiede il download di risorce extra per poter funzionare. Considera inoltre la possibilità di concedere l\'accesso alla posizione per usare tutte le funzionalità. Quest\'app non terrà mai traccia della tua posizione e non richiede un segnale GPS per funzionare.</string>
+    <string name="permissions_not_granted">Permessi non garantiti</string>
     <string name="select_the_language">Lingua</string>
     <string name="italian">Italiano</string>
     <string name="english">Inglese</string>
-    <string name="download_dialog_message">Prego selezionare paese e lingua per scaricare le risorse corrispondenti</string>
+    <string name="download_dialog_message">Prego selezionare paese e qualità delle immagini per scaricare le risorse corrispondenti.</string>
     <string name="change_image_quality">Cambia qualità immagini</string>
     <string name="select_image_quality">Qualità immagine</string>
     <string name="low">Bassa</string>
     <string name="medium">Media</string>
     <string name="high">Alta</string>
-    <string name="update_location">Aggiorna Posizione</string>
-    <string name="remove_cache">Cancella cache</string>
+    <string name="update_location">Concedi permessi posizione</string>
+    <string name="remove_cache">Rimuovi tutte le risorse</string>
     <string name="connection_alert_dialog_message">Sono necessari file aggiuntivi per poter utilizzare quest\'app, ma sembra che tu non stia utilizzando una connessione WIFI. Se intendi procedere comunque con il download seleziona OK, altrimenti seleziona CANCEL o assicurati di connetterti a una rete WIFI prima di procedere.</string>
-    <string name="resources_deleted_message">Eliminate cache e risorse.</string>
+    <string name="resources_deleted_message">Eliminate tutte le risorse.</string>
     <string name="download_new_resources">Scarica nuove risorse</string>
     <string name="not_enough_space">Non c\'è abbastanza spazio per scaricare nuove risorse</string>
     <string name="notification_download_message">"Download di risorse per: "</string>
@@ -104,5 +104,6 @@
     <string name="symptoms_itchiness">Prurito</string>
     <string name="symptoms_irritation">Irritazione</string>
     <string name="symptoms_hallucinations">Allucinazioni</string>
+    <string name="change_image_quality_button_text">CAMBIA QUALITÀ IMMAGINI</string>
 
 </resources>

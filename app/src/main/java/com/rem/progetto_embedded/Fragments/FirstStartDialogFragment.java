@@ -18,7 +18,7 @@ import com.rem.progetto_embedded.Values;
 
 public class FirstStartDialogFragment extends DialogFragment {
     public interface FirstStartListener{
-        void closingStartDialog();
+        void onClosingFirstStartDialog();
     }
 
     private FirstStartListener listener;
@@ -43,6 +43,7 @@ public class FirstStartDialogFragment extends DialogFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState){
         Button okButton = view.findViewById(R.id.ok_button);
+        setCancelable(false);
         okButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,7 +52,7 @@ public class FirstStartDialogFragment extends DialogFragment {
                 // set false if first run is completed
                 sharedPreferences.edit().putBoolean(Values.FIRST_RUN, false).apply();
 
-                listener.closingStartDialog();
+                listener.onClosingFirstStartDialog();
             }
         });
     }

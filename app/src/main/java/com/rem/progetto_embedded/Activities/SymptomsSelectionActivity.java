@@ -5,7 +5,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -275,9 +274,7 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
                 }
                 if (!alreadyShowing) {
                     //We show a cautionary message to the user about downloading with a metered connection if that's the case
-                    ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-                    boolean isConnectionMetered = cm != null && cm.isActiveNetworkMetered();
-                    if(isConnectionMetered) {
+                    if(Utilities.isConnectionMetered(getApplicationContext())) {
                         new ConnectionDialogFragment().show(getSupportFragmentManager(), "alert");
                     }
 
@@ -342,7 +339,7 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
 
     //Implementation of FakeDownloadIntentService's interface callback method
     @Override
-    public void notifyDownloadFinished() {
+    public void onNotifyDownloadFinished() {
         unbindService(connection);
         bound = false;
         runOnUiThread(new Runnable() {

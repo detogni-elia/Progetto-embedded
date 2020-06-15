@@ -39,21 +39,21 @@
     <string name="symptoms_search_query_hint">Search for specific symptoms</string>
     <string name="symptoms_search_toolbar_title">Symptoms search</string>
     <string name="change_language">Select the language</string>
-    <string name="ask_permission">The following permissions must be accepted for the app to work properly</string>
+    <string name="ask_permission">This app requires you to download some extra resources in order for it to work. You may also want to allow access to the device\'s location to use all of the functionalities. This app will never keep track of your position and does not require a GPS signal to function.</string>
     <string name="permissions_not_granted">Permission not granted</string>
     <string name="select_the_language">Language</string>
     <string name="italian">Italian</string>
     <string name="english">English</string>
-    <string name="download_dialog_message">Please select a country and a language to download corresponding resources</string>
+    <string name="download_dialog_message">Please select a country and image quality to download corresponding resources.</string>
     <string name="change_image_quality">Change image quality</string>
     <string name="select_image_quality">Image quality</string>
     <string name="low">Low</string>
     <string name="medium">Medium</string>
     <string name="high">High</string>
-    <string name="update_location">Update Location</string>
-    <string name="remove_cache">Delete cache</string>
+    <string name="update_location">Grant location permissions</string>
+    <string name="remove_cache">Delete all resources</string>
     <string name="connection_alert_dialog_message">You need to download some resources to use this app, but it seems you are not currently connected to a WIFI network. If you wish to continue anyway then press OK, otherwise press CANCEL or connect to a WIFI network before continuing.</string>
-    <string name="resources_deleted_message">Deleted cache and resources.</string>
+    <string name="resources_deleted_message">Deleted all resources.</string>
     <string name="download_new_resources">Download new resources</string>
     <string name="not_enough_space">There is not enough space for new reources.</string>
     <string name="notification_download_message">"Downloading resources for: "</string>
@@ -102,5 +102,6 @@
     <string name="symptoms_itchiness">Itchiness</string>
     <string name="symptoms_irritation">Irritation</string>
     <string name="symptoms_hallucinations">Hallucinations</string>
+    <string name="change_image_quality_button_text">CHANGE IMAGE QUALITY</string>
 
 </resources>

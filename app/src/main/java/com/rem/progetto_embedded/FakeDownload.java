@@ -23,7 +23,7 @@ public class FakeDownload {
 
     //Suppress NullPointerException warnings
     @SuppressWarnings("ConstantConditions")
-    public static boolean copyAssetsToStorage(Context context, String country, String language, String imageQuality) throws IOException {
+    public static boolean copyAssetsToStorage(Context context, String country, String language, String imageQuality, boolean skipDatabase) throws IOException {
         //File root;
         //if (Utilities.hasWritableSd(context) && Utilities.checkAvailableSpace(paths[1], 10)) {
         //    root = paths[1];
@@ -69,19 +69,14 @@ public class FakeDownload {
                 dest.close();
             }
         }
-        //Copy database
-        src = assetManager.open(country + "/Databases/" + language + ".db");
-        dest = new FileOutputStream(dbFolder + "/" + "database.db");
-
-        copyFile(src, dest);
-        src.close();
-        dest.close();
+        if(!skipDatabase) {
+            //Copy database
+            src = assetManager.open(country + "/Databases/" + language + ".db");
+            dest = new FileOutputStream(dbFolder + "/" + "database.db");
+            copyFile(src, dest);
+            src.close();
+            dest.close();
+        }
         return true;
-    }
-
-    private static boolean hasEnoughSpace(Context context){
-        long spaceInMb = context.getExternalFilesDir(null).getUsableSpace() / (1024 * 1024);
-        Log.v(TAG, "Available space: " + spaceInMb + " Mb");
-        return spaceInMb > 10;
     }
 }

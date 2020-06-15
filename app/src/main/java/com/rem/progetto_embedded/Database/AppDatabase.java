@@ -2,15 +2,11 @@ package com.rem.progetto_embedded.Database;
 
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.ArrayMap;
-import android.util.Log;
 
-import androidx.preference.PreferenceManager;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-
 
 import com.rem.progetto_embedded.Database.Dao.ContactsDao;
 import com.rem.progetto_embedded.Database.Dao.CreaturesDao;
@@ -21,7 +17,6 @@ import com.rem.progetto_embedded.Database.Entity.Effects;
 import com.rem.progetto_embedded.Database.Entity.Symptoms;
 import com.rem.progetto_embedded.Database.Entity.Contacts;
 import com.rem.progetto_embedded.Utilities;
-import com.rem.progetto_embedded.Values;
 
 import java.io.File;
 
@@ -32,35 +27,19 @@ public abstract class AppDatabase extends RoomDatabase
     public abstract ContactsDao contactsDao();
     public abstract SymptomsDao symptomsDao();
     public abstract EffectsDao effectsDao();
-    private static ArrayMap<String, AppDatabase> instances=new ArrayMap<>();
-
-    public static synchronized AppDatabase getInstance(Context context, String country)
-    {
+    //ArrayMap saves the instances of all the databases opened during the applications's lifecycle in order to open them only once
+    private static ArrayMap<String, AppDatabase> instances = new ArrayMap<>();
+    public static synchronized AppDatabase getInstance(Context context, String country) {
+        //Get country's database folder
         File resFolder = Utilities.getResourcesFolder(context);
         File dbPath = new File(resFolder, country + "/Database/database.db");
-        //SharedPreferences sharedPreferences=PreferenceManager.getDefaultSharedPreferences(context);
-        //String lang=sharedPreferences.getString(Values.LANGUAGE,"");
-        //Log.d("DATABASE", lang);
-        //Controllo se la chiave è presente nel dizionario, se non c'è apro il database e salvo l'istanza
+        //Check wether database instance is present in the ArrayMap, if not then put it
         if(!instances.containsKey(country + dbPath.lastModified())){
+            //Save the database with name country + dbPath.lastModified() to load the database from storage each time the user downloads it
+            //Since we admit only one database for each country, if the user changes language we want to avoid the one in cache.
             AppDatabase instance = Room.databaseBuilder(context, AppDatabase.class, country + dbPath.lastModified()).createFromFile(dbPath).build();
             instances.put(country + dbPath.lastModified(), instance);
         }
         return instances.get(country + dbPath.lastModified());
-
-        /*
-        if(!instances.containsKey(lang+country)) {
-            AppDatabase instance;
-            File resFolder = Utilities.getResourcesFolder(context);
-            File dbPath = new File(resFolder, country + "/Database/database.db/");
-            instance = Room.databaseBuilder(context, AppDatabase.class, country).createFromFile(dbPath).build();
-            Log.d("DATABASE", lang+country+"Inserito");
-            instances.put(lang+country, instance);
-        }
-
-         */
-        //Log.d("DATABASE", lang+country+"restituito");
-        //return instances.get(lang+country);
     }
 }
-

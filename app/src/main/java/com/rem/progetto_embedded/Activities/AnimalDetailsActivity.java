@@ -23,6 +23,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.Observer;
 
+import com.bumptech.glide.Glide;
 import com.rem.progetto_embedded.Database.AppDatabase;
 import com.rem.progetto_embedded.Database.Entity.Contacts;
 import com.rem.progetto_embedded.Database.Entity.Symptoms;
@@ -55,7 +56,7 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
 
         Intent intent = getIntent();
         imageView = findViewById(R.id.detailsImage);
-        imageView.setImageURI(Uri.parse(intent.getStringExtra(Values.EXTRA_IMAGE_PATH)));
+        Glide.with(this).load(intent.getStringExtra(Values.EXTRA_IMAGE_PATH)).placeholder(R.drawable.ic_placeholder_icon_vector).into(imageView);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -135,7 +136,6 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
 
             ((TextView) symptomsEntry.findViewById(R.id.layoutEntry)).setText(contactType + ": " + builder.toString());
         }
-        //((TextView)symptomsEntry.findViewById(R.id.layoutEntry)).setText(contactType + ": " + builder.toString());
     }
 
     @Override

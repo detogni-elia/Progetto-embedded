@@ -22,6 +22,8 @@ import com.rem.progetto_embedded.Services.FakeDownloadIntentService;
 import com.rem.progetto_embedded.Utilities;
 import com.rem.progetto_embedded.Values;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -52,13 +54,6 @@ public class ResourcesDownloadDialogFragment extends DialogFragment {
         countries_spinner.setAdapter(countriesAdapter);
         countriesAdapter.notifyDataSetChanged();
 
-        //Populate language spinner
-        final Spinner languages_spinner = view.findViewById(R.id.languages_spinner);
-        String[] supportedLanguages = Utilities.getLocalizedSupportedLanguages(getContext());
-        ArrayAdapter<String> languagesAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, supportedLanguages);
-        languagesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        languages_spinner.setAdapter(languagesAdapter);
-
         //Populate image quality spinner
         final Spinner image_quality_spinner = view.findViewById(R.id.image_quality_spinner);
         String[] supportedImageQuality = Utilities.getLocalizedImagesQualities(getContext());
@@ -74,15 +69,7 @@ public class ResourcesDownloadDialogFragment extends DialogFragment {
             public void onClick(View v) {
                 //Get selected item for each spinner
                 String country = Values.getCountriesDefaultNames()[countries_spinner.getSelectedItemPosition()];
-                String language = Values.getLanguagesDefaultNames()[languages_spinner.getSelectedItemPosition()];
                 String imageQuality = Values.getImageQualityNames()[image_quality_spinner.getSelectedItemPosition()];
-
-                //Save favourite language and image quality in app's SharedPreference
-                SharedPreferences prefs = context.getSharedPreferences("com.detons97gmail.progetto_embedded",Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor=prefs.edit();
-                editor.putString("selectedLanguage",language);
-                editor.putString("selectedImageQuality",imageQuality);
-                editor.apply();
 
                 //Start download of selected resources
                 startDownloadService(country, imageQuality);
@@ -108,6 +95,7 @@ public class ResourcesDownloadDialogFragment extends DialogFragment {
     private void startDownloadService(String country, String imageQuality){
         Intent startIntent = new Intent(getContext(), FakeDownloadIntentService.class);
         startIntent.putExtra(Values.EXTRA_COUNTRY, country);
+        //Set english language if system language is not supported
         String locale = Locale.getDefault().getLanguage();
         String[] languages = Values.getLanguagesDefaultNames();
         boolean supported = false;
@@ -124,7 +112,7 @@ public class ResourcesDownloadDialogFragment extends DialogFragment {
         startIntent.putExtra(Values.EXTRA_IMAGE_QUALITY, imageQuality);
 
         if(getActivity() != null) {
-
+            //We need to start download service as foreground service starting from Android O
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                 getActivity().startForegroundService(startIntent);
             else

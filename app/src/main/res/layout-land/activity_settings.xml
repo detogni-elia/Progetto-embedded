@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.rem.progetto_embedded.Activities.SettingsActivity"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar"
+        android:id="@+id/toolbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp">
+
+        <TextView
+            android:id="@+id/image_quality_label"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="@id/image_quality_spinner_layout"
+            app:layout_constraintEnd_toEndOf="@id/image_quality_spinner_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:text="@string/select_image_quality"/>
+
+        <LinearLayout
+            android:id="@+id/image_quality_spinner_layout"
+            app:layout_constraintTop_toBottomOf="@id/image_quality_label"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/countries_spinner_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/spinner_layout_background">
+
+            <Spinner
+                android:id="@+id/settings_spinner_images_quality"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/country_label"
+            app:layout_constraintTop_toTopOf="@id/country_label"
+            app:layout_constraintStart_toStartOf="@id/countries_spinner_layout"
+            app:layout_constraintEnd_toEndOf="@id/countries_spinner_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textAlignment="textStart"
+            android:text="@string/select_the_country"/>
+
+        <LinearLayout
+            android:id="@+id/countries_spinner_layout"
+            app:layout_constraintTop_toBottomOf="@id/image_quality_label"
+            app:layout_constraintStart_toEndOf="@id/image_quality_spinner_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/spinner_layout_background">
+
+            <Spinner
+                android:id="@+id/settings_spinner_country"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/left_guide"
+            app:layout_constraintTop_toBottomOf="@id/image_quality_spinner_layout"
+            app:layout_constraintStart_toStartOf="@id/image_quality_spinner_layout"
+            app:layout_constraintHorizontal_bias="0.25"
+            app:layout_constraintEnd_toEndOf="@id/countries_spinner_layout"
+            android:layout_width="10dp"
+            android:layout_height="10dp"/>
+
+        <View
+            android:id="@+id/right_guide"
+            app:layout_constraintTop_toBottomOf="@id/image_quality_spinner_layout"
+            app:layout_constraintStart_toStartOf="@id/image_quality_spinner_layout"
+            app:layout_constraintHorizontal_bias="0.75"
+            app:layout_constraintEnd_toEndOf="@id/countries_spinner_layout"
+            android:layout_width="10dp"
+            android:layout_height="10dp"/>
+
+        <Button
+            android:id="@+id/update_image_quality_button"
+            app:layout_constraintStart_toStartOf="@id/left_guide"
+            app:layout_constraintEnd_toEndOf="@id/right_guide"
+            app:layout_constraintTop_toBottomOf="@id/image_quality_spinner_layout"
+            android:layout_marginTop="16dp"
+            android:onClick="onClickChangeImageQuality"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/change_image_quality_button_text"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:background="@drawable/buttons_settings_ripple"
+            android:stateListAnimator="@null"
+            android:drawableStart="@drawable/ic_change_image_quality"
+            android:drawablePadding="2dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"/>
+
+        <View
+            android:id="@+id/horizontal_divider"
+            app:layout_constraintTop_toBottomOf="@id/update_image_quality_button"
+            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            style="@style/horizontal_divider"/>
+
+        <Button
+            android:id="@+id/download_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/update_position_button"
+            app:layout_constraintTop_toBottomOf="@id/horizontal_divider"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="4dp"
+            android:onClick="onClickDownloadResources"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/download_new_resources"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:background="@drawable/buttons_settings_ripple"
+            android:stateListAnimator="@null"
+            android:drawableStart="@drawable/ic_file_download_white_34dp"
+            android:drawablePadding="8dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"/>
+
+        <Button
+            android:id="@+id/update_position_button"
+            app:layout_constraintTop_toTopOf="@id/download_button"
+            app:layout_constraintBottom_toBottomOf="@id/download_button"
+            app:layout_constraintStart_toEndOf="@id/download_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:onClick="onClickGrantPermissions"
+            android:layout_marginStart="4dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/update_location"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:background="@drawable/buttons_settings_ripple"
+            android:stateListAnimator="@null"
+            android:drawableStart="@drawable/ic_my_location_white_34dp"
+            android:drawablePadding="8dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"/>
+
+        <Button
+            android:id="@+id/cache_button"
+            app:layout_constraintTop_toBottomOf="@id/download_button"
+            app:layout_constraintStart_toStartOf="@id/left_guide"
+            app:layout_constraintEnd_toEndOf="@id/right_guide"
+            android:layout_marginTop="16dp"
+            android:onClick="onClickDeleteCache"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/remove_cache"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:background="@drawable/buttons_settings_ripple"
+            android:stateListAnimator="@null"
+            android:drawableStart="@drawable/ic_delete_white_34dp"
+            android:drawablePadding="8dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>
