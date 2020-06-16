@@ -56,7 +56,6 @@ public class SettingsActivity extends AppCompatActivity implements ConnectionDia
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(R.string.settings);
         }
-        updateSpinners();
     }
 
     @Override
@@ -66,7 +65,7 @@ public class SettingsActivity extends AppCompatActivity implements ConnectionDia
         Intent bindIntent = new Intent(SettingsActivity.this, FakeDownloadIntentService.class);
         bindService(bindIntent, connection, Context.BIND_AUTO_CREATE);
 
-        //updateSpinners();
+        updateSpinners();
     }
 
     @Override
@@ -114,6 +113,7 @@ public class SettingsActivity extends AppCompatActivity implements ConnectionDia
             //Register as callback to get updates regarding downloads
             mService.setCallback(SettingsActivity.this);
             if(mService.isRunning()) {
+                findViewById(R.id.update_image_quality_button).setEnabled(false);
                 Log.i(TAG, "Service is already running");
             }
         }
@@ -143,6 +143,8 @@ public class SettingsActivity extends AppCompatActivity implements ConnectionDia
         }
         else
             new ResourcesDownloadDialogFragment().show(getSupportFragmentManager(), "download");
+
+        findViewById(R.id.update_image_quality_button).setEnabled(false);
     }
 
     public void onClickGrantPermissions(View v){
@@ -152,6 +154,7 @@ public class SettingsActivity extends AppCompatActivity implements ConnectionDia
 
     @Override
     public void onConnectionDialogDismiss() {
+        findViewById(R.id.update_image_quality_button).setEnabled(false);
         String[] qualities = Values.getImageQualityNames();
         Intent startIntent = new Intent(this, FakeDownloadIntentService.class);
         startIntent.putExtra(Values.EXTRA_COUNTRY, countries[downloadedCountriesSpinner.getSelectedItemPosition()]);
@@ -182,8 +185,8 @@ public class SettingsActivity extends AppCompatActivity implements ConnectionDia
     public void onNotifyDownloadFinished() {
         Log.d(TAG, "notifyDownloadFinished called");
         //We unbind so that the service may stop
-        unbindService(connection);
-        bound = false;
+        //unbindService(connection);
+        //bound = false;
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
