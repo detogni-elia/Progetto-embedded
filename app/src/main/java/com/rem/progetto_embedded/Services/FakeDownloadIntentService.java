@@ -122,8 +122,9 @@ public class FakeDownloadIntentService extends IntentService {
     }
 
     public void onDestroy(){
-        Log.v(TAG, "Stopping");
         isRunning = false;
+        client = null;
+        Log.v(TAG, "Service destroyed");
         stopForeground(true);
     }
 
