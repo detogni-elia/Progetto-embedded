@@ -18,7 +18,7 @@
     <string name="details_name">NOME COMUNE</string>
     <string name="details_species">NOME SPECIE</string>
     <string name="details_diet">DIETA</string>
-    <string name="details_symptoms">Ricerca per sintomi</string>
+    <string name="details_symptoms">SYMPTOMS</string>
     <string name="details_symptom_bite">MORSO</string>
     <string name="details_symptom_contact">CONTATTO</string>
     <string name="details_symptom_ingested">INGESTIONE</string>
@@ -53,7 +53,7 @@
     <string name="high">Alta</string>
     <string name="update_location">Concedi permessi posizione</string>
     <string name="remove_cache">Rimuovi tutte le risorse</string>
-    <string name="connection_alert_dialog_message">Sono necessari file aggiuntivi per poter utilizzare quest\'app, ma sembra che tu non stia utilizzando una connessione WIFI. Se intendi procedere comunque con il download seleziona OK, altrimenti seleziona CANCEL o assicurati di connetterti a una rete WIFI prima di procedere.</string>
+    <string name="connection_alert_dialog_message">Sembra che il dispositivo sia collegato a una connessione a consumo. Prima di procedere con il download consigliamo di connettere il dispositivo a una connessione non a consumo, ad esempio a una rete WI-FI. Se desideri procedere comunque allora premi OK.</string>
     <string name="resources_deleted_message">Eliminate tutte le risorse.</string>
     <string name="download_new_resources">Scarica nuove risorse</string>
     <string name="not_enough_space">Non c\'è abbastanza spazio per scaricare nuove risorse</string>
@@ -106,5 +106,7 @@
     <string name="symptoms_hallucinations">Allucinazioni</string>
     <string name="change_image_quality_button_text">CAMBIA QUALITÀ IMMAGINI</string>
     <string name="reset_selections">Azzera selezioni</string>
+    <string name="search_by_symptoms">Ricerca per sintomi</string>
+    <string name="error_database_not_found">Non è stato possibile aprire il databse. Prova a scaricare nuovamente le risorse.</string>
 
 </resources>

@@ -5,8 +5,8 @@ import android.annotation.SuppressLint;
 import android.content.ComponentCallbacks2;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,23 +16,23 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
-import com.rem.progetto_embedded.Database.AppDatabase;
 import com.rem.progetto_embedded.Database.Entity.Contacts;
 import com.rem.progetto_embedded.Database.Entity.Symptoms;
+import com.rem.progetto_embedded.SpeciesViewModel;
 import com.rem.progetto_embedded.Utilities;
 import com.rem.progetto_embedded.Values;
 import com.rem.progetto_embedded.R;
 
+import java.util.ArrayList;
 import java.util.List;
-
 
 public class AnimalDetailsActivity extends AppCompatActivity implements ComponentCallbacks2 {
 
@@ -42,22 +42,22 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
     private LinearLayout dietEntry;
     private LinearLayout symptomsEntry;
     private TextView speciesDescription;
-    private String contactType;
-    private String[] symptoms;
 
     private final String TAG = this.getClass().getSimpleName();
 
     @SuppressLint("SetTextI18n")
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_species_details);
 
-        Intent intent = getIntent();
+        //This activity will always be launched via intent
+        final Intent intent = getIntent();
         imageView = findViewById(R.id.detailsImage);
+        //Show image of the animal/insect/plant
         Glide.with(this).load(intent.getStringExtra(Values.EXTRA_IMAGE_PATH)).placeholder(R.drawable.ic_placeholder_icon_vector).into(imageView);
 
+        //Set toolbar and show "back" button
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -66,20 +66,15 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
             actionBar.setTitle(R.string.details_toolbar_title);
         }
 
+        //Set description of species
         speciesDescription = findViewById(R.id.speciesDescription);
         speciesDescription.setText(intent.getStringExtra(Values.EXTRA_DESCRIPTION));
 
-        if(savedInstanceState != null){
-            contactType = savedInstanceState.getString(Values.EXTRA_CONTACT);
-            symptoms = savedInstanceState.getStringArray(Values.EXTRA_SYMPTOMS);
-        }
-
-        //If nameEntry is not present, we are in landscape layout and we do not have to update the TextViews
+        //If nameEntry is not present, we are in landscape layout and we do not need to update the other fields
         if(findViewById(R.id.nameEntry) == null)
             return;
 
-        final String speciesName = intent.getStringExtra(Values.EXTRA_SPECIES);
-
+        //Set titles of each entry
         nameEntry = findViewById(R.id.nameEntry);
         speciesEntry = findViewById(R.id.speciesEntry);
         dietEntry = findViewById(R.id.dietEntry);
@@ -87,55 +82,42 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
 
         ((TextView)nameEntry.findViewById(R.id.layoutLabel)).setText(R.string.details_name);
         ((TextView)speciesEntry.findViewById(R.id.layoutLabel)).setText(R.string.details_species);
+        ((TextView)nameEntry.findViewById(R.id.layoutEntry)).setText(intent.getStringExtra(Values.EXTRA_NAME));
+        ((TextView)speciesEntry.findViewById(R.id.layoutEntry)).setText(intent.getStringExtra(Values.EXTRA_SPECIES));
+
         ((TextView)dietEntry.findViewById(R.id.layoutLabel)).setText(R.string.details_diet);
         ((TextView)symptomsEntry.findViewById(R.id.layoutLabel)).setText(R.string.details_symptoms);
 
-        ((TextView)nameEntry.findViewById(R.id.layoutEntry)).setText(intent.getStringExtra(Values.EXTRA_NAME));
-        ((TextView)speciesEntry.findViewById(R.id.layoutEntry)).setText(intent.getStringExtra(Values.EXTRA_SPECIES));
+        //If diet is null we are showing a plant and we don't need to display the corresponding View
         String diet = intent.getStringExtra(Values.EXTRA_DIET);
         if(diet == null)
             dietEntry.setVisibility(View.GONE);
         else
             ((TextView)dietEntry.findViewById(R.id.layoutEntry)).setText(diet);
 
+        //Get SpeciesViewModel to query the database to get contact type and symptoms caused by the animal/insect/plant
+        final String latinName = intent.getStringExtra(Values.EXTRA_SPECIES);
+        final SpeciesViewModel viewModel = new ViewModelProvider(this).get(SpeciesViewModel.class);
+        String country = intent.getStringExtra(Values.EXTRA_COUNTRY);
+        viewModel.getContact(country, latinName).observe(this, new Observer<Contacts>() {
+            @Override
+            public void onChanged(Contacts contacts) {
+                //Symptoms and contacts are always in English in the database, we need to translate them
+                final String contactType = Utilities.localizeContact(getApplicationContext(), contacts.toString());
+                viewModel.getSymptoms(intent.getStringExtra(Values.EXTRA_COUNTRY), latinName).observe(AnimalDetailsActivity.this, new Observer<List<Symptoms>>() {
+                    @Override
+                    public void onChanged(List<Symptoms> result) {
+                        List<String> symptomsList = new ArrayList<>();
+                        for(Symptoms s: result)
+                            symptomsList.add(s.toString());
 
-        if(savedInstanceState == null){
-            final AppDatabase db = AppDatabase.getInstance(this, intent.getStringExtra(Values.EXTRA_COUNTRY));
-            db.creaturesDao().getContactOfCreature(speciesName).observe(this, new Observer<Contacts>() {
-                @Override
-                public void onChanged(Contacts contacts) {
-                    contactType = Utilities.localizeContact(getApplicationContext(), contacts.toString());
-                    db.creaturesDao().getSymptomsOfCreature(speciesName).observe(AnimalDetailsActivity.this, new Observer<List<Symptoms>>() {
-                        @SuppressLint("SetTextI18n")
-                        @Override
-                        public void onChanged(List<Symptoms> symptomsList) {
-                            int i = 0;
-                            symptoms = new String[symptomsList.size()];
-                            for(Symptoms s: symptomsList)
-                                symptoms[i++] = s.toString();
-
-                            symptoms = Utilities.localizeSymptoms(getApplicationContext(), symptoms);
-
-                            StringBuilder builder = new StringBuilder();
-                            for(i = 0; i < symptoms.length - 1; i++)
-                                builder.append(symptoms[i]).append(", ");
-
-                            builder.append(symptoms[symptoms.length - 1]);
-                            ((TextView)symptomsEntry.findViewById(R.id.layoutEntry)).setText(contactType + ": " + builder.toString());
-                        }
-                    });
-                }
-            });
-        }
-        else {
-            StringBuilder builder = new StringBuilder();
-            for(int i = 0; i < symptoms.length - 1; i++)
-                builder.append(symptoms[i]).append(", ");
-
-            builder.append(symptoms[symptoms.length - 1]);
-
-            ((TextView) symptomsEntry.findViewById(R.id.layoutEntry)).setText(contactType + ": " + builder.toString());
-        }
+                        //We display symptoms as a comma-separated list
+                        String[] symptoms = Utilities.localizeSymptoms(getApplicationContext(), symptomsList.toArray(new String[]{}));
+                        ((TextView)symptomsEntry.findViewById(R.id.layoutEntry)).setText(contactType + ": " + TextUtils.join(",", symptoms));
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -165,9 +147,9 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
+        //Restore elements that were removed after a call to onTrimMemory()
         if(imageView == null) {
             imageView = findViewById(R.id.detailsImage);
             Log.d(TAG,"ImageView ripristinata");
@@ -195,29 +177,26 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
         }
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState){
-        super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putString(Values.EXTRA_CONTACT, contactType);
-        savedInstanceState.putStringArray(Values.EXTRA_SYMPTOMS, symptoms);
-    }
-
     //METODO NON TESTATO, DA PROVARE QUANDO LA NAVIGAZIONE è' COMPLETA
     public void onTrimMemory(int level)
     {
         if(level == ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN)
         {
             //Release all the UI references, app is in background
-            imageView=null;
-            nameEntry=null;
-            speciesEntry=null;
-            dietEntry=null;
-            symptomsEntry=null;
-            speciesDescription=null;
+            imageView = null;
+            nameEntry = null;
+            speciesEntry = null;
+            dietEntry = null;
+            symptomsEntry = null;
+            speciesDescription = null;
             Log.d(TAG," Eliminati i riferimenti a tutti i widget UI");
         }
     }
 
+    /**
+     * Check if the app has permission to access to the device's Coarse location. Does not ask the user for this permission.
+     * @return true if permissions are granted, false otherwise.
+     */
     private boolean checkPermissions(){
         return ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;

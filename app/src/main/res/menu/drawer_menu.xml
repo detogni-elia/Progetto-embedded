@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/symptoms_drawer"
         android:icon="@drawable/ic_symptoms_72"
-        android:title="@string/details_symptoms" />
+        android:title="@string/search_by_symptoms" />
     <item
         android:id="@+id/bar_settings"
         android:icon="@drawable/ic_settings_black_24dp"

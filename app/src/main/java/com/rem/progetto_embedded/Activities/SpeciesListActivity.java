@@ -24,7 +24,6 @@ import com.rem.progetto_embedded.SpeciesViewModel;
 import com.rem.progetto_embedded.Utilities;
 import com.rem.progetto_embedded.Values;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

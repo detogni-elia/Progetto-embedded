@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentManager;
 import com.rem.progetto_embedded.R;
 
 public class ConnectionDialogFragment extends DialogFragment {
+    public static final String ALERT_NO_DIALOG = "alert-no-dialog";
 
     public interface ConnectionDialogDismissListener{
         void onConnectionDialogDismiss();
@@ -52,10 +53,12 @@ public class ConnectionDialogFragment extends DialogFragment {
             public void onClick(View v) {
                 dismiss();
                 String tag = getTag();
-                if(tag != null && tag.equals("alert-no-dialog")){
+                //ALERT_NO_DIALOG means that the listener wants to handle itself the download
+                if(tag != null && tag.equals(ALERT_NO_DIALOG)){
                     listener.onConnectionDialogDismiss();
                 }
                 else {
+                    //Show dialog to download resources
                     FragmentManager manager = getParentFragmentManager();
                     new ResourcesDownloadDialogFragment().show(manager, "download");
                 }
