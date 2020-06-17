@@ -136,8 +136,7 @@ public class SpeciesListActivity extends AppCompatActivity implements SpeciesLis
     @Override
     public void onPause(){
         super.onPause();
-        //Store current adapter's cache to restore it after a configuration change
-        //adapter.setClickListener(null);
+        adapter.setClickListener(null);
         Log.v(TAG, "onPause");
     }
 
