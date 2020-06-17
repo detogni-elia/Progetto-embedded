@@ -85,6 +85,23 @@ public class SpeciesListActivity extends AppCompatActivity implements SpeciesLis
     @Override
     public void onResume(){
         super.onResume();
+        if(adapter == null){
+            viewModel = new ViewModelProvider(this).get(SpeciesViewModel.class);
+            String country = getIntent().getStringExtra(Values.EXTRA_COUNTRY);
+            String category = getIntent().getStringExtra(Values.EXTRA_CATEGORY);
+            List<String> symptoms = getIntent().getStringArrayListExtra(Values.EXTRA_SYMPTOMS);
+            String contact = getIntent().getStringExtra(Values.EXTRA_CONTACT);
+            adapter = new SpeciesListAdapter(getApplicationContext(), this);
+            viewModel.getSpecies(country, category, symptoms, contact).observe(this, new Observer<List<Creatures>>() {
+                @Override
+                public void onChanged(List<Creatures> dataWrappers) {
+                    adapter.setData(dataWrappers);
+                    adapter.notifyDataSetChanged();
+                }
+            });
+        }
+
+        adapter.setClickListener(this);
     }
 
     @Override
@@ -120,14 +137,13 @@ public class SpeciesListActivity extends AppCompatActivity implements SpeciesLis
     public void onPause(){
         super.onPause();
         //Store current adapter's cache to restore it after a configuration change
-        adapter.setClickListener(null);
+        //adapter.setClickListener(null);
         Log.v(TAG, "onPause");
     }
 
     //Release Memory when system resources becomes low
     //NON TESTATO NEI CASI DI MEMORY RUNNING LOW E CRITICAL
-    public void onTrimMemory(int level)
-    {
+    public void onTrimMemory(int level) {
         if(level == ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN) {
             //Sembrava funzionare correttamente anche senza onResume
             //App in background --> Remove UI widget
@@ -136,6 +152,8 @@ public class SpeciesListActivity extends AppCompatActivity implements SpeciesLis
             adapter = null;
             Log.d(TAG, "Adapter eliminata");
         }
+
+
     }
 
     @Override
