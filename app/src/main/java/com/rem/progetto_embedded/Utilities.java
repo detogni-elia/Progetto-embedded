@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.Locale;
 
 /**
  * Class contains various methods used throughout the app to translate resources and to manage storage
@@ -17,6 +18,7 @@ import java.io.FileFilter;
 
 public class Utilities {
     private final static String TAG = "Utilities";
+    private static String lastLanguage = "en";
     public static void showToast(Context context, String message){
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
@@ -159,6 +161,11 @@ public class Utilities {
      * @return String array containing the localizations
      */
     public static String[] localizeCountries(Context context, String[] toLocalize){
+        String language = Locale.getDefault().getLanguage();
+        if(!language.equals(lastLanguage)){
+            lastLanguage = language;
+            resetArrayMaps();
+        }
         if(countriesTranslations.isEmpty()){
             //Mapping english names and android ids allows to translate
             int[] countriesIds = Values.getCountriesIds();
@@ -181,6 +188,11 @@ public class Utilities {
      * @return String array containing all localized symptoms
      */
     public static String[] localizeSymptoms(Context context, String[] toLocalize){
+        String language = Locale.getDefault().getLanguage();
+        if(!language.equals(lastLanguage)) {
+            lastLanguage = language;
+            resetArrayMaps();
+        }
         if(symptomsTranslations.isEmpty()){
             int[] symptomsIds = Values.getSymptomsIds();
             String[] symptoms = Values.getSymptomsDefaultNames();
@@ -225,6 +237,11 @@ public class Utilities {
      * @return The localized contact
      */
     public static String localizeContact(Context context, String toLocalize){
+        String language = Locale.getDefault().getLanguage();
+        if(!language.equals(lastLanguage)) {
+            lastLanguage = language;
+            resetArrayMaps();
+        }
         if(contactsTranslations.isEmpty()) {
             int[] contactsIds = Values.getContactsTypeIds();
             String[] contacts = Values.getContactTypesDefaultNames();
@@ -240,6 +257,11 @@ public class Utilities {
      * @return The String array containing the localized contact types
      */
     public static String[] getLocalizedContacts(Context context){
+        String language = Locale.getDefault().getLanguage();
+        if(!language.equals(lastLanguage)) {
+            lastLanguage = language;
+            resetArrayMaps();
+        }
         String[] contacts = Values.getContactTypesDefaultNames();
         if(contactsTranslations.isEmpty()) {
             int[] contactsIds = Values.getContactsTypeIds();
@@ -324,5 +346,11 @@ public class Utilities {
     public static boolean isConnectionMetered(Context context){
         ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         return manager != null && manager.isActiveNetworkMetered();
+    }
+
+    private static void resetArrayMaps(){
+        contactsTranslations.clear();
+        symptomsTranslations.clear();
+        countriesTranslations.clear();
     }
 }
