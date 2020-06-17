@@ -104,5 +104,7 @@
     <string name="symptoms_hallucinations">Hallucinations</string>
     <string name="change_image_quality_button_text">CHANGE IMAGE QUALITY</string>
     <string name="reset_selections">Reset selections</string>
+    <string name="title_activity_map">Map</string>
+    <string name="your_position">Your Position</string>
 
 </resources>

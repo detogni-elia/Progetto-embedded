@@ -3,9 +3,16 @@ package com.rem.progetto_embedded.Activities;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ComponentCallbacks2;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.net.Uri;
+import android.location.Location;
+
+import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -21,13 +28,19 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+
 import androidx.lifecycle.Observer;
 
 import com.bumptech.glide.Glide;
+
 import com.rem.progetto_embedded.Database.AppDatabase;
 import com.rem.progetto_embedded.Database.Entity.Contacts;
 import com.rem.progetto_embedded.Database.Entity.Symptoms;
 import com.rem.progetto_embedded.Utilities;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
+
 import com.rem.progetto_embedded.Values;
 import com.rem.progetto_embedded.R;
 
@@ -44,24 +57,42 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
     private TextView speciesDescription;
     private String contactType;
     private String[] symptoms;
+    Double animalLatitude;
+    Double animalLongitude;
+    String commonName;
+
 
     private final String TAG = this.getClass().getSimpleName();
 
+    LocationManager locationManager = null;
+    private FusedLocationProviderClient fusedLocationProviderClient;
+
     @SuppressLint("SetTextI18n")
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_species_details);
 
+        //get fusedLocation for device location
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+
         Intent intent = getIntent();
+
+        //get latitude,longitude,name to display animal location and information
+        animalLatitude = intent.getDoubleExtra(Values.EXTRA_LATITUDE,0);
+        animalLongitude = intent.getDoubleExtra(Values.EXTRA_LONGITUDE,0);
+        Log.i(TAG, "onCreate: lat,long animal = "+animalLatitude+animalLongitude);
+
+        commonName = intent.getStringExtra(Values.EXTRA_NAME);
+
         imageView = findViewById(R.id.detailsImage);
         Glide.with(this).load(intent.getStringExtra(Values.EXTRA_IMAGE_PATH)).placeholder(R.drawable.ic_placeholder_icon_vector).into(imageView);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null) {
+        if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(R.string.details_toolbar_title);
         }
@@ -69,13 +100,13 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
         speciesDescription = findViewById(R.id.speciesDescription);
         speciesDescription.setText(intent.getStringExtra(Values.EXTRA_DESCRIPTION));
 
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             contactType = savedInstanceState.getString(Values.EXTRA_CONTACT);
             symptoms = savedInstanceState.getStringArray(Values.EXTRA_SYMPTOMS);
         }
 
         //If nameEntry is not present, we are in landscape layout and we do not have to update the TextViews
-        if(findViewById(R.id.nameEntry) == null)
+        if (findViewById(R.id.nameEntry) == null)
             return;
 
         final String speciesName = intent.getStringExtra(Values.EXTRA_SPECIES);
@@ -85,21 +116,21 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
         dietEntry = findViewById(R.id.dietEntry);
         symptomsEntry = findViewById(R.id.symptomsEntry);
 
-        ((TextView)nameEntry.findViewById(R.id.layoutLabel)).setText(R.string.details_name);
-        ((TextView)speciesEntry.findViewById(R.id.layoutLabel)).setText(R.string.details_species);
-        ((TextView)dietEntry.findViewById(R.id.layoutLabel)).setText(R.string.details_diet);
-        ((TextView)symptomsEntry.findViewById(R.id.layoutLabel)).setText(R.string.details_symptoms);
+        ((TextView) nameEntry.findViewById(R.id.layoutLabel)).setText(R.string.details_name);
+        ((TextView) speciesEntry.findViewById(R.id.layoutLabel)).setText(R.string.details_species);
+        ((TextView) dietEntry.findViewById(R.id.layoutLabel)).setText(R.string.details_diet);
+        ((TextView) symptomsEntry.findViewById(R.id.layoutLabel)).setText(R.string.details_symptoms);
 
-        ((TextView)nameEntry.findViewById(R.id.layoutEntry)).setText(intent.getStringExtra(Values.EXTRA_NAME));
-        ((TextView)speciesEntry.findViewById(R.id.layoutEntry)).setText(intent.getStringExtra(Values.EXTRA_SPECIES));
+        ((TextView) nameEntry.findViewById(R.id.layoutEntry)).setText(commonName);
+        ((TextView) speciesEntry.findViewById(R.id.layoutEntry)).setText(intent.getStringExtra(Values.EXTRA_SPECIES));
         String diet = intent.getStringExtra(Values.EXTRA_DIET);
-        if(diet == null)
+        if (diet == null)
             dietEntry.setVisibility(View.GONE);
         else
-            ((TextView)dietEntry.findViewById(R.id.layoutEntry)).setText(diet);
+            ((TextView) dietEntry.findViewById(R.id.layoutEntry)).setText(diet);
 
 
-        if(savedInstanceState == null){
+        if (savedInstanceState == null) {
             final AppDatabase db = AppDatabase.getInstance(this, intent.getStringExtra(Values.EXTRA_COUNTRY));
             db.creaturesDao().getContactOfCreature(speciesName).observe(this, new Observer<Contacts>() {
                 @Override
@@ -111,25 +142,24 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
                         public void onChanged(List<Symptoms> symptomsList) {
                             int i = 0;
                             symptoms = new String[symptomsList.size()];
-                            for(Symptoms s: symptomsList)
+                            for (Symptoms s : symptomsList)
                                 symptoms[i++] = s.toString();
 
                             symptoms = Utilities.localizeSymptoms(getApplicationContext(), symptoms);
 
                             StringBuilder builder = new StringBuilder();
-                            for(i = 0; i < symptoms.length - 1; i++)
+                            for (i = 0; i < symptoms.length - 1; i++)
                                 builder.append(symptoms[i]).append(", ");
 
                             builder.append(symptoms[symptoms.length - 1]);
-                            ((TextView)symptomsEntry.findViewById(R.id.layoutEntry)).setText(contactType + ": " + builder.toString());
+                            ((TextView) symptomsEntry.findViewById(R.id.layoutEntry)).setText(contactType + ": " + builder.toString());
                         }
                     });
                 }
             });
-        }
-        else {
+        } else {
             StringBuilder builder = new StringBuilder();
-            for(int i = 0; i < symptoms.length - 1; i++)
+            for (int i = 0; i < symptoms.length - 1; i++)
                 builder.append(symptoms[i]).append(", ");
 
             builder.append(symptoms[symptoms.length - 1]);
@@ -146,23 +176,54 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.gps_button)
-            {
-                if(checkPermissions())
-                    {
+        if (item.getItemId() == R.id.gps_button) {
 
-                        //Intent mapActivity = new Intent(getApplicationContext(),MapActivity.class);
-                        //startActivity(mapActivity);
+
+        if(checkPermissions()) {
+            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+
+                    //update or fetch a location
+
+
+                    Log.i(TAG, "onSuccess: " + location);
+
+                    if (location != null) {
+                        String myLat = String.valueOf(location.getLatitude());
+                        String myLon = String.valueOf(location.getLongitude());
+
+                        Log.i(TAG, "onSuccess: lat,lon " + myLat + " " + myLon);
+
+
+                        SharedPreferences sharedPreferences = getSharedPreferences(Values.PREFERENCES_NAME,MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString(Values.LATITUDE,myLat);
+                        editor.putString(Values.LONGITUDE,myLon);
+                        editor.apply();
+
+                        startMap();
+
+                    } else {
+                        startMap();
                     }
-                else
-                    {Toast.makeText(getApplicationContext(),R.string.permissions_not_granted,Toast.LENGTH_SHORT).show();}
-            }
 
-        if(item.getItemId() == android.R.id.home)
-            finish();
+                }
+            });
+        }else{
+            //if location permission has not been accepted just display animal position
+            startMap();
+        }
+
+    }
+
+        if(item.getItemId()==android.R.id.home)
+        finish();
 
         return super.onOptionsItemSelected(item);
-    }
+
+
+}
 
     @Override
     public void onResume()
@@ -218,8 +279,22 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
         }
     }
 
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
     private boolean checkPermissions(){
-        return ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        return ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void startMap(){
+        Intent mapActivity = new Intent(getApplicationContext(), MapActivity.class);
+        mapActivity.putExtra(Values.EXTRA_LATITUDE,animalLatitude);
+        mapActivity.putExtra(Values.EXTRA_LONGITUDE,animalLongitude);
+        mapActivity.putExtra(Values.EXTRA_NAME,commonName);
+        startActivity(mapActivity);
     }
 }

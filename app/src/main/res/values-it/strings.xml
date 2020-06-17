@@ -107,4 +107,7 @@
     <string name="change_image_quality_button_text">CAMBIA QUALITÀ IMMAGINI</string>
     <string name="reset_selections">Azzera selezioni</string>
 
+    <string name="title_activity_map">Mappa</string>
+    <string name="your_position">La tua posizione</string>
+
 </resources>

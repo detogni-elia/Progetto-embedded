@@ -18,6 +18,8 @@ public class Values {
     public static final String EXTRA_DESCRIPTION = BASE + "Description";
     public static final String EXTRA_IMAGE_QUALITY = BASE + "ImageQuality";
     public static final String EXTRA_SKIP_DATABASE = BASE + "SkipDatabase";
+    public static final String EXTRA_LATITUDE = BASE + "latitude";
+    public static final String EXTRA_LONGITUDE = BASE + "longitude";
 
     //SharedPreferences keys
     public static final String PREFERENCES_NAME = BASE;
@@ -31,7 +33,9 @@ public class Values {
     public static final String DESTROYED = BASE + "destroyed";
     public static final String UPDATE_POSITION = BASE + "updatePosition";
     public static final String LANGUAGE = BASE + "language";
-    public static final String IMAGE_QUALITY = BASE +"selectedImageQuality";
+    public static final String IMAGE_QUALITY = BASE + "selectedImageQuality";
+    public static final String LATITUDE = BASE + "latitude";
+    public static final String LONGITUDE = BASE + "longitude";
 
     //Ids of countries for localization
     private static final int[] COUNTRIES_IDS = {
