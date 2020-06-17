@@ -44,6 +44,9 @@
         <activity
             android:name="com.rem.progetto_embedded.Activities.AnimalDetailsActivity"
             tools:ignore="InnerclassSeparator" />
+        <activity
+            android:name="com.rem.progetto_embedded.Activities.MapActivity"
+            tools:ignore="InnerclassSeparator" />
 
         <service android:name="com.rem.progetto_embedded.Services.FakeDownloadIntentService"
             android:exported="false"
