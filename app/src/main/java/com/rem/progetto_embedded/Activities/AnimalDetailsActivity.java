@@ -4,7 +4,14 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ComponentCallbacks2;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Location;
+
+import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -28,6 +35,10 @@ import com.rem.progetto_embedded.Database.Entity.Contacts;
 import com.rem.progetto_embedded.Database.Entity.Symptoms;
 import com.rem.progetto_embedded.SpeciesViewModel;
 import com.rem.progetto_embedded.Utilities;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
+
 import com.rem.progetto_embedded.Values;
 import com.rem.progetto_embedded.R;
 
@@ -43,7 +54,15 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
     private LinearLayout symptomsEntry;
     private TextView speciesDescription;
 
+    Double animalLatitude;
+    Double animalLongitude;
+    String commonName;
+
+
     private final String TAG = this.getClass().getSimpleName();
+
+
+    private FusedLocationProviderClient fusedLocationProviderClient;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -53,6 +72,16 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
 
         //This activity will always be launched via intent
         final Intent intent = getIntent();
+        //get fusedLocation for device location
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+        //get latitude,longitude,name to display animal location and information
+        animalLatitude = intent.getDoubleExtra(Values.EXTRA_LATITUDE,0);
+        animalLongitude = intent.getDoubleExtra(Values.EXTRA_LONGITUDE,0);
+        Log.i(TAG, "onCreate: lat,long animal = "+animalLatitude+animalLongitude);
+
+        commonName = intent.getStringExtra(Values.EXTRA_NAME);
+
         imageView = findViewById(R.id.detailsImage);
         //Show image of the animal/insect/plant
         Glide.with(this).load(intent.getStringExtra(Values.EXTRA_IMAGE_PATH)).placeholder(R.drawable.ic_placeholder_icon_vector).into(imageView);
@@ -61,7 +90,7 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null) {
+        if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(R.string.details_toolbar_title);
         }
@@ -82,7 +111,7 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
 
         ((TextView)nameEntry.findViewById(R.id.layoutLabel)).setText(R.string.details_name);
         ((TextView)speciesEntry.findViewById(R.id.layoutLabel)).setText(R.string.details_species);
-        ((TextView)nameEntry.findViewById(R.id.layoutEntry)).setText(intent.getStringExtra(Values.EXTRA_NAME));
+        ((TextView)nameEntry.findViewById(R.id.layoutEntry)).setText(intent.getStringExtra(commonName));
         ((TextView)speciesEntry.findViewById(R.id.layoutEntry)).setText(intent.getStringExtra(Values.EXTRA_SPECIES));
 
         ((TextView)dietEntry.findViewById(R.id.layoutLabel)).setText(R.string.details_diet);
@@ -128,23 +157,54 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.gps_button)
-            {
-                if(checkPermissions())
-                    {
+        if (item.getItemId() == R.id.gps_button) {
 
-                        //Intent mapActivity = new Intent(getApplicationContext(),MapActivity.class);
-                        //startActivity(mapActivity);
+
+        if(checkPermissions()) {
+            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+
+                    //update or fetch a location
+
+
+                    Log.i(TAG, "onSuccess: " + location);
+
+                    if (location != null) {
+                        String myLat = String.valueOf(location.getLatitude());
+                        String myLon = String.valueOf(location.getLongitude());
+
+                        Log.i(TAG, "onSuccess: lat,lon " + myLat + " " + myLon);
+
+
+                        SharedPreferences sharedPreferences = getSharedPreferences(Values.PREFERENCES_NAME,MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString(Values.LATITUDE,myLat);
+                        editor.putString(Values.LONGITUDE,myLon);
+                        editor.apply();
+
+                        startMap();
+
+                    } else {
+                        startMap();
                     }
-                else
-                    {Toast.makeText(getApplicationContext(),R.string.permissions_not_granted,Toast.LENGTH_SHORT).show();}
-            }
 
-        if(item.getItemId() == android.R.id.home)
-            finish();
+                }
+            });
+        }else{
+            //if location permission has not been accepted just display animal position
+            startMap();
+        }
+
+    }
+
+        if(item.getItemId()==android.R.id.home)
+        finish();
 
         return super.onOptionsItemSelected(item);
-    }
+
+
+}
 
     @Override
     public void onResume() {
@@ -198,7 +258,14 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
      * @return true if permissions are granted, false otherwise.
      */
     private boolean checkPermissions(){
-        return ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        return ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void startMap(){
+        Intent mapActivity = new Intent(getApplicationContext(), MapActivity.class);
+        mapActivity.putExtra(Values.EXTRA_LATITUDE,animalLatitude);
+        mapActivity.putExtra(Values.EXTRA_LONGITUDE,animalLongitude);
+        mapActivity.putExtra(Values.EXTRA_NAME,commonName);
+        startActivity(mapActivity);
     }
 }

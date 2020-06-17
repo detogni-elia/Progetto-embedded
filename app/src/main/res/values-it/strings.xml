@@ -109,4 +109,7 @@
     <string name="search_by_symptoms">Ricerca per sintomi</string>
     <string name="error_database_not_found">Non è stato possibile aprire il databse. Prova a scaricare nuovamente le risorse.</string>
 
+    <string name="title_activity_map">Mappa</string>
+    <string name="your_position">La tua posizione</string>
+
 </resources>

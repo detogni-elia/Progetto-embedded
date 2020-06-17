@@ -166,6 +166,8 @@ public class SpeciesListActivity extends AppCompatActivity implements SpeciesLis
         startIntent.putExtra(Values.EXTRA_DIET, element.getDiet());
         startIntent.putExtra(Values.EXTRA_DESCRIPTION, element.getDescription());
         startIntent.putExtra(Values.EXTRA_COUNTRY, getIntent().getStringExtra(Values.EXTRA_COUNTRY));
+        startIntent.putExtra(Values.EXTRA_LATITUDE,element.getLatitude());
+        startIntent.putExtra(Values.EXTRA_LONGITUDE,element.getLongitude());
         startActivity(startIntent);
     }
 }
