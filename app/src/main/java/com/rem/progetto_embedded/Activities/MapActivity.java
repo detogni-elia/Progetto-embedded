@@ -82,7 +82,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         // Add a marker for animal position
         LatLng animal = new LatLng(animalLan,animalLon);
         mMap.addMarker(new MarkerOptions().position(animal).title(animalName).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-        Circle circle = mMap.addCircle(new CircleOptions().center(animal).radius(randomRadius()).strokeColor(R.color.colorAnimals));
+        Circle circle = mMap.addCircle(new CircleOptions().center(animal).radius(randomRadius()).strokeColor(R.color.colorPrimaryDark));
         setView();
     }
 

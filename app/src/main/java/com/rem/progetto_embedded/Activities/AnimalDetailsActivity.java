@@ -111,7 +111,7 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
 
         ((TextView)nameEntry.findViewById(R.id.layoutLabel)).setText(R.string.details_name);
         ((TextView)speciesEntry.findViewById(R.id.layoutLabel)).setText(R.string.details_species);
-        ((TextView)nameEntry.findViewById(R.id.layoutEntry)).setText(intent.getStringExtra(commonName));
+        ((TextView)nameEntry.findViewById(R.id.layoutEntry)).setText(commonName);
         ((TextView)speciesEntry.findViewById(R.id.layoutEntry)).setText(intent.getStringExtra(Values.EXTRA_SPECIES));
 
         ((TextView)dietEntry.findViewById(R.id.layoutLabel)).setText(R.string.details_diet);
