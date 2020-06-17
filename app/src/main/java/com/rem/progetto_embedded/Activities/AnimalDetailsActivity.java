@@ -80,8 +80,6 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
         animalLongitude = intent.getDoubleExtra(Values.EXTRA_LONGITUDE,0);
         Log.i(TAG, "onCreate: lat,long animal = "+animalLatitude+animalLongitude);
 
-        commonName = intent.getStringExtra(Values.EXTRA_NAME);
-
         imageView = findViewById(R.id.detailsImage);
         //Show image of the animal/insect/plant
         Glide.with(this).load(intent.getStringExtra(Values.EXTRA_IMAGE_PATH)).placeholder(R.drawable.ic_placeholder_icon_vector).into(imageView);
@@ -111,7 +109,8 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
 
         ((TextView)nameEntry.findViewById(R.id.layoutLabel)).setText(R.string.details_name);
         ((TextView)speciesEntry.findViewById(R.id.layoutLabel)).setText(R.string.details_species);
-        ((TextView)nameEntry.findViewById(R.id.layoutEntry)).setText(intent.getStringExtra(commonName));
+        commonName = intent.getStringExtra(Values.EXTRA_NAME);
+        ((TextView)nameEntry.findViewById(R.id.layoutEntry)).setText(commonName);
         ((TextView)speciesEntry.findViewById(R.id.layoutEntry)).setText(intent.getStringExtra(Values.EXTRA_SPECIES));
 
         ((TextView)dietEntry.findViewById(R.id.layoutLabel)).setText(R.string.details_diet);

@@ -18,7 +18,7 @@
     <string name="details_name">NOME COMUNE</string>
     <string name="details_species">NOME SPECIE</string>
     <string name="details_diet">DIETA</string>
-    <string name="details_symptoms">SYMPTOMS</string>
+    <string name="details_symptoms">SINTOMI</string>
     <string name="details_symptom_bite">MORSO</string>
     <string name="details_symptom_contact">CONTATTO</string>
     <string name="details_symptom_ingested">INGESTIONE</string>
