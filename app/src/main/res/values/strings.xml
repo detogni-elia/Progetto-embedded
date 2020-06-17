@@ -19,7 +19,7 @@
     <string name="details_name">COMMON NAME</string>
     <string name="details_species">SPECIES NAME</string>
     <string name="details_diet">DIET</string>
-    <string name="details_symptoms">Search by symptom</string>
+    <string name="details_symptoms">SYMPTOMS</string>
     <string name="details_symptom_bite">BITE</string>
     <string name="details_symptom_contact">CONTACT</string>
     <string name="details_symptom_ingested">INGESTED</string>
@@ -52,7 +52,7 @@
     <string name="high">High</string>
     <string name="update_location">Grant location permissions</string>
     <string name="remove_cache">Delete all resources</string>
-    <string name="connection_alert_dialog_message">You need to download some resources to use this app, but it seems you are not currently connected to a WIFI network. If you wish to continue anyway then press OK, otherwise press CANCEL or connect to a WIFI network before continuing.</string>
+    <string name="connection_alert_dialog_message">It seems you are currently using a metered connection. Before downloading more resources, we suggest you connect to a non-metered connection such as a WI-FI network. If you wish to continue anyway then press OK.</string>
     <string name="resources_deleted_message">Deleted all resources.</string>
     <string name="download_new_resources">Download new resources</string>
     <string name="not_enough_space">There is not enough space for new reources.</string>
@@ -104,6 +104,8 @@
     <string name="symptoms_hallucinations">Hallucinations</string>
     <string name="change_image_quality_button_text">CHANGE IMAGE QUALITY</string>
     <string name="reset_selections">Reset selections</string>
+    <string name="search_by_symptoms">Search by symptoms</string>
+    <string name="error_database_not_found">Could not open database. Try downloading resources again.</string>
     <string name="title_activity_map">Map</string>
     <string name="your_position">Your Position</string>
 

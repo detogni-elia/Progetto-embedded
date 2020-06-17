@@ -76,9 +76,6 @@ public class FakeDownloadIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         Log.v(TAG, "onHandleIntent called");
-        //We want only one fake download at a time
-        if(isRunning)
-            return;
         isRunning = true;
         String country = intent.getStringExtra(Values.EXTRA_COUNTRY);
         String language = intent.getStringExtra(Values.EXTRA_LANGUAGE);
@@ -94,21 +91,18 @@ public class FakeDownloadIntentService extends IntentService {
 
         //Start the service and run in foreground
         startForeground(1, builder.build());
+        try{Thread.sleep(5000);}
+        catch (InterruptedException ignored){}
 
-        try {
+        try{
             boolean success = FakeDownload.copyAssetsToStorage(getApplicationContext(), country, language, imageQuality, skipDatabase);
-            if(!success) {
+            if(!success){
                 Utilities.showToast(getApplicationContext(), getString(R.string.not_enough_space));
                 Log.d(TAG, "Not enough space to complete the download.");
             }
-            else{
-                //Wait 5 seconds to simulate download
-                try { Thread.sleep(5000); }
-                catch (InterruptedException ignored) {}
-            }
         }
-        catch (IOException e) {
-            Utilities.showToast(getApplicationContext(), getString(R.string.unexpected_error));
+        catch (IOException e){
+            Utilities.showToast(getApplicationContext(),  getString(R.string.unexpected_error));
             Log.e(TAG, "Could not copy assets to storage: " + e.toString());
         }
 
@@ -118,12 +112,14 @@ public class FakeDownloadIntentService extends IntentService {
             Log.v(TAG, "Notified client of download finished");
         }
 
-        stopSelf();
+        isRunning = false;
+        stopForeground(true);
     }
 
     public void onDestroy(){
-        Log.v(TAG, "Stopping");
         isRunning = false;
+        client = null;
+        Log.v(TAG, "Service destroyed");
         stopForeground(true);
     }
 

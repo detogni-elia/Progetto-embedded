@@ -13,8 +13,7 @@ import java.io.OutputStream;
 public class FakeDownload {
     private static final String TAG = FakeDownload.class.getSimpleName();
 
-    private static void copyFile(InputStream in, OutputStream out) throws IOException
-    {
+    private static void copyFile(InputStream in, OutputStream out) throws IOException {
         byte[] buffer=new byte[1024];
         int read;
         while((read=in.read(buffer)) != -1)
@@ -24,30 +23,34 @@ public class FakeDownload {
     //Suppress NullPointerException warnings
     @SuppressWarnings("ConstantConditions")
     public static boolean copyAssetsToStorage(Context context, String country, String language, String imageQuality, boolean skipDatabase) throws IOException {
-        //File root;
-        //if (Utilities.hasWritableSd(context) && Utilities.checkAvailableSpace(paths[1], 10)) {
-        //    root = paths[1];
-        //    sharedPreferences.edit().putString(Values.DOWNLOAD_LOCATION, Values.LOCATION_EXTERNAL).apply();
-        //}
+        Log.v(TAG, "Copying assets to storage");
         File root = Utilities.getResourcesFolder(context);
 
         if(root == null || !Utilities.checkAvailableSpace(root, 10)){
+            Log.d(TAG, "Could not copy. Destination not found or not enough space available");
+            Log.d(TAG, "Requesting new resources folder");
             root = Utilities.requestNewResourcesFolder(context);
-            if(root == null)
+            if(root == null) {
+                Log.d(TAG, "Could not acquire resources folder");
                 return false;
+            }
         }
 
         //Get app's dedicated files directory (either in sd card or in emulated sd card)
-        //File root = context.getExternalFilesDir(null);
         //Create the subfolder for the selected country, if it does not exist
         File countryFolder = new File(root, country);
-        countryFolder.mkdirs();
+        if(countryFolder.mkdirs())
+            Log.v(TAG, "Created country folder");
+
         //Create the subfolder for the images
         File imagesFolder = new File(countryFolder, "Images");
-        imagesFolder.mkdirs();
+        if(imagesFolder.mkdirs())
+            Log.v(TAG, "Created Images folder");
+
         //Create the subfolder for the databases and the subfolder for the selected language
         File dbFolder = new File(countryFolder, "Database");
-        dbFolder.mkdirs();
+        if(dbFolder.mkdirs())
+            Log.v(TAG, "Created Database folder");
 
         AssetManager assetManager = context.getAssets();
         //Get sub-folders for each category (Animals, Insects, Plants) inside the selected country's Images assets
@@ -67,15 +70,18 @@ public class FakeDownload {
                 copyFile(src, dest);
                 src.close();
                 dest.close();
+                Log.v(TAG, "Copied " + image + " to storage");
             }
         }
         if(!skipDatabase) {
+            Log.v(TAG, "Copying database");
             //Copy database
             src = assetManager.open(country + "/Databases/" + language + ".db");
             dest = new FileOutputStream(dbFolder + "/" + "database.db");
             copyFile(src, dest);
             src.close();
             dest.close();
+            Log.v(TAG, "Database copied");
         }
         return true;
     }

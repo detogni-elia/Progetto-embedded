@@ -12,7 +12,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
-import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -49,6 +48,7 @@ public class SettingsActivity extends AppCompatActivity implements ConnectionDia
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        //Setup the ActionBar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -61,8 +61,10 @@ public class SettingsActivity extends AppCompatActivity implements ConnectionDia
     @Override
     public void onResume(){
         super.onResume();
+        //Bind to FakeDownloadIntentService to get updates about downloads
         Intent bindIntent = new Intent(SettingsActivity.this, FakeDownloadIntentService.class);
         bindService(bindIntent, connection, Context.BIND_AUTO_CREATE);
+
         updateSpinners();
     }
 
@@ -86,12 +88,15 @@ public class SettingsActivity extends AppCompatActivity implements ConnectionDia
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Download new images for available resources
+     * @param v The button pressed
+     */
     public void onClickChangeImageQuality(View v){
         //We show a cautionary message to the user about downloading with a metered connection if that's the case
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        boolean isConnectionMetered = cm != null && cm.isActiveNetworkMetered();
-        if(isConnectionMetered) {
-            new ConnectionDialogFragment().show(getSupportFragmentManager(), "alert-no-dialog");
+        if(Utilities.isConnectionMetered(this)) {
+            //We show the cautionary message without showing the download dialog, since the user already selected the parameters in this activity using the spinners
+            new ConnectionDialogFragment().show(getSupportFragmentManager(), ConnectionDialogFragment.ALERT_NO_DIALOG);
         }
         else
             onConnectionDialogDismiss();
@@ -108,6 +113,7 @@ public class SettingsActivity extends AppCompatActivity implements ConnectionDia
             //Register as callback to get updates regarding downloads
             mService.setCallback(SettingsActivity.this);
             if(mService.isRunning()) {
+                findViewById(R.id.update_image_quality_button).setEnabled(false);
                 Log.i(TAG, "Service is already running");
             }
         }
@@ -137,6 +143,8 @@ public class SettingsActivity extends AppCompatActivity implements ConnectionDia
         }
         else
             new ResourcesDownloadDialogFragment().show(getSupportFragmentManager(), "download");
+
+        findViewById(R.id.update_image_quality_button).setEnabled(false);
     }
 
     public void onClickGrantPermissions(View v){
@@ -146,6 +154,7 @@ public class SettingsActivity extends AppCompatActivity implements ConnectionDia
 
     @Override
     public void onConnectionDialogDismiss() {
+        findViewById(R.id.update_image_quality_button).setEnabled(false);
         String[] qualities = Values.getImageQualityNames();
         Intent startIntent = new Intent(this, FakeDownloadIntentService.class);
         startIntent.putExtra(Values.EXTRA_COUNTRY, countries[downloadedCountriesSpinner.getSelectedItemPosition()]);
@@ -176,8 +185,8 @@ public class SettingsActivity extends AppCompatActivity implements ConnectionDia
     public void onNotifyDownloadFinished() {
         Log.d(TAG, "notifyDownloadFinished called");
         //We unbind so that the service may stop
-        unbindService(connection);
-        bound = false;
+        //unbindService(connection);
+        //bound = false;
         runOnUiThread(new Runnable() {
             @Override
             public void run() {

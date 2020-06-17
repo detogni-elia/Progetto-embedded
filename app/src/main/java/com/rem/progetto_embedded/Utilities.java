@@ -5,19 +5,18 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Environment;
 import android.util.ArrayMap;
+import android.util.Log;
 import android.widget.Toast;
-
-import com.rem.progetto_embedded.Fragments.ConnectionDialogFragment;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.util.LinkedList;
 
 /**
  * Class contains various methods used throughout the app to translate resources and to manage storage
  */
 
 public class Utilities {
+    private final static String TAG = "Utilities";
     public static void showToast(Context context, String message){
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
@@ -177,7 +176,7 @@ public class Utilities {
     private static final ArrayMap<String, String> symptomsTranslations = new ArrayMap<>();
 
     /**
-     * Get all defined symptoms translated to the device's current language
+     * Get all selected symptoms translated from english to the device's current language.
      * @param context The application context
      * @return String array containing all localized symptoms
      */
@@ -204,7 +203,7 @@ public class Utilities {
     }
 
     /**
-     * As above, get categories localized for the device's selected language
+     * Get species' categories localized for the system language of the device
      * @param context The application context
      * @return String array containing all localized categories
      */
@@ -219,21 +218,26 @@ public class Utilities {
 
     private static ArrayMap<String, String> contactsTranslations = new ArrayMap<>();
 
+    /**
+     * Localize contact type from english to device's system language
+     * @param context The application Context
+     * @param toLocalize The String contact to localize
+     * @return The localized contact
+     */
     public static String localizeContact(Context context, String toLocalize){
         if(contactsTranslations.isEmpty()) {
             int[] contactsIds = Values.getContactsTypeIds();
             String[] contacts = Values.getContactTypesDefaultNames();
             for (int i = 0; i < contacts.length; i++)
-                //localizedContactsTypes[i] = context.getString(contactsIds[i]);
                 contactsTranslations.put(contacts[i], context.getString(contactsIds[i]));
         }
         return contactsTranslations.get(toLocalize);
     }
 
     /**
-     * Same as above
-     * @param context same
-     * @return same
+     * Get localized contact types
+     * @param context The application context
+     * @return The String array containing the localized contact types
      */
     public static String[] getLocalizedContacts(Context context){
         String[] contacts = Values.getContactTypesDefaultNames();
@@ -300,7 +304,6 @@ public class Utilities {
      * Delete files recursively
      * @param file The file or folder to delete
      */
-
     private static void deleteRecursively(File file) {
         if(file.isDirectory()) {
             File[] children = file.listFiles();
@@ -309,7 +312,8 @@ public class Utilities {
                     deleteRecursively(child);
         }
 
-        file.delete();
+        if(file.delete())
+            Log.v(TAG, "Eliminated: " + file.toString());
     }
 
     /**

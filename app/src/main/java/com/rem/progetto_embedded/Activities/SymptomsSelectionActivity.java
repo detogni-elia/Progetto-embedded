@@ -39,7 +39,7 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
 
     private String[] symptomsDefaultNames;
     private String[] contactsDefaultNames;
-    private ArrayList<SymptomsSearchAdapter.DataWrapper> data;
+    private List<SymptomsSearchAdapter.DataWrapper> data;
     private String[] countriesFolders;
     private RecyclerView.LayoutManager manager;
     private SymptomsSearchAdapter adapter;
