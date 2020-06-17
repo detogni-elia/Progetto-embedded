@@ -39,11 +39,6 @@
         <activity
             android:name="com.rem.progetto_embedded.Activities.AnimalDetailsActivity"
             tools:ignore="InnerclassSeparator" />
-        <activity
-            android:name="com.rem.progetto_embedded.Activities.ProvaDatabase"
-            tools:ignore="InnerclassSeparator">
-
-        </activity>
 
         <service android:name="com.rem.progetto_embedded.Services.FakeDownloadIntentService"
             android:exported="false"
