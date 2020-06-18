@@ -1,16 +1,11 @@
 package com.rem.progetto_embedded.Activities;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.ComponentCallbacks2;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
-
-import android.location.LocationManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -21,7 +16,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -64,7 +58,6 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
 
     private FusedLocationProviderClient fusedLocationProviderClient;
 
-    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,7 +135,9 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
 
                         //We display symptoms as a comma-separated list
                         String[] symptoms = Utilities.localizeSymptoms(getApplicationContext(), symptomsList.toArray(new String[]{}));
-                        ((TextView)symptomsEntry.findViewById(R.id.layoutEntry)).setText(contactType + ": " + TextUtils.join(",", symptoms));
+                        //Set text by formatting default string resource
+                        TextView symptomsText = symptomsEntry.findViewById(R.id.layoutEntry);
+                        symptomsText.setText(getString(R.string.symptoms_placeholder, contactType, TextUtils.join(",", symptoms)));
                     }
                 });
             }

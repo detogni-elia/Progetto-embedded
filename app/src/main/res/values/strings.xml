@@ -108,5 +108,6 @@
     <string name="error_database_not_found">Could not open database. Try downloading resources again.</string>
     <string name="title_activity_map">Map</string>
     <string name="your_position">Your Position</string>
+    <string name="symptoms_placeholder">%1$s: %2$s</string>
 
 </resources>
