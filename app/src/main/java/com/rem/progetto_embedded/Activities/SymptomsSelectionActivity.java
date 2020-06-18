@@ -198,10 +198,7 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
         else
             checkedCounter --;
 
-        if(checkedCounter <= 0 || !areResourcesAvailable)
-            fab.setVisibility(View.GONE);
-        else
-            fab.setVisibility(View.VISIBLE);
+        updateNavigationState();
     }
 
     /**

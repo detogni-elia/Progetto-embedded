@@ -49,7 +49,7 @@ public class SpeciesViewModel extends AndroidViewModel {
             //If database not found show error message and return empty List
             catch (FileNotFoundException e){
                 Context c = getApplication().getApplicationContext();
-                Utilities.showToast(c, c.getString(R.string.unexpected_error));
+                Utilities.showToast(c, c.getString(R.string.error_database_not_found));
                 return new MutableLiveData<>();
             }
             //Is there are no symptoms selected we simply return all species
@@ -78,7 +78,7 @@ public class SpeciesViewModel extends AndroidViewModel {
             }
             catch (FileNotFoundException e){
                 Context c = getApplication().getApplicationContext();
-                Utilities.showToast(c, c.getString(R.string.unexpected_error));
+                Utilities.showToast(c, c.getString(R.string.error_database_not_found));
                 return new MutableLiveData<>();
             }
             contact = db.creaturesDao().getContactOfCreature(latinName);
@@ -99,7 +99,7 @@ public class SpeciesViewModel extends AndroidViewModel {
             }
             catch (FileNotFoundException e){
                 Context c = getApplication().getApplicationContext();
-                Utilities.showToast(c, c.getString(R.string.unexpected_error));
+                Utilities.showToast(c, c.getString(R.string.error_database_not_found));
                 return new MutableLiveData<>();
             }
             symptoms = db.creaturesDao().getSymptomsOfCreature(latinName);
