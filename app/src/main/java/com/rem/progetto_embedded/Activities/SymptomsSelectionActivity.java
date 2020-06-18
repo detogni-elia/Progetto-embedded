@@ -138,6 +138,10 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Method sets the activity to the state described in savedInstanceState
+     * @param savedInstanceState The Activity's saved instance state to restore
+     */
     private void setActivity(Bundle savedInstanceState){
         fab = findViewById(R.id.fab);
         countriesSpinner = findViewById(R.id.countries_spinner);
@@ -154,7 +158,7 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
         contactsDefaultNames = Values.getContactTypesDefaultNames();
 
         boolean[] selections;
-        //If not restoring after orientation change
+        //If not restoring after orientation change but resetting the state (after pressing the reset button)
         if(savedInstanceState == null) {
             selections = new boolean[symptoms.length];
             checkedCounter = 0;
@@ -165,8 +169,6 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
             checkedCounter = savedInstanceState.getInt(CHECKED_COUNTER);
             //We hide the FloatingActionButton if no symptom is checked, we want at least a symptom to interrogate the database
         }
-
-        updateNavigationState();
 
         ArrayAdapter<String> speciesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
         speciesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -183,6 +185,8 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
         manager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(manager);
         recyclerView.setAdapter(adapter);
+
+        updateNavigationState();
     }
 
     //Update checkedCounter to determine if FloatingActionButton should be shown or not
@@ -200,6 +204,10 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
             fab.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Launch SpeciesListActivity with the parameters selected in the UI
+     * @param v The fab calling this method
+     */
     public void onFabClicked(View v){
         Intent startIntent = new Intent(this, SpeciesListActivity.class);
         //Get the symptoms to pass via Intent
@@ -326,6 +334,10 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
         updateNavigationState();
     }
 
+    /**
+     * Sets the fab accordingly to the state of the Activity. Only if at least one symptom is selected and if at least one country has resources available
+     * then activates the fab, making it visible. Otherwise the fab will be invisible and so not clickable
+     */
     private void updateNavigationState(){
         //Show FAB only when both resources are available and at least one symptom is checked
         if(checkedCounter > 0 && areResourcesAvailable)
@@ -334,6 +346,9 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
             fab.setVisibility(View.GONE);
     }
 
+    /**
+     * Populate countriesSpinner with the available countries
+     */
     private void updateCountriesSpinner(){
         //Translate country names
         countriesFolders = Utilities.getDownloadedCountries(this);
@@ -349,7 +364,9 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
         updateNavigationState();
     }
 
-    //Implementation of FakeDownloadIntentService's interface callback method
+    /**
+     * Implementation of FakeDownloadIntentService's interface callback method
+     */
     @Override
     public void onNotifyDownloadFinished() {
         unbindService(connection);
