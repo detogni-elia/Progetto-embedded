@@ -8,17 +8,23 @@
     android:layout_height="match_parent"
     tools:context="com.rem.progetto_embedded.Activities.MainActivity">
 
-    <include
-        android:layout_height="wrap_content"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        layout="@layout/toolbar" />
+        android:layout_height="match_parent">
 
-    <include
-        android:layout_marginTop="?attr/actionBarSize"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        layout="@layout/activity_main_content"/>
-    
+        <include
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            layout="@layout/toolbar" />
+
+        <include
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            layout="@layout/activity_main_content"/>
+
+    </LinearLayout>
+
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigation_view"
         android:layout_width="match_parent"
