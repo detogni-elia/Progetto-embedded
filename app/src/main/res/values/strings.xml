@@ -13,21 +13,13 @@
     <string name="in">India</string>
     <string name="s_africa">South Africa</string>
     <string name="image_details_animal_content_descriptor">Immagine per il dettaglio</string>
-    <string name="menu_details_title">Details</string>
     <string name="menu_details_button_name">GPS</string>
-    <string name="images_load_error">There was an error loading the images. Try downloading the resources again</string>
     <string name="details_name">COMMON NAME</string>
     <string name="details_species">SPECIES NAME</string>
     <string name="details_diet">DIET</string>
     <string name="details_symptoms">SYMPTOMS</string>
-    <string name="details_symptom_bite">BITE</string>
-    <string name="details_symptom_contact">CONTACT</string>
-    <string name="details_symptom_ingested">INGESTED</string>
-    <string name="details_symptom_stung">STUNG</string>
-    <string name="details_symptom_inhalation">INHALATION</string>
     <string name="details_toolbar_title">Details</string>
     <string name="species_list_toolbar_title">List of species</string>
-    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
     <string name="contact_bite">Bite</string>
     <string name="contact_stung">Stung</string>
     <string name="contact_eaten">Eaten</string>
@@ -38,14 +30,11 @@
     <string name="settings">Settings</string>
     <string name="symptoms_search_query_hint">Search for specific symptoms</string>
     <string name="symptoms_search_toolbar_title">Symptoms search</string>
-    <string name="change_language">Select the language</string>
     <string name="ask_permission">This app requires you to download some extra resources in order for it to work. You may also want to allow access to the device\'s location to use all of the functionalities. This app will never keep track of your position and does not require a GPS signal to function.</string>
     <string name="permissions_not_granted">Permission not granted</string>
-    <string name="select_the_language">Language</string>
     <string name="italian">Italian</string>
     <string name="english">English</string>
     <string name="download_dialog_message">Please select a country and image quality to download corresponding resources.</string>
-    <string name="change_image_quality">Change image quality</string>
     <string name="select_image_quality">Image quality</string>
     <string name="low">Low</string>
     <string name="medium">Medium</string>
@@ -58,21 +47,7 @@
     <string name="not_enough_space">There is not enough space for new reources.</string>
     <string name="notification_download_message">"Downloading resources for: "</string>
     <string name="unexpected_error">Unexpected error.</string>
-    <string name="selectedLowQ">Selected low image quality</string>
-    <string name="selectedMediumQ">Selected medium image quality</string>
-    <string name="selectedHighQ">Selected high image quality</string>
-    <string name="download_new_resource">Download a new resource</string>
 
-    <string-array name="settings_languages">
-        <item>Italiano</item>
-        <item>English</item>
-    </string-array>
-
-    <string-array name="settings_quality">
-        <item>@string/low</item>
-        <item>@string/medium</item>
-        <item>@string/high</item>
-    </string-array>
     <string name="symptoms_abdominal_cramps">Abdominal cramps</string>
     <string name="symptoms_ptosis">Ptosis</string>
     <string name="symptoms_vomiting">Vomiting</string>
@@ -106,7 +81,6 @@
     <string name="reset_selections">Reset selections</string>
     <string name="search_by_symptoms">Search by symptoms</string>
     <string name="error_database_not_found">Could not open database. Try downloading resources again.</string>
-    <string name="title_activity_map">Map</string>
     <string name="your_position">Your Position</string>
     <string name="symptoms_placeholder">%1$s: %2$s</string>
 

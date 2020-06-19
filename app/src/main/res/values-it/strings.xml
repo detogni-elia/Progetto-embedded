@@ -5,7 +5,6 @@
     <string name="menu_search_title">Ricerca</string>
     <string name="species_list_query_hint">Cerca per nome della specie</string>
     <string name="image_details_animal_content_descriptor">Immagine per il dettaglio</string>
-    <string name="menu_details_title">Dettagli</string>
     <string name="menu_details_button_name">GPS</string>
     <string name="animals">Animali</string>
     <string name="insects">Insetti</string>
@@ -14,19 +13,12 @@
     <string name="it">Italia</string>
     <string name="in">India</string>
     <string name="s_africa">Sud Africa</string>
-    <string name="images_load_error">Si è verificato un problema nel caricamento delle immagini. Prova a riscaricarle.</string>
     <string name="details_name">NOME COMUNE</string>
     <string name="details_species">NOME SPECIE</string>
     <string name="details_diet">DIETA</string>
     <string name="details_symptoms">SINTOMI</string>
-    <string name="details_symptom_bite">MORSO</string>
-    <string name="details_symptom_contact">CONTATTO</string>
-    <string name="details_symptom_ingested">INGESTIONE</string>
-    <string name="details_symptom_stung">PUNTURA</string>
-    <string name="details_symptom_inhalation">INALAZIONE</string>
     <string name="details_toolbar_title">Dettagli</string>
     <string name="species_list_toolbar_title">Lista delle specie</string>
-    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
     <string name="contact_bite">Morso</string>
     <string name="contact_stung">Puntura</string>
     <string name="contact_eaten">Ingestione</string>
@@ -39,14 +31,11 @@
     <string name="contact_prompt">Contatto</string>
     <string name="symptoms_search_toolbar_title">Ricerca sintomi</string>
     <string name="symptoms_search_query_hint">Ricerca sintomi specifici</string>
-    <string name="change_language">Seleziona la lingua</string>
     <string name="ask_permission">Questa applicazione richiede il download di risorce extra per poter funzionare. Considera inoltre la possibilità di concedere l\'accesso alla posizione per usare tutte le funzionalità. Quest\'app non terrà mai traccia della tua posizione e non richiede un segnale GPS per funzionare.</string>
     <string name="permissions_not_granted">Permessi non garantiti</string>
-    <string name="select_the_language">Lingua</string>
     <string name="italian">Italiano</string>
     <string name="english">Inglese</string>
     <string name="download_dialog_message">Prego selezionare paese e qualità delle immagini per scaricare le risorse corrispondenti.</string>
-    <string name="change_image_quality">Cambia qualità immagini</string>
     <string name="select_image_quality">Qualità immagine</string>
     <string name="low">Bassa</string>
     <string name="medium">Media</string>
@@ -59,22 +48,13 @@
     <string name="not_enough_space">Non c\'è abbastanza spazio per scaricare nuove risorse</string>
     <string name="notification_download_message">"Download di risorse per: "</string>
     <string name="unexpected_error">Errore inatteso.</string>
-    <string name="selectedLowQ">Selezionata qualità immagini bassa</string>
-    <string name="selectedMediumQ">Selezionata qualità immagini media</string>
-    <string name="selectedHighQ">Selezionata qualità immagini alta</string>
-    <string name="download_new_resource">Scarica una nuova risorsa</string>
 
 
-<!--    <string-array name="settings_languages">
-        <item>@string/italian</item>
-        <item>@string/english</item>
-    </string-array>-->
+    <!--    <string-array name="settings_languages">
+            <item>@string/italian</item>
+            <item>@string/english</item>
+        </string-array>-->
 
-    <string-array name="settings_quality">
-        <item>@string/low</item>
-        <item>@string/medium</item>
-        <item>@string/high</item>
-    </string-array>
     <string name="symptoms_abdominal_cramps">Crampi addominali</string>
     <string name="symptoms_ptosis">Ptosi</string>
     <string name="symptoms_vomiting">Nausea</string>
@@ -111,7 +91,6 @@
     <string name="symptoms_placeholder">%1$s: %2$s</string>
 
 
-    <string name="title_activity_map">Mappa</string>
     <string name="your_position">La tua posizione</string>
 
 </resources>

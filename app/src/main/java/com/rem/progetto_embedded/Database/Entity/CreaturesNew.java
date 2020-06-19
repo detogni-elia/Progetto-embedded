@@ -1,7 +1,6 @@
 package com.rem.progetto_embedded.Database.Entity;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -48,6 +47,6 @@ public class CreaturesNew
 
     public String toString()
     {
-        return latinName+" , "+commonName+" , "+specieName+" , "+description+" , "+category+" , "+Double.toString(latitude)+" , "+Double.toString(longitude);
+        return latinName+" , "+commonName+" , "+specieName+" , "+description+" , "+category+" , "+ latitude +" , "+ longitude;
     }
 }

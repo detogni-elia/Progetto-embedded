@@ -2,7 +2,6 @@ package com.rem.progetto_embedded.Fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -22,8 +21,6 @@ import com.rem.progetto_embedded.Services.FakeDownloadIntentService;
 import com.rem.progetto_embedded.Utilities;
 import com.rem.progetto_embedded.Values;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 /**
