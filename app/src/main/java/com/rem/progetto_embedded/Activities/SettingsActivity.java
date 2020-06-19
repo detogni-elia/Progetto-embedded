@@ -155,12 +155,12 @@ public class SettingsActivity extends AppCompatActivity implements ConnectionDia
     @Override
     public void onConnectionDialogDismiss() {
         findViewById(R.id.update_image_quality_button).setEnabled(false);
-        String[] qualities = Values.getImageQualityNames();
+        String[] qualities = Values.IMAGE_QUALITY_NAMES;
         Intent startIntent = new Intent(this, FakeDownloadIntentService.class);
         startIntent.putExtra(Values.EXTRA_COUNTRY, countries[downloadedCountriesSpinner.getSelectedItemPosition()]);
         //Set english language if system language is not supported
         String locale = Locale.getDefault().getLanguage();
-        String[] languages = Values.getLanguagesDefaultNames();
+        String[] languages = Values.LANGUAGES_DEFAULT_NAMES;
         boolean supported = false;
         for(String lang: languages){
             if(locale.equals(lang)) {

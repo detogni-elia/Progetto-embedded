@@ -28,125 +28,80 @@ public class Values {
     static final String LOCATION_EXTERNAL = BASE + "locationExternal";
     static final String NOT_YET_DECIDED = BASE + "notYetDecided";
     public static final String FIRST_RUN = BASE + "firstRun";
-    public static final String DELETE_CACHE = BASE +"deleteCache";
-    public static final String LANGUAGE_CHANGED = BASE +"langChanged";
-    public static final String DESTROYED = BASE + "destroyed";
     public static final String UPDATE_POSITION = BASE + "updatePosition";
-    public static final String LANGUAGE = BASE + "language";
-    public static final String IMAGE_QUALITY = BASE + "selectedImageQuality";
     public static final String LATITUDE = BASE + "latitude";
     public static final String LONGITUDE = BASE + "longitude";
 
     //Ids of countries for localization
-    private static final int[] COUNTRIES_IDS = {
+    static final int[] COUNTRIES_IDS = {
             R.string.in,
             R.string.s_africa,
             R.string.it
     };
 
-    static int[] getCountriesIds(){
-        return COUNTRIES_IDS;
-    }
-
     //Countries english names for database queries
-    private static final String[] COUNTRIES_DEFAULT_NAMES = {
+    public static final String[] COUNTRIES_DEFAULT_NAMES = {
             "India",
             "South-Africa",
             "Italy"
     };
 
-    public static String[] getCountriesDefaultNames(){
-        return COUNTRIES_DEFAULT_NAMES;
-    }
-
     //Ids of contact type for localization
-    private static final int[] CONTACTS_IDS = {
+    static final int[] CONTACTS_IDS = {
             R.string.contact_bite,
             R.string.contact_stung,
             R.string.contact_eaten,
             R.string.contact_contact
     };
 
-    private static final int[] LANGUAGES_IDS = {
+    //Languages ids for localizations
+    static final int[] LANGUAGES_IDS = {
             R.string.italian,
             R.string.english
     };
 
-    private static final String[] LANGUAGES_DEFAULT_NAMES = {
+    //Languages default names used when selecting download resources
+    public static final String[] LANGUAGES_DEFAULT_NAMES = {
             "it",
             "en"
     };
 
-    private static final int[] IMAGE_QUALITY_IDS = {
+    //Image quality ids for localization
+    static final int[] IMAGE_QUALITY_IDS = {
             R.string.low,
             R.string.medium,
             R.string.high
     };
 
-    private static final String[] IMAGE_QUALITY_NAMES = {
+    //Image quality names used when selecting download resources
+    public static final String[] IMAGE_QUALITY_NAMES = {
             "Low",
             "Medium",
             "High"
     };
 
-    static int[] getImageQualityIds(){
-        return IMAGE_QUALITY_IDS;
-    }
-
-    public static String[] getImageQualityNames(){
-        return IMAGE_QUALITY_NAMES;
-    }
-
-    static int[] getLanguagesIds(){
-        return LANGUAGES_IDS;
-    }
-
-    public static String[] getLanguagesDefaultNames(){
-        return LANGUAGES_DEFAULT_NAMES;
-    }
-
-    static int[] getContactsTypeIds(){
-        return CONTACTS_IDS;
-    }
-
     //Contacts default values for database queries
-    private static final String[] CONTACTS_STRINGS = {
+    public static final String[] CONTACTS_DEFAULT_NAMES = {
             "Bite",
             "Sting",
             "Eaten",
             "Skin contact"
     };
 
-    public static String[] getContactTypesDefaultNames(){
-        return CONTACTS_STRINGS;
-    }
-
+    //Categories default names
     public static final String CATEGORY_ANIMALS = "Animals";
     public static final String CATEGORY_PLANTS = "Plants";
     public static final String CATEGORY_INSECTS = "Insects";
 
-    private static final int[] SPECIES_IDS = {
+    //Categories ids used for localization
+    static final int[] SPECIES_IDS = {
             R.string.animals,
             R.string.insects,
             R.string.plants
     };
 
-    static int[] getSpeciesIds(){
-        return SPECIES_IDS;
-    }
-
-    private static final String[] SPECIES_STRINGS = {
-            "Animals",
-            "Insects",
-            "Plants"
-    };
-
-    public static String[] getSpeciesDefaultNames(){
-        return SPECIES_STRINGS;
-    }
-
     //Ids of symptoms for localization
-    private static final int[] SYMPTOMS_IDS = {
+    static final int[] SYMPTOMS_IDS = {
             R.string.symptoms_ptosis,
             R.string.symptoms_vomiting,
             R.string.symptoms_dizziness,
@@ -178,12 +133,8 @@ public class Values {
             R.string.symptoms_hallucinations
     };
 
-    static int[] getSymptomsIds(){
-        return SYMPTOMS_IDS;
-    }
-
     //Symptoms default values for database queries
-    private static final String[] SYMPTOMS_STRINGS = {
+    public static final String[] SYMPTOMS_DEFAULT_NAMES = {
             "Ptosis",
             "Vomiting",
             "Dizziness",
@@ -214,8 +165,4 @@ public class Values {
             "Irritation",
             "Hallucinations"
     };
-
-    public static String[] getSymptomsDefaultNames(){
-        return SYMPTOMS_STRINGS;
-    }
 }

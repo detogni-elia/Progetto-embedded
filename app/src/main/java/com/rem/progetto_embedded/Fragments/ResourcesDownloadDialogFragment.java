@@ -65,8 +65,8 @@ public class ResourcesDownloadDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 //Get selected item for each spinner
-                String country = Values.getCountriesDefaultNames()[countries_spinner.getSelectedItemPosition()];
-                String imageQuality = Values.getImageQualityNames()[image_quality_spinner.getSelectedItemPosition()];
+                String country = Values.COUNTRIES_DEFAULT_NAMES[countries_spinner.getSelectedItemPosition()];
+                String imageQuality = Values.IMAGE_QUALITY_NAMES[image_quality_spinner.getSelectedItemPosition()];
 
                 //Start download of selected resources
                 startDownloadService(country, imageQuality);
@@ -94,7 +94,7 @@ public class ResourcesDownloadDialogFragment extends DialogFragment {
         startIntent.putExtra(Values.EXTRA_COUNTRY, country);
         //Set english language if system language is not supported
         String locale = Locale.getDefault().getLanguage();
-        String[] languages = Values.getLanguagesDefaultNames();
+        String[] languages = Values.LANGUAGES_DEFAULT_NAMES;
         boolean supported = false;
         for(String lang: languages){
             if(locale.equals(lang)) {

@@ -148,19 +148,21 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
         speciesSpinner = findViewById(R.id.species_spinner);
         contactsSpinner = findViewById(R.id.contact_spinner);
 
-        //Get localized symptoms and species categories to display
+        //Get localized symptoms, species categories and contacts to display
         String[] symptoms = Utilities.localizeSymptoms(this, null);
         String[] categories = Utilities.getLocalizedCategories(this);
         String[] contacts = Utilities.getLocalizedContacts(this);
 
         //Get english symptoms names to pass via intent to SpeciesListActivity to interrogate the database
-        symptomsDefaultNames = Values.getSymptomsDefaultNames();
-        contactsDefaultNames = Values.getContactTypesDefaultNames();
+        symptomsDefaultNames = Values.SYMPTOMS_DEFAULT_NAMES;
+        contactsDefaultNames = Values.CONTACTS_DEFAULT_NAMES;
 
         boolean[] selections;
-        //If not restoring after orientation change but resetting the state (after pressing the reset button)
+        //If not restoring after orientation change but resetting the state (after pressing the reset button) or during first start
         if(savedInstanceState == null) {
+            //Array of false values
             selections = new boolean[symptoms.length];
+            //0 symptoms checked
             checkedCounter = 0;
         }
 

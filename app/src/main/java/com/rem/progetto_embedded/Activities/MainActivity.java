@@ -9,7 +9,6 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.preference.PreferenceManager;
 
 import android.Manifest;
 import android.content.ComponentCallbacks2;
@@ -32,7 +31,6 @@ import android.widget.Toast;
 import com.rem.progetto_embedded.Fragments.FirstStartDialogFragment;
 import com.google.android.material.navigation.NavigationView;
 import java.util.List;
-import java.util.Locale;
 
 import com.rem.progetto_embedded.Fragments.ConnectionDialogFragment;
 import com.rem.progetto_embedded.Fragments.ResourcesDownloadDialogFragment;
@@ -161,16 +159,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             //set update position to true on first run
             sharedPreferences.edit().putBoolean(Values.UPDATE_POSITION,true).apply();
-            //set delete cache to false on first run
-            sharedPreferences.edit().putBoolean(Values.DELETE_CACHE,false).apply();
-            //set boolean value of langChanged, becomes true if language is changed from settings activity
-            sharedPreferences.edit().putBoolean(Values.LANGUAGE_CHANGED,false).apply();
-            //at first run app is not destroyed
-            sharedPreferences.edit().putBoolean(Values.DESTROYED,false).apply();
-            //take note of the displayed language at first launch
-            String mLang=Locale.getDefault().getDisplayLanguage();
-            Log.i(TAG, "onResume: mLang first run displayed "+mLang);
-            PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext()).edit().putString(Values.LANGUAGE,mLang).apply();
         }
         else
             checkResourcesAvailability();
