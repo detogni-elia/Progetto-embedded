@@ -87,7 +87,7 @@ public class FakeDownloadIntentService extends IntentService {
                 .setSmallIcon(android.R.drawable.stat_sys_download)
                 .setContentTitle("Downloading")
                 .setContentText(getString(R.string.notification_download_message) + country)
-                .setPriority(NotificationCompat.PRIORITY_HIGH);
+                .setPriority(NotificationCompat.PRIORITY_LOW);
 
         //Start the service and run in foreground
         startForeground(1, builder.build());
@@ -127,7 +127,7 @@ public class FakeDownloadIntentService extends IntentService {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
             CharSequence name = "FakeDownloadNotificationChannel";
             String description = "Downloading";
-            int importance = NotificationManager.IMPORTANCE_HIGH;
+            int importance = NotificationManager.IMPORTANCE_LOW;
             NotificationChannel channel = new NotificationChannel("FakeDownloadNotification", name, importance);
             channel.setDescription(description);
             NotificationManager notificationManager = getSystemService(NotificationManager.class);

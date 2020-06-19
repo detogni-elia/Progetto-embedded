@@ -135,3 +135,19 @@ Path esempio: /COUNTRY/Images/[Plants-Insects-Animals]/nome.webp
 
 
 Cambio globale qualità immagini
+
+
+MOTIVI PER USARE SINTOMI IN INGLESE:
+    1.Si vuole evitare una query al database ogni volta che viene aperta la ricerca dei sintomi
+    2.Anche se AppDatabase mantiene una rererence ai database aperti, ci sono problemi di inconsistenza ossia:
+        Ogni database di una certa nazione può non contenere tutti i sintomi possibili, faccio una query
+        su tutti i database disponibili solo per prendere tutti i sintomi?
+
+        Altra soluzione sarebbe quella di prendere i sintomi solo della nazione selezionata, cambio dati nell'adapter ogni volta che l'utente
+        modifica lo spinner?
+
+        È anche difficile mettere in cache queste informazioni. Il ViewModel infatti viene distrutto quando l'activity che lo chiama viene distrutta.
+
+        Si è preferito usare una lista di sintomi standard, salvarli nei database in lingua inglese e fornire le traduzioni nelle risorse
+        dell'app. In questo modo i sintomi da caricare sono costanti e non ci sono database da interrogare, l'interrogazione avviene solo
+        quando l'utente esegue una ricerca.
