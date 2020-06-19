@@ -45,7 +45,8 @@ public class ResourcesDownloadDialogFragment extends DialogFragment {
 
         //Populate country spinner
         final Spinner countries_spinner = view.findViewById(R.id.countries_spinner);
-        String[] supportedCountries = Utilities.getLocalizedSupportedCountries(context);
+        //String[] supportedCountries = Utilities.getLocalizedSupportedCountries(context);
+        String[] supportedCountries = getResources().getStringArray(R.array.supported_countries);
         ArrayAdapter<String> countriesAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, supportedCountries);
         countriesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         countries_spinner.setAdapter(countriesAdapter);
@@ -53,7 +54,8 @@ public class ResourcesDownloadDialogFragment extends DialogFragment {
 
         //Populate image quality spinner
         final Spinner image_quality_spinner = view.findViewById(R.id.image_quality_spinner);
-        String[] supportedImageQuality = Utilities.getLocalizedImagesQualities(getContext());
+        //String[] supportedImageQuality = Utilities.getLocalizedImagesQualities(getContext());
+        String[] supportedImageQuality = getResources().getStringArray(R.array.image_qualities);
         ArrayAdapter<String> imagesQualityAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, supportedImageQuality);
         imagesQualityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         image_quality_spinner.setAdapter(imagesQualityAdapter);

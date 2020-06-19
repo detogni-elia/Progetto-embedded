@@ -168,10 +168,11 @@ public class Utilities {
         }
         if(countriesTranslations.isEmpty()){
             //Mapping english names and android ids allows to translate
-            int[] countriesIds = Values.COUNTRIES_IDS;
+            //int[] countriesIds = Values.COUNTRIES_IDS;
+            String[] localizedCountries = context.getResources().getStringArray(R.array.supported_countries);
             String[] countries = Values.COUNTRIES_DEFAULT_NAMES;
             for(int i = 0; i < countries.length; i++)
-                countriesTranslations.put(countries[i], context.getString(countriesIds[i]));
+                countriesTranslations.put(countries[i], localizedCountries[i]);
         }
         String[] localized = new String[toLocalize.length];
         for(int i = 0; i < toLocalize.length; i++)
@@ -194,10 +195,10 @@ public class Utilities {
             resetArrayMaps();
         }
         if(symptomsTranslations.isEmpty()){
-            int[] symptomsIds = Values.SYMPTOMS_IDS;
+            String[] localizedSymptoms = context.getResources().getStringArray(R.array.symptoms);
             String[] symptoms = Values.SYMPTOMS_DEFAULT_NAMES;
             for(int i = 0; i < symptoms.length; i++)
-                symptomsTranslations.put(symptoms[i], context.getString(symptomsIds[i]));
+                symptomsTranslations.put(symptoms[i], localizedSymptoms[i]);
         }
         String[] localizedSymptoms;
         if(toLocalize == null) {
@@ -212,20 +213,6 @@ public class Utilities {
                 localizedSymptoms[i] = symptomsTranslations.get(toLocalize[i]);
         }
         return localizedSymptoms;
-    }
-
-    /**
-     * Get species' categories localized for the system language of the device
-     * @param context The application context
-     * @return String array containing all localized categories
-     */
-    public static String[] getLocalizedCategories(Context context){
-        int[] speciesIds = Values.SPECIES_IDS;
-        String[] localizedSpecies = new String[speciesIds.length];
-        for(int i = 0; i < localizedSpecies.length; i++)
-            localizedSpecies[i] = context.getString(speciesIds[i]);
-
-        return localizedSpecies;
     }
 
     private static ArrayMap<String, String> contactsTranslations = new ArrayMap<>();
@@ -274,37 +261,6 @@ public class Utilities {
             toReturn[i] = contactsTranslations.get(contacts[i]);
 
         return toReturn;
-    }
-
-    /**
-     * Get all of the application's supported languages
-     * @param context the application context
-     * @return Array containing all the supported languages
-     */
-    public static String[] getLocalizedSupportedLanguages(Context context){
-        int[] languagesIds = Values.LANGUAGES_IDS;
-        String[] localizedLanguages = new String[languagesIds.length];
-        for(int i = 0; i < languagesIds.length; i++)
-            localizedLanguages[i] = context.getString(languagesIds[i]);
-        return localizedLanguages;
-    }
-
-    public static String[] getLocalizedSupportedCountries(Context context){
-        int[] countriesIds = Values.COUNTRIES_IDS;
-        String[] localizedCountries = new String[countriesIds.length];
-        for(int i = 0; i < countriesIds.length; i++)
-            localizedCountries[i] = context.getString(countriesIds[i]);
-
-        return localizedCountries;
-    }
-
-    public static String[] getLocalizedImagesQualities(Context context){
-        int[] imageQualityIds = Values.IMAGE_QUALITY_IDS;
-        String[] supportedImageQuality = new String[imageQualityIds.length];
-        for(int i = 0; i < imageQualityIds.length; i++)
-            supportedImageQuality[i] = context.getString(imageQualityIds[i]);
-
-        return supportedImageQuality;
     }
 
     /**

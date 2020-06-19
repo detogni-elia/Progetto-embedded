@@ -149,8 +149,10 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
         contactsSpinner = findViewById(R.id.contact_spinner);
 
         //Get localized symptoms, species categories and contacts to display
-        String[] symptoms = Utilities.localizeSymptoms(this, null);
-        String[] categories = Utilities.getLocalizedCategories(this);
+        //String[] symptoms = Utilities.localizeSymptoms(this, null);
+        String[] symptoms = getResources().getStringArray(R.array.symptoms);
+        //String[] categories = Utilities.getLocalizedCategories(this);
+        String[] categories = getResources().getStringArray(R.array.categories);
         String[] contacts = Utilities.getLocalizedContacts(this);
 
         //Get english symptoms names to pass via intent to SpeciesListActivity to interrogate the database

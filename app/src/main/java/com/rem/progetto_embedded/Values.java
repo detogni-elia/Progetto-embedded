@@ -32,13 +32,6 @@ public class Values {
     public static final String LATITUDE = BASE + "latitude";
     public static final String LONGITUDE = BASE + "longitude";
 
-    //Ids of countries for localization
-    static final int[] COUNTRIES_IDS = {
-            R.string.in,
-            R.string.s_africa,
-            R.string.it
-    };
-
     //Countries english names for database queries
     public static final String[] COUNTRIES_DEFAULT_NAMES = {
             "India",
@@ -54,23 +47,10 @@ public class Values {
             R.string.contact_contact
     };
 
-    //Languages ids for localizations
-    static final int[] LANGUAGES_IDS = {
-            R.string.italian,
-            R.string.english
-    };
-
     //Languages default names used when selecting download resources
     public static final String[] LANGUAGES_DEFAULT_NAMES = {
             "it",
             "en"
-    };
-
-    //Image quality ids for localization
-    static final int[] IMAGE_QUALITY_IDS = {
-            R.string.low,
-            R.string.medium,
-            R.string.high
     };
 
     //Image quality names used when selecting download resources
@@ -92,46 +72,6 @@ public class Values {
     public static final String CATEGORY_ANIMALS = "Animals";
     public static final String CATEGORY_PLANTS = "Plants";
     public static final String CATEGORY_INSECTS = "Insects";
-
-    //Categories ids used for localization
-    static final int[] SPECIES_IDS = {
-            R.string.animals,
-            R.string.insects,
-            R.string.plants
-    };
-
-    //Ids of symptoms for localization
-    static final int[] SYMPTOMS_IDS = {
-            R.string.symptoms_ptosis,
-            R.string.symptoms_vomiting,
-            R.string.symptoms_dizziness,
-            R.string.symptoms_allergic_reaction,
-            R.string.symptoms_pain_at_bite_site,
-            R.string.symptoms_swelling,
-            R.string.symptoms_local_burning,
-            R.string.symptoms_urticaria,
-            R.string.symptoms_inflammation,
-            R.string.symptoms_redness,
-            R.string.symptoms_vesication,
-            R.string.symptoms_tetanic_convulsion,
-            R.string.symptoms_headache,
-            R.string.symptoms_convulsions,
-            R.string.symptoms_endema,
-            R.string.symptoms_discoloration,
-            R.string.symptoms_acute_pain,
-            R.string.symptoms_soreness,
-            R.string.symptoms_ulcer,
-            R.string.symptoms_pain,
-            R.string.symptoms_muscular_paralysis,
-            R.string.symptoms_chocking,
-            R.string.symptoms_diarrhea,
-            R.string.symptoms_necrosis,
-            R.string.symptoms_sleepiness,
-            R.string.symptoms_itchiness,
-            R.string.symptoms_abdominal_cramps,
-            R.string.symptoms_irritation,
-            R.string.symptoms_hallucinations
-    };
 
     //Symptoms default values for database queries
     public static final String[] SYMPTOMS_DEFAULT_NAMES = {

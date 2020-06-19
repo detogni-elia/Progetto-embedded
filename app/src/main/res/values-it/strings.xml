@@ -49,41 +49,58 @@
     <string name="notification_download_message">"Download di risorse per: "</string>
     <string name="unexpected_error">Errore inatteso.</string>
 
+    <string-array name="symptoms">
 
-    <!--    <string-array name="settings_languages">
-            <item>@string/italian</item>
-            <item>@string/english</item>
-        </string-array>-->
+        <item name="symptoms_abdominal_cramps">Crampi addominali</item>
+        <item name="symptoms_ptosis">Ptosi</item>
+        <item name="symptoms_vomiting">Nausea</item>
+        <item name="symptoms_diarrhea">Diarrea</item>
+        <item name="symptoms_dizziness">Vertigini</item>
+        <item name="symptoms_allergic_reaction">Reazione allergica</item>
+        <item name="symptoms_pain_at_bite_site">Dolore nell\'area di contatto</item>
+        <item name="symptoms_swelling">Gonfiore</item>
+        <item name="symptoms_local_burning">Bruciore localizzato</item>
+        <item name="symptoms_urticaria">Urticaria</item>
+        <item name="symptoms_inflammation">Infiammazione</item>
+        <item name="symptoms_redness">Rossore</item>
+        <item name="symptoms_vesication">Vesciche</item>
+        <item name="symptoms_tetanic_convulsion">Convulsioni da tetano</item>
+        <item name="symptoms_headache">Mal di testa</item>
+        <item name="symptoms_convulsions">Convulsioni</item>
+        <item name="symptoms_endema">Endema</item>
+        <item name="symptoms_discoloration">Scolorimento</item>
+        <item name="symptoms_acute_pain">Dolore acuto</item>
+        <item name="symptoms_soreness">Indolenzimento</item>
+        <item name="symptoms_ulcer">Ulcere</item>
+        <item name="symptoms_pain">Dolore</item>
+        <item name="symptoms_muscular_paralysis">Paralisi muscolare</item>
+        <item name="symptoms_chocking">Soffocamento</item>
+        <item name="symptoms_necrosis">Necrosi</item>
+        <item name="symptoms_sleepiness">Sonnolenza</item>
+        <item name="symptoms_itchiness">Prurito</item>
+        <item name="symptoms_irritation">Irritazione</item>
+        <item name="symptoms_hallucinations">Allucinazioni</item>
 
-    <string name="symptoms_abdominal_cramps">Crampi addominali</string>
-    <string name="symptoms_ptosis">Ptosi</string>
-    <string name="symptoms_vomiting">Nausea</string>
-    <string name="symptoms_diarrhea">Diarrea</string>
-    <string name="symptoms_dizziness">Vertigini</string>
-    <string name="symptoms_allergic_reaction">Reazione allergica</string>
-    <string name="symptoms_pain_at_bite_site">Dolore nell\'area di contatto</string>
-    <string name="symptoms_swelling">Gonfiore</string>
-    <string name="symptoms_local_burning">Bruciore localizzato</string>
-    <string name="symptoms_urticaria">Urticaria</string>
-    <string name="symptoms_inflammation">Infiammazione</string>
-    <string name="symptoms_redness">Rossore</string>
-    <string name="symptoms_vesication">Vesciche</string>
-    <string name="symptoms_tetanic_convulsion">Convulsioni da tetano</string>
-    <string name="symptoms_headache">Mal di testa</string>
-    <string name="symptoms_convulsions">Convulsioni</string>
-    <string name="symptoms_endema">Endema</string>
-    <string name="symptoms_discoloration">Scolorimento</string>
-    <string name="symptoms_acute_pain">Dolore acuto</string>
-    <string name="symptoms_soreness">Indolenzimento</string>
-    <string name="symptoms_ulcer">Ulcere</string>
-    <string name="symptoms_pain">Dolore</string>
-    <string name="symptoms_muscular_paralysis">Paralisi muscolare</string>
-    <string name="symptoms_chocking">Soffocamento</string>
-    <string name="symptoms_necrosis">Necrosi</string>
-    <string name="symptoms_sleepiness">Sonnolenza</string>
-    <string name="symptoms_itchiness">Prurito</string>
-    <string name="symptoms_irritation">Irritazione</string>
-    <string name="symptoms_hallucinations">Allucinazioni</string>
+    </string-array>
+
+    <string-array name="categories">
+        <item name="animals">Animali</item>
+        <item name="insects">Insetti</item>
+        <item name="plants">Piante</item>
+    </string-array>
+
+    <string-array name="image_qualities">
+        <item name="low">Bassa</item>
+        <item name="medium">Media</item>
+        <item name="high">Alta</item>
+    </string-array>
+
+    <string-array name="supported_countries">
+        <item name="india">India</item>
+        <item name="south_africa">Sud Africa</item>
+        <item name="italy">Italia</item>
+    </string-array>
+
     <string name="change_image_quality_button_text">CAMBIA QUALITÀ IMMAGINI</string>
     <string name="reset_selections">Azzera selezioni</string>
     <string name="search_by_symptoms">Ricerca per sintomi</string>

@@ -115,10 +115,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             toolbar=findViewById(R.id.toolbar);
             Log.d("ON_RESUME", "Ripristinata la toolbar");
         }
-        if(mSpinnerCountries == null) {
-            findViewById(R.id.countries_spinner);
-            Log.d("ON_RESUME", "Ripristinata lo spinner");
-        }
         if(drawer == null) {
             drawer=findViewById(R.id.drawer);
             Log.d("ON_RESUME", "Ripristinata il drawer");
@@ -251,9 +247,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     public void onClickCategory(View v){
         //Translate selected country's name to query SQLite database
-        //String country = Utilities.getCountryNameInEnglish(this, (String)mSpinnerCountries.getSelectedItem());
         String country = countriesFolders[mSpinnerCountries.getSelectedItemPosition()];
-        //String country = countriesFolders[mSpinnerCountries.getSelectedItemPosition()];
         String category;
         switch (v.getId()){
             case R.id.insects_button:

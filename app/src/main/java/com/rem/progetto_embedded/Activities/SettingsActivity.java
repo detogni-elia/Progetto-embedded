@@ -212,7 +212,8 @@ public class SettingsActivity extends AppCompatActivity implements ConnectionDia
 
         //Fill image quality spinner
         imageQualitySpinner = findViewById(R.id.settings_spinner_images_quality);
-        String[] qualities = Utilities.getLocalizedImagesQualities(this);
+        //String[] qualities = Utilities.getLocalizedImagesQualities(this);
+        String[] qualities = getResources().getStringArray(R.array.image_qualities);
         ArrayAdapter<String> qualitiesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, qualities);
         qualitiesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         imageQualitySpinner.setAdapter(qualitiesAdapter);

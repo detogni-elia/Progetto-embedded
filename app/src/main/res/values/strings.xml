@@ -48,35 +48,56 @@
     <string name="notification_download_message">"Downloading resources for: "</string>
     <string name="unexpected_error">Unexpected error.</string>
 
-    <string name="symptoms_abdominal_cramps">Abdominal cramps</string>
-    <string name="symptoms_ptosis">Ptosis</string>
-    <string name="symptoms_vomiting">Vomiting</string>
-    <string name="symptoms_diarrhea">Diarrhea</string>
-    <string name="symptoms_dizziness">Dizziness</string>
-    <string name="symptoms_allergic_reaction">Allergic reaction</string>
-    <string name="symptoms_pain_at_bite_site">Pain in the bite area</string>
-    <string name="symptoms_swelling">Swelling</string>
-    <string name="symptoms_local_burning">Localized burning sensation</string>
-    <string name="symptoms_urticaria">Urticaria</string>
-    <string name="symptoms_inflammation">Inflammation</string>
-    <string name="symptoms_redness">Redness</string>
-    <string name="symptoms_vesication">Vesication</string>
-    <string name="symptoms_tetanic_convulsion">Tetanic convulsion</string>
-    <string name="symptoms_headache">Headache</string>
-    <string name="symptoms_convulsions">Convulsions</string>
-    <string name="symptoms_endema">Endema</string>
-    <string name="symptoms_discoloration">Discoloration</string>
-    <string name="symptoms_acute_pain">Acute pain</string>
-    <string name="symptoms_soreness">Soreness</string>
-    <string name="symptoms_ulcer">Ulcers</string>
-    <string name="symptoms_pain">Pain</string>
-    <string name="symptoms_muscular_paralysis">Muscular paralysis</string>
-    <string name="symptoms_chocking">Chocking sensation</string>
-    <string name="symptoms_necrosis">Necrosis</string>
-    <string name="symptoms_sleepiness">Sleepiness</string>
-    <string name="symptoms_itchiness">Itchiness</string>
-    <string name="symptoms_irritation">Irritation</string>
-    <string name="symptoms_hallucinations">Hallucinations</string>
+    <string-array name="symptoms">
+        <item name="symptoms_abdominal_cramps">Abdominal cramps</item>
+        <item name="symptoms_ptosis">Ptosis</item>
+        <item name="symptoms_vomiting">Vomiting</item>
+        <item name="symptoms_diarrhea">Diarrhea</item>
+        <item name="symptoms_dizziness">Dizziness</item>
+        <item name="symptoms_allergic_reaction">Allergic reaction</item>
+        <item name="symptoms_pain_at_bite_site">Pain in the bite area</item>
+        <item name="symptoms_swelling">Swelling</item>
+        <item name="symptoms_local_burning">Localized burning sensation</item>
+        <item name="symptoms_urticaria">Urticaria</item>
+        <item name="symptoms_inflammation">Inflammation</item>
+        <item name="symptoms_redness">Redness</item>
+        <item name="symptoms_vesication">Vesication</item>
+        <item name="symptoms_tetanic_convulsion">Tetanic convulsion</item>
+        <item name="symptoms_headache">Headache</item>
+        <item name="symptoms_convulsions">Convulsions</item>
+        <item name="symptoms_endema">Endema</item>
+        <item name="symptoms_discoloration">Discoloration</item>
+        <item name="symptoms_acute_pain">Acute pain</item>
+        <item name="symptoms_soreness">Soreness</item>
+        <item name="symptoms_ulcer">Ulcers</item>
+        <item name="symptoms_pain">Pain</item>
+        <item name="symptoms_muscular_paralysis">Muscular paralysis</item>
+        <item name="symptoms_chocking">Chocking sensation</item>
+        <item name="symptoms_necrosis">Necrosis</item>
+        <item name="symptoms_sleepiness">Sleepiness</item>
+        <item name="symptoms_itchiness">Itchiness</item>
+        <item name="symptoms_irritation">Irritation</item>
+        <item name="symptoms_hallucinations">Hallucinations</item>
+    </string-array>
+
+    <string-array name="categories">
+        <item name="animals">Animals</item>
+        <item name="insects">Insects</item>
+        <item name="plants">Plants</item>
+    </string-array>
+
+    <string-array name="image_qualities">
+        <item name="low">Low</item>
+        <item name="medium">Medium</item>
+        <item name="high">High</item>
+    </string-array>
+
+    <string-array name="supported_countries">
+        <item name="india">India</item>
+        <item name="south_africa">South-Africa</item>
+        <item name="italy">Italy</item>
+    </string-array>
+
     <string name="change_image_quality_button_text">CHANGE IMAGE QUALITY</string>
     <string name="reset_selections">Reset selections</string>
     <string name="search_by_symptoms">Search by symptoms</string>
