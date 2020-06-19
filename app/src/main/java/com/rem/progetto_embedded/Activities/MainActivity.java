@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private boolean bound;
     private String[] countriesFolders;
 
-
     //permissions codes
     private static final int REQUEST_CODE=100;
 
@@ -231,6 +230,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         countriesFolders = Utilities.getDownloadedCountries(this);
         if(countriesFolders == null)
             return;
+
+
         //Translate names of available countries to display them
         String[] localizedCountries = Utilities.localizeCountries(this, countriesFolders);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, localizedCountries);
