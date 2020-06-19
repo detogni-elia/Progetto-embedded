@@ -101,6 +101,13 @@
         <item name="italy">Italia</item>
     </string-array>
 
+    <string-array name="contacts">
+        <item name="bite">Morso</item>
+        <item name="stung">Puntura</item>
+        <item name="eaten">Ingerito</item>
+        <item name="skin-contact">Contatto con la pelle</item>
+    </string-array>
+
     <string name="change_image_quality_button_text">CAMBIA QUALITÀ IMMAGINI</string>
     <string name="reset_selections">Azzera selezioni</string>
     <string name="search_by_symptoms">Ricerca per sintomi</string>

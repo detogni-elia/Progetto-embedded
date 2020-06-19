@@ -230,37 +230,12 @@ public class Utilities {
             resetArrayMaps();
         }
         if(contactsTranslations.isEmpty()) {
-            int[] contactsIds = Values.CONTACTS_IDS;
+            String[] localizedContacts = context.getResources().getStringArray(R.array.contacts);
             String[] contacts = Values.CONTACTS_DEFAULT_NAMES;
             for (int i = 0; i < contacts.length; i++)
-                contactsTranslations.put(contacts[i], context.getString(contactsIds[i]));
+                contactsTranslations.put(contacts[i], localizedContacts[i]);
         }
         return contactsTranslations.get(toLocalize);
-    }
-
-    /**
-     * Get localized contact types
-     * @param context The application context
-     * @return The String array containing the localized contact types
-     */
-    public static String[] getLocalizedContacts(Context context){
-        String language = Locale.getDefault().getLanguage();
-        if(!language.equals(lastLanguage)) {
-            lastLanguage = language;
-            resetArrayMaps();
-        }
-        String[] contacts = Values.CONTACTS_DEFAULT_NAMES;
-        if(contactsTranslations.isEmpty()) {
-            int[] contactsIds = Values.CONTACTS_IDS;
-            for (int i = 0; i < contacts.length; i++)
-                //localizedContactsTypes[i] = context.getString(contactsIds[i]);
-                contactsTranslations.put(contacts[i], context.getString(contactsIds[i]));
-        }
-        String[] toReturn  = new String[contacts.length];
-        for(int i = 0; i < toReturn.length; i++)
-            toReturn[i] = contactsTranslations.get(contacts[i]);
-
-        return toReturn;
     }
 
     /**

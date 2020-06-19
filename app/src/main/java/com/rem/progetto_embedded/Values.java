@@ -39,14 +39,6 @@ public class Values {
             "Italy"
     };
 
-    //Ids of contact type for localization
-    static final int[] CONTACTS_IDS = {
-            R.string.contact_bite,
-            R.string.contact_stung,
-            R.string.contact_eaten,
-            R.string.contact_contact
-    };
-
     //Languages default names used when selecting download resources
     public static final String[] LANGUAGES_DEFAULT_NAMES = {
             "it",

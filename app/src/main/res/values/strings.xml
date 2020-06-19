@@ -98,6 +98,13 @@
         <item name="italy">Italy</item>
     </string-array>
 
+    <string-array name="contacts">
+        <item name="bite">Bite</item>
+        <item name="stung">Stung</item>
+        <item name="eaten">Eaten</item>
+        <item name="skin-contact">Skin contact</item>
+    </string-array>
+
     <string name="change_image_quality_button_text">CHANGE IMAGE QUALITY</string>
     <string name="reset_selections">Reset selections</string>
     <string name="search_by_symptoms">Search by symptoms</string>

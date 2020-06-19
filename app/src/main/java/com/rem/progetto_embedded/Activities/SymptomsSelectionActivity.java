@@ -153,7 +153,8 @@ public class SymptomsSelectionActivity extends AppCompatActivity implements Symp
         String[] symptoms = getResources().getStringArray(R.array.symptoms);
         //String[] categories = Utilities.getLocalizedCategories(this);
         String[] categories = getResources().getStringArray(R.array.categories);
-        String[] contacts = Utilities.getLocalizedContacts(this);
+        //String[] contacts = Utilities.getLocalizedContacts(this);
+        String[] contacts = getResources().getStringArray(R.array.contacts);
 
         //Get english symptoms names to pass via intent to SpeciesListActivity to interrogate the database
         symptomsDefaultNames = Values.SYMPTOMS_DEFAULT_NAMES;
