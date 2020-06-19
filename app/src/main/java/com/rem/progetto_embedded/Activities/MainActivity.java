@@ -213,7 +213,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Intent startIntent = new Intent(MainActivity.this, FakeDownloadIntentService.class);
         //Bind to FakeDownloadIntentService to listen to updates for the downloads
         bindService(startIntent, connection, Context.BIND_AUTO_CREATE);
-        //If no resources available, ask user to download them if there's not a download in progress
         if(countriesFolders == null) {
             //Reset adapter if resources were removed while the app was in background
             mSpinnerCountries.setAdapter(null);
@@ -279,7 +278,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Log.i(TAG, "Service is running or resources are already available");
             }
 
-            //If service is not running, it means we should ask the user to download resources
+            //We ask the user to download resources, it means we should ask the user to download resources
             else {
                 //We show a message only if there isn't one already on screen. We want to avoid overlap of identical DialogFragments in case of configuration changes
                 List<Fragment> fragments = getSupportFragmentManager().getFragments();
