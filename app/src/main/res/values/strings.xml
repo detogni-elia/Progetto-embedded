@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ESP Project</string>
+    <string name="app_name">viper.ly</string>
     <string name="species_item_imageview_placeholder_description">Placeholder description</string>
     <string name="menu_search_title">Search</string>
     <string name="species_list_query_hint">Search for specific name</string>

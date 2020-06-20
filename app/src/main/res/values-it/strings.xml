@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Progetto sistemi embedded</string>
+    <string name="app_name">viper.ly</string>
     <string name="species_item_imageview_placeholder_description">Descrizione standard</string>
     <string name="menu_search_title">Ricerca</string>
     <string name="species_list_query_hint">Cerca per nome della specie</string>
