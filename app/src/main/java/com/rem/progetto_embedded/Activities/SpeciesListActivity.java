@@ -151,8 +151,6 @@ public class SpeciesListActivity extends AppCompatActivity implements SpeciesLis
             adapter = null;
             Log.d(TAG, "Adapter eliminata");
         }
-
-
     }
 
     @Override

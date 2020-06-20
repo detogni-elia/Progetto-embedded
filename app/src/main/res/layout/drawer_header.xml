@@ -15,7 +15,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
         android:contentDescription="@string/app_name"
-        app:srcCompat="@drawable/taz" />
+        app:srcCompat="@drawable/ic_insect_480" />
 
     <TextView
         android:layout_width="wrap_content"

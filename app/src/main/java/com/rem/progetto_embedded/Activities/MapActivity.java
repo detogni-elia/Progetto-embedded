@@ -55,11 +55,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         animalLan = intent.getDoubleExtra(Values.EXTRA_LATITUDE,0);
         animalLon = intent.getDoubleExtra(Values.EXTRA_LONGITUDE,0);
         animalName = intent.getStringExtra(Values.EXTRA_NAME);
-
-
     }
-
-
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -105,6 +101,4 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         );
         mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(mMapBoundary,0));
     }
-
-
 }
