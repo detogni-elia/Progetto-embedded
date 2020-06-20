@@ -32,7 +32,6 @@ import com.rem.progetto_embedded.Values;
 
 import java.util.Locale;
 
-//TODO: COMMENT EVERYTHING
 public class SettingsActivity extends AppCompatActivity implements ConnectionDialogFragment.ConnectionDialogDismissListener, FakeDownloadIntentService.DownloadCallbacks, FirstStartDialogFragment.FirstStartListener {
     private static final int REQUEST_CODE = 100;
     private String[] countries;
@@ -212,7 +211,6 @@ public class SettingsActivity extends AppCompatActivity implements ConnectionDia
 
         //Fill image quality spinner
         imageQualitySpinner = findViewById(R.id.settings_spinner_images_quality);
-        //String[] qualities = Utilities.getLocalizedImagesQualities(this);
         String[] qualities = getResources().getStringArray(R.array.image_qualities);
         ArrayAdapter<String> qualitiesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, qualities);
         qualitiesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

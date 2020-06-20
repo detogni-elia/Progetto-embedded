@@ -1,7 +1,9 @@
 package com.rem.progetto_embedded;
 
 import android.app.Application;
+import android.content.ComponentCallbacks2;
 import android.content.Context;
+import android.content.res.Configuration;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -19,7 +21,7 @@ import java.util.List;
  * SpeciesViewModel queries the database and is used inside SpeciesListActivity
  */
 
-public class SpeciesViewModel extends AndroidViewModel {
+public class SpeciesViewModel extends AndroidViewModel implements ComponentCallbacks2 {
     private LiveData<List<Creatures>> species;
     private LiveData<List<Symptoms>> symptoms;
     private LiveData<Contacts> contact;
@@ -42,15 +44,17 @@ public class SpeciesViewModel extends AndroidViewModel {
      * @return LiveData containing the List of Creatures objects corresponding to the query parameters, return an empty List if the database cannot be opened
      */
     public LiveData<List<Creatures>> getSpecies(String country, String category, List<String> symptoms, String contact) {
-        if(db == null || species == null) {
-            try {
-                db = AppDatabase.getInstance(getApplication().getApplicationContext(), country);
-            }
-            //If database not found show error message and return empty List
-            catch (FileNotFoundException e){
-                Context c = getApplication().getApplicationContext();
-                Utilities.showToast(c, c.getString(R.string.error_database_not_found));
-                return new MutableLiveData<>();
+        if(species == null) {
+            if(db == null) {
+                try {
+                    db = AppDatabase.getInstance(getApplication().getApplicationContext(), country);
+                }
+                //If database not found show error message and return empty List
+                catch (FileNotFoundException e) {
+                    Context c = getApplication().getApplicationContext();
+                    Utilities.showToast(c, c.getString(R.string.error_database_not_found));
+                    return new MutableLiveData<>();
+                }
             }
             //Is there are no symptoms selected we simply return all species
             if (symptoms == null || symptoms.isEmpty()) {
@@ -71,15 +75,16 @@ public class SpeciesViewModel extends AndroidViewModel {
      * @return LiveData containing a single Contacts object
      */
     public LiveData<Contacts> getContact(String country, String latinName){
-        if(db == null || contact == null){
-            //Same error checking as before
-            try {
-                db = AppDatabase.getInstance(getApplication().getApplicationContext(), country);
-            }
-            catch (FileNotFoundException e){
-                Context c = getApplication().getApplicationContext();
-                Utilities.showToast(c, c.getString(R.string.error_database_not_found));
-                return new MutableLiveData<>();
+        if(contact == null){
+            if(db == null) {
+                //Same error checking as before
+                try {
+                    db = AppDatabase.getInstance(getApplication().getApplicationContext(), country);
+                } catch (FileNotFoundException e) {
+                    Context c = getApplication().getApplicationContext();
+                    Utilities.showToast(c, c.getString(R.string.error_database_not_found));
+                    return new MutableLiveData<>();
+                }
             }
             contact = db.creaturesDao().getContactOfCreature(latinName);
         }
@@ -93,17 +98,38 @@ public class SpeciesViewModel extends AndroidViewModel {
      * @return LiveData containing a List of Symptoms
      */
     public LiveData<List<Symptoms>> getSymptoms(String country, String latinName){
-        if(db == null || symptoms == null){
-            try {
-                db = AppDatabase.getInstance(getApplication().getApplicationContext(), country);
-            }
-            catch (FileNotFoundException e){
-                Context c = getApplication().getApplicationContext();
-                Utilities.showToast(c, c.getString(R.string.error_database_not_found));
-                return new MutableLiveData<>();
+        if(symptoms == null){
+            if(db == null) {
+                try {
+                    db = AppDatabase.getInstance(getApplication().getApplicationContext(), country);
+                } catch (FileNotFoundException e) {
+                    Context c = getApplication().getApplicationContext();
+                    Utilities.showToast(c, c.getString(R.string.error_database_not_found));
+                    return new MutableLiveData<>();
+                }
             }
             symptoms = db.creaturesDao().getSymptomsOfCreature(latinName);
         }
         return symptoms;
     }
+
+    /**
+     * Clear memory when RAM is almost full
+     * @param level The level of necessity to free memory
+     */
+    @Override
+    public void onTrimMemory(int level) {
+        if(level >= TRIM_MEMORY_RUNNING_CRITICAL){
+            species = null;
+            symptoms = null;
+            contact = null;
+            db = null;
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration configuration){}
+
+    @Override
+    public void onLowMemory() {}
 }

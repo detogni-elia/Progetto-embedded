@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.rem.progetto_embedded.Adapters.SpeciesListAdapter;
+import com.rem.progetto_embedded.Database.AppDatabase;
 import com.rem.progetto_embedded.Database.Entity.Creatures;
 import com.rem.progetto_embedded.R;
 import com.rem.progetto_embedded.SpeciesViewModel;
@@ -148,6 +149,7 @@ public class SpeciesListActivity extends AppCompatActivity implements SpeciesLis
 
     //Release Memory when system resources becomes low
     //NON TESTATO NEI CASI DI MEMORY RUNNING LOW E CRITICAL
+    @Override
     public void onTrimMemory(int level) {
         if(level == ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN) {
             //Sembrava funzionare correttamente anche senza onResume

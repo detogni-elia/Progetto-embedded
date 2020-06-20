@@ -1,10 +1,13 @@
 package com.rem.progetto_embedded.Activities;
 
-import androidx.fragment.app.FragmentActivity;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -19,7 +22,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.rem.progetto_embedded.R;
 import com.rem.progetto_embedded.Values;
 
-public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 
@@ -55,6 +58,15 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         animalLan = intent.getDoubleExtra(Values.EXTRA_LATITUDE,0);
         animalLon = intent.getDoubleExtra(Values.EXTRA_LONGITUDE,0);
         animalName = intent.getStringExtra(Values.EXTRA_NAME);
+
+        //Set toolbar and show "back" button
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(R.string.species_location);
+        }
     }
 
     @Override
@@ -81,11 +93,16 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         setView();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==android.R.id.home)
+            finish();
+
+        return super.onOptionsItemSelected(item);
+    }
 
     private Double randomRadius(){
-
-        Double radius = MIN + (Math.random() * ((MAX - MIN) + 1));
-        return radius;
+        return MIN + (Math.random() * ((MAX - MIN) + 1));
     }
 
     private void setView()

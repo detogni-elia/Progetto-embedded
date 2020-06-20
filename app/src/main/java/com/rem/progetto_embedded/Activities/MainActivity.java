@@ -28,6 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.rem.progetto_embedded.Database.AppDatabase;
 import com.rem.progetto_embedded.Fragments.FirstStartDialogFragment;
 import com.google.android.material.navigation.NavigationView;
 import java.util.List;
@@ -39,7 +40,7 @@ import com.rem.progetto_embedded.Utilities;
 import com.rem.progetto_embedded.Values;
 import com.rem.progetto_embedded.R;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, FakeDownloadIntentService.DownloadCallbacks, FirstStartDialogFragment.FirstStartListener{
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ComponentCallbacks2, FakeDownloadIntentService.DownloadCallbacks, FirstStartDialogFragment.FirstStartListener{
     private static final String TAG = "MainActivity";
 
     //UI Widgets
@@ -160,9 +161,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     //Gestione delle callbacks legate alla memoria
+    @Override
     public void onTrimMemory(int level)
     {
-        if(level == ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN)
+        if(level >= ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN)
         {
             Log.d(TAG, "onTrimMemory called");
             //Se l' app passa in background elimino i riferimenti all UI
@@ -182,6 +184,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             insects_button = null;
             plants_button = null;
             Log.d(TAG, "Removed references to UI buttons");
+        }
+        //Clear AppDatabase cache when memory is critical
+        if(level >= TRIM_MEMORY_RUNNING_CRITICAL){
+            AppDatabase.clearInstancesCache();
         }
     }
 

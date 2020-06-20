@@ -100,5 +100,6 @@
     <string name="your_position">Your Position</string>
     <string name="symptoms_placeholder">%1$s: %2$s</string>
     <string name="wow">Wow, such empty.</string>
+    <string name="species_location">Location</string>
 
 </resources>

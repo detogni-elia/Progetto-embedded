@@ -1,6 +1,7 @@
 package com.rem.progetto_embedded.Database;
 
 
+import android.content.ComponentCallbacks2;
 import android.content.Context;
 import android.util.ArrayMap;
 
@@ -22,15 +23,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 @Database(entities = {Creatures.class, Contacts.class, Symptoms.class, Effects.class}, version = 1)
-public abstract class AppDatabase extends RoomDatabase
-{
+public abstract class AppDatabase extends RoomDatabase{
     public abstract CreaturesDao creaturesDao();
     public abstract ContactsDao contactsDao();
     public abstract SymptomsDao symptomsDao();
     public abstract EffectsDao effectsDao();
-    //ArrayMap saves the instances of all the databases opened during the applications's lifecycle in order to open them only once
+    //ArrayMap saves the instances of all the databases opened during the applications's lifecycle in order to load them only once
     private static ArrayMap<String, AppDatabase> instances = new ArrayMap<>();
-    public static synchronized AppDatabase getInstance(Context context, String country) throws FileNotFoundException {
+    public static AppDatabase getInstance(Context context, String country) throws FileNotFoundException {
         //Get country's database folder
         File resFolder = Utilities.getResourcesFolder(context);
         File dbPath = new File(resFolder, country + "/Database/database.db");
@@ -44,5 +44,15 @@ public abstract class AppDatabase extends RoomDatabase
             instances.put(country + dbPath.lastModified(), instance);
         }
         return instances.get(country + dbPath.lastModified());
+    }
+
+    /**
+     * Clear AppDatabase cache when memory low
+     */
+    public static void clearInstancesCache(){
+        for(int i = 0; i < instances.size(); i++)
+            instances.valueAt(i).close();
+
+        instances.clear();
     }
 }

@@ -1,153 +1,64 @@
-Cose da fare
+Descrizione applicazione
 
-1) Layout sintomi(checkbox) --> ELIA
+viper.ly è un'applicazione pensata per i mercati emergenti che vuole fornire un aiuto nell'identificare specie di animali, insetti e piante
+pericolosi per l'uomo. Un utente può perciò scaricare uno o più pacchetti di risorse, ognuno corrispondente a una certa nazione, contenenti immagini e database di informazioni.
 
-2) Settings --> MATTIA
-    --> Download automatici
-    --> Lingua
-    --> Qualità foto scaricate
-    --> Tasto aggiorna posizione
-    --> {Se la memoria è poca ==> salvataggio in SD [DikLRUCache]} --> Tasto rimuovi cache dalla memoria
+La prima funzionalità fornita è quella di visualizzare tutte le specie per una certa nazione, suddivise nelle 3 categorie Animali, Insetti, Piante.
+La lista riporta il nome comune della specie e l'utente può filtrare gli elementi per il loro nome, per poter trovare più in fretta l'elemento voluto.
 
-3) {Struttura file in memoria ==> com.detons97gmail.progetto_embedded.Database} --> Più avanti
+Per ogni specie è inoltre presente una seconda schermata, relativa ai dettagli. Qui viene mostrata la foto con dimensioni maggiori, vengono riportate ulteriori
+informazioni come il nome latino, la dieta (per animali e insetti), i sintomi causati dal contatto (morso, puntura, ingestione o contatto con la pelle) e una
+descrizione approfondita della specie in questione. È inoltre possibile visualizzare in una mappa le aree in cui è più probabile incontrare la determinata specie,
+mostrando anche la posizione del dispositivo, se disponibile.
 
-4) Navigazione tra le activity --> ELIA
-    --> Intent con i giusti extra
-    --> Navigazione all' indietro
-
-5) Activity di prima apertura --> MATTIA
-    --> con un if per capire se è la prima attivazione
-    --> permessi [Lettura/scrittura]
-
-6) Gestione RAM [Adapter Species_list_adapter][Android.util.LRUCache] --> ROCCO --> Provo a caricare immagini a manetta e riduco RAM emulatore
-        --> Primo livello ==> Riduzione cache (resize, trim)
-        --> Secondo livello ==> Elimino il riferimento alla cache
-
-7) Utilizzo di risorse vettoriali nella MainActivity[icone] --> MATTIA
-
-8) Download fasulli --> Finisce ELIA
-    --> Sistemare un pelo ( cartella di destinazione)
-    --> AddressBar [Notifica]
-    --> Da fare in un service e usare JobIntentService ( al posto di IntentService)
-    --> Prima del download fare controllo dei permessi, se mancanti chiederli
-
-9) Report --> ROCCO
-
-10) com.detons97gmail.progetto_embedded.Database --> ELIA
-    --> Databse differente per ogni nazione e per ogni lingua
-    --> Attributi
-            - Path Immagine
-            - Nome latino
-            - Nome Specie Tradotto
-            - Lista di sintomi SEPARATI DA VIRGOLE
-            - Tipologia di contatto (Unica)
-    --> Room
-
-11) Controllo impostazioni di download --> DOPO
-    --> Esempio download solo wifi
-
-12) Icona Sintomi vettoriale --> MATTIA
-
-13) Icona dell'applicazione --> Guardiamo un po' tutti
-
-Proposta schema funzionamento app:
-
-1) MainActivity controlla cartella applicazione rilevando le cartelle relative ad ogni nazione, ex: vengono rilevate cartelle per Italia, Cina, India, Africa.
-Nello spinner verranno quindi mostrate solo quelle 4 nazioni. Sarebbe opportuno controllare che in ogni cartella vi sia il database relativo presente, se così non fosse
-potremmo evitare di mostrare quella nazione.
-
-MainActivity chiama poi SpeciesListActivity passando come extra nell'Intent: NAZIONE, CATEGORIA (Animali, Insetti, Piante).
-
-2) SpeciesListActivity si occupa solo di passare le informazioni a SpeciesListFragment. C'è secondo me una scelta da fare ossia:
-    A) I percorsi delle foto vengono presi direttamente dal database, possibilmente più veloce che scansionare tutta la cartella delle foto, e porterebbe ad evitare errori.
-    Ad esempio se nella cartella ci fossero foto che non sono state inserite da noi, l'app potrebbe avere dei comportamenti scorretti. Controllare questo tipo di errori sarebbe complicato.
-    Tuttavia può anche essere che percorsi di foto nel database non corrispondano a foto presenti in memoria, perchè sono state ad esempio cancellate. In questo caso si potrebbe semplicemente
-    mostrare una foto placeholder
-
-    B) I percorsi delle foto vengono presi scansionando la cartella delle foto, andando a prendere le informazioni nel database delle sole foto presenti. I problemi di questo approccio sono quelli descritti sopra.
-    Sarei dell'opinione di usare l'alternativa A, ma dobbiamo discuterne.
-
-In ogni caso, dovrebbe essere il fragment ad aprire la connessione col database. Questo permetterebbe di mantenerla aperta fino a che l'Activity ospitante non viene distrutta del tutto, ma cambi di orientamento
-manterrebbero aperta la connessione, che è quello che vogliamo. Allo SpeciesListAdapter passiamo solo le informazioni dei percorsi delle foto e dei nomi degli animali, presi dal database. Solo al click di un elemento
-andiamo a prendere le informazioni rimanenti dal database (Specie, dieta, sintomi, descrizione, aree geografiche).
-
-3) DetailsActivity è il punto finale di questo percorso e non deve fare niente di complicato, solo mostrare le informazioni che ha ricevuto.
-
-4) Un percorso alternativo è quello dei sintomi, dove va interrogato il database per conoscere tutti i sintomi registrati. Una volta selezionati, vanno passati tramite Intent alla SpeciesListActivity.
-Quindi SpeciesListActivity mostrerebbe Animali, insetti, piante con quei sintomi dopo aver interrogato il database.
-Con questa soluzione andrebbero aperte 2 connessioni diverse al database. Una possibile soluzione potrebbe essere quella di usare sintomi predefiniti e di inserirli staticamente in una classe Java, in questo modo
-dovremmo interrogare il database solo nella SpeciesListActivity.
+La seconda funzione importante fornita dall'app è la possibilità di ricercare una determinata specie in base ai sintomi. Poniamo per esempio di essere stati morsi
+da un serpente che non sappiamo riconoscere. Inserendo nella schermata la nazione in cui ci si trova, il tipo di contatto, la categoria e selezionando tutti i sintomi
+che si provano, possiamo sperare di restringere il campo di ricerca e di trovare il serpente che ci ha morso, potendo così fornire queste informazioni al personale medico
+che dovrà occuparsi di noi.
 
 
+Ottimizzazioni applicate
 
-OPZIONI:
-Qualità foto: Alta o bassa
-Lingua: Italiano inglese
-Rimuovi cache memoria
-Se scheda SD, download in SD, altrimenti no
+Essendo un'applicazione realizzata secondo le linee guida Build for Billions, vengono inoltre applicate diverse ottimizzazioni secondo le linee guida fornite da Google.
 
-Show progress bar: https://stuff.mit.edu/afs/sipb/project/android/docs/training/notify-user/display-progress.html
+DIMENSIONI DELL'APK
+    1. Abilitato code e resource shrinking.
+    2. La maggiorparte delle icone utilizzate sono in formato vettoriale.
+    3. Solo italiano e inglese sono incluse nei file di traduzione per le stringhe. Altre lingue potrebbero essere supportate dinamicamente attraverso gli App Bundle, ma ciò non
+    viene realizzato dalla nostra app.
+    4. L'applicazione arriva senza nessuna foto o database disponibile (sono presenti all'interno delle risorse solo per simulare il download).
+    Un utente che vuole utilizzare l'applicazione deve per forza scaricare almeno un pacchetto relativo a una nazione, in questo modo viene scaricato dal Play Store solo il minimo indispensabile.
 
-DA CHIEDERE: Non ricordo perchè chiediamo il permesso di accedere alla memoria esterna.
+SPAZIO OCCUPATO DOPO L'INSTALLAZIONE
+    1. Il download delle risorse seleziona automaticamente la destinazione all'interno del File System, privilegiando eventuali schede sd che si assume siano più
+    spaziose della memoria interna del dispositivo.
+    2. Il download delle risorse permette di selezionare la qualità delle immagini scaricate (Alta, Media, Bassa). Ogni immagine è inoltre in formato .webp per
+    ridurre ulteriormente la quantità di spazio occupata.
+    3. In ogni momento è possibile dalle impostazioni cambiare la qualità delle immagini scaricate, eventualmente riducendola per liberare spazio.
+    4. Per ogni nazione viene mantenuto un solo database. In caso di un cambio di lingua di sistema un download di nuove risorse sovrascrive il database presente.
+    5. Per visualizzare le foto viene usata la libreria Glide. Essa mantiene nella memoria interna al dispositivo una cache contenente le immagini decodificate, per poterle caricare
+    più in fretta. Come descritto nel report il sistema Android gestisce automaticamente questo tipo di cache, assegnando dinamicamente a ogni app una quantità di spazio in base
+    all'utilizzo che ne fa l'utente. In caso di necessità inoltre questi file vengono eliminati in modo automatico.
 
+CONNESSIONE A INTERNET E AI SERVIZI DI LOCALIZZAZIONE
+    1. Prima del download l'applicazione verifica il tipo di connessione in uso. Se viene rilevata una connessione a consumo l'utente viene avvertito, in modo che possa
+    decidere se continuare con il download o se rimandarlo a quando sarà disponibile una connessione meno costosa e con meno limiti.
+    2. Una volta scaricate le risorse necessarie, l'applicazione funziona completamente offline.
+    3. Per la visualizzazione delle zone in cui una specie è presente, le coordinate sono prese direttamente dal database.
+    Per quanto riguarda le coordinate del dispositivo, queste vengono prese dalla cache del servizio di localizzazione e non viene mai richiesta esplicitamente una nuova posizione.
+    Se la posizione non è disponibile ci si limita a mostrare quella della specie. In sostanza questa funzione non richiede mai di attivare il GPS.
 
+MEMORIA RAM
+    1. Le componenti dell'app rispondono ai metodi di ComponentCallbacks2 e liberano risorse quando il sistema lo richiede.
+    2. La libreria Glide, utilizzata per visualizzare le foto, risponde anch'essa a ComponentCallbacks2 e ridimensiona le cache in RAM in caso di necessità.
+    3. Si è cercato di utilizzare il Memory Profiler di Android Studio per rilevare eventuali memory leaks. Ammettendo di non essere ferrati in materia,
+    ci siamo affidati alle analisi del profiler, che non ne ha individuati.
 
-SINTOMI
+PRESTAZIONI
+    1. Vista la possibilità di avere più database, viene mantenuta una cache di istanze aperte per ogni diverso database aperto per evitare di caricarli continuamente
+    dalla memoria di massa.
+    2. L'utilizzo di Glide migliora visibilmente le prestazioni su dispositivi poco performanti caricando le immagini con qualità diverse in base alle dimensioni di
+    visualizzazione. Inoltre vengono evitate numerose chiamate al garbage collector riutilizzando aggressivamente la memoria già allocata.
 
-Abdominals Cramps
-Muscolar Paralysis
-Ptosis
-Vomiting
-Diarrhoea
-Dizziness
-Allergic Reactions
-Pain at the site of the bite
-Swelling
-Local burning sensation
-Urticaria
-Inflammation
-Redness
-Vesication
-Tetanic convulsions
-Headache
-Convulsions
-Endema
-Discoloration
-Vomiting
-Acute Pain
-Soreness
-Ulcer
-Pain
-Muscular paralysis
-Choking sensation
-Diarrhea
-Necrosis
-Swelling
-Sleepiness
-Itchiness
-Abdominal cramps
-Irritation
-Hallucinations
-
-
-
-Path esempio: /COUNTRY/Images/[Plants-Insects-Animals]/nome.webp
-
-
-Cambio globale qualità immagini
-
-
-MOTIVI PER USARE SINTOMI IN INGLESE:
-    1.Si vuole evitare una query al database ogni volta che viene aperta la ricerca dei sintomi
-    2.Anche se AppDatabase mantiene una rererence ai database aperti, ci sono problemi di inconsistenza ossia:
-        Ogni database di una certa nazione può non contenere tutti i sintomi possibili, faccio una query
-        su tutti i database disponibili solo per prendere tutti i sintomi?
-
-        Altra soluzione sarebbe quella di prendere i sintomi solo della nazione selezionata, cambio dati nell'adapter ogni volta che l'utente
-        modifica lo spinner?
-
-        È anche difficile mettere in cache queste informazioni. Il ViewModel infatti viene distrutto quando l'activity che lo chiama viene distrutta.
-
-        Si è preferito usare una lista di sintomi standard, salvarli nei database in lingua inglese e fornire le traduzioni nelle risorse
-        dell'app. In questo modo i sintomi da caricare sono costanti e non ci sono database da interrogare, l'interrogazione avviene solo
-        quando l'utente esegue una ricerca.
+SUPPORTO PER SCHERMI DI VARIE DIMENSIONI
+    1. I layout sono stati testati e adattati per schermi con un range abbastanza vario di dimensioni, senza però includere risorse diverse per ogni tipo di schermo.

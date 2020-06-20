@@ -19,3 +19,5 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+#Class must have this exact name in order for MapActivity to be inflated correctly (caused by map fragment pointing to the exact class name)
+-keep public class com.google.android.gms.maps.SupportMapFragment

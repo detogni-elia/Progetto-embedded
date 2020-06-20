@@ -24,6 +24,7 @@ import androidx.room.ForeignKey;
                         onDelete = ForeignKey.CASCADE,
                         onUpdate = ForeignKey.CASCADE)
         })
+
 public class Effects
 {
     @ColumnInfo(name="creature")

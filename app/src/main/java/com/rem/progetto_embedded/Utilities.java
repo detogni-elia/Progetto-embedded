@@ -81,7 +81,7 @@ public class Utilities {
     }
 
     /**
-     * Get position of app's resources, choosing between internal shared storage and external sd card if needed, prioritizing external storage.
+     * Get position of app's resources, choosing between internal shared storage and external sd card if present, prioritizing external storage.
      * @param context The application context
      * @return File relative to application's folder either in sd card or internal storage, choosing one of the two if it's the first time calling this method.
      * Returns null only if it's the first time calling this method and both filesystems are low on storage.

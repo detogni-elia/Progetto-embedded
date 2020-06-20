@@ -105,5 +105,6 @@
 
     <string name="your_position">La tua posizione</string>
     <string name="wow">Wow, such empty.</string>
+    <string name="species_location">Posizione</string>
 
 </resources>

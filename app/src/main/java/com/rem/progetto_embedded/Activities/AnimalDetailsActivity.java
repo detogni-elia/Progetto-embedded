@@ -161,16 +161,11 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
                 public void onSuccess(Location location) {
 
                     //update or fetch a location
-
-
-                    Log.i(TAG, "onSuccess: " + location);
-
                     if (location != null) {
                         String myLat = String.valueOf(location.getLatitude());
                         String myLon = String.valueOf(location.getLongitude());
 
-                        Log.i(TAG, "onSuccess: lat,lon " + myLat + " " + myLon);
-
+                        Log.i(TAG, "FusedLocation onSuccess: lat,lon " + myLat + " " + myLon);
 
                         SharedPreferences sharedPreferences = getSharedPreferences(Values.PREFERENCES_NAME,MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
