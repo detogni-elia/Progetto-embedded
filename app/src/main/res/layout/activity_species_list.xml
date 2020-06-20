@@ -9,13 +9,17 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:padding="16dp">
 
-        <!--FrameLayout
-            android:id="@+id/species_list_fragment_container"
+        <ImageView
+            android:id="@+id/such_empty"
+            android:visibility="gone"
+            android:contentDescription="@string/wow"
+            android:src="@drawable/wow"
+            android:alpha="0.12"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </FrameLayout-->
+            android:layout_height="match_parent"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/species_list_recycler_view"

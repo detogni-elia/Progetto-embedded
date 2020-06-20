@@ -16,6 +16,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.rem.progetto_embedded.Adapters.SpeciesListAdapter;
 import com.rem.progetto_embedded.Database.Entity.Creatures;
@@ -75,6 +77,10 @@ public class SpeciesListActivity extends AppCompatActivity implements SpeciesLis
             public void onChanged(List<Creatures> dataWrappers) {
                 adapter.setData(dataWrappers);
                 adapter.notifyDataSetChanged();
+                if(dataWrappers.isEmpty()) {
+                    Utilities.showToast(getApplicationContext(), getString(R.string.wow));
+                    ((ImageView)findViewById(R.id.such_empty)).setVisibility(View.VISIBLE);
+                }
             }
         });
 

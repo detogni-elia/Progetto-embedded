@@ -48,7 +48,7 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
     private LinearLayout symptomsEntry;
     private TextView speciesDescription;
 
-    Double animalLatitude;
+    private Double animalLatitude;
     Double animalLongitude;
     String commonName;
 

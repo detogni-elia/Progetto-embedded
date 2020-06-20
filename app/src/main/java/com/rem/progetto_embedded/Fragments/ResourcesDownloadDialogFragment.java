@@ -18,7 +18,6 @@ import androidx.fragment.app.DialogFragment;
 
 import com.rem.progetto_embedded.R;
 import com.rem.progetto_embedded.Services.FakeDownloadIntentService;
-import com.rem.progetto_embedded.Utilities;
 import com.rem.progetto_embedded.Values;
 
 import java.util.Locale;

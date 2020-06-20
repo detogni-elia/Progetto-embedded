@@ -10,36 +10,24 @@
     <string name="insects">Insetti</string>
     <string name="plants">Piante</string>
     <string name="countries_prompt">Seleziona paese</string>
-    <string name="it">Italia</string>
-    <string name="in">India</string>
-    <string name="s_africa">Sud Africa</string>
     <string name="details_name">NOME COMUNE</string>
     <string name="details_species">NOME SPECIE</string>
     <string name="details_diet">DIETA</string>
     <string name="details_symptoms">SINTOMI</string>
     <string name="details_toolbar_title">Dettagli</string>
     <string name="species_list_toolbar_title">Lista delle specie</string>
-    <string name="contact_bite">Morso</string>
-    <string name="contact_stung">Puntura</string>
-    <string name="contact_eaten">Ingestione</string>
-    <string name="contact_contact">Contatto con la pelle</string>
     <string name="select_the_country">Paese</string>
-    <string name="open_drawer">open</string>
-    <string name="close_drawer">close</string>
+    <string name="open_drawer">Apri drawer</string>
+    <string name="close_drawer">Chiudi drawer</string>
     <string name="settings">Impostazioni</string>
     <string name="category_prompt">Categoria</string>
     <string name="contact_prompt">Contatto</string>
     <string name="symptoms_search_toolbar_title">Ricerca sintomi</string>
     <string name="symptoms_search_query_hint">Ricerca sintomi specifici</string>
-    <string name="ask_permission">Questa applicazione richiede il download di risorce extra per poter funzionare. Considera inoltre la possibilità di concedere l\'accesso alla posizione per usare tutte le funzionalità. Quest\'app non terrà mai traccia della tua posizione e non richiede un segnale GPS per funzionare.</string>
+    <string name="ask_permission">Questa applicazione richiede il download di risorse extra per poter funzionare. Considera inoltre la possibilità di concedere l\'accesso alla posizione per usare tutte le funzionalità. Quest\'app non terrà mai traccia della tua posizione e non richiede un segnale GPS per funzionare.</string>
     <string name="permissions_not_granted">Permessi non garantiti</string>
-    <string name="italian">Italiano</string>
-    <string name="english">Inglese</string>
     <string name="download_dialog_message">Prego selezionare paese e qualità delle immagini per scaricare le risorse corrispondenti.</string>
     <string name="select_image_quality">Qualità immagine</string>
-    <string name="low">Bassa</string>
-    <string name="medium">Media</string>
-    <string name="high">Alta</string>
     <string name="update_location">Concedi permessi posizione</string>
     <string name="remove_cache">Rimuovi tutte le risorse</string>
     <string name="connection_alert_dialog_message">Sembra che il dispositivo sia collegato a una connessione a consumo. Prima di procedere con il download consigliamo di connettere il dispositivo a una connessione non a consumo, ad esempio a una rete WI-FI. Se desideri procedere comunque allora premi OK.</string>
@@ -116,5 +104,6 @@
 
 
     <string name="your_position">La tua posizione</string>
+    <string name="wow">Wow, such empty.</string>
 
 </resources>

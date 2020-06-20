@@ -9,9 +9,6 @@
     <string name="countries_prompt">Country</string>
     <string name="category_prompt">Category</string>
     <string name="contact_prompt">Contact</string>
-    <string name="it">Italy</string>
-    <string name="in">India</string>
-    <string name="s_africa">South Africa</string>
     <string name="image_details_animal_content_descriptor">Immagine per il dettaglio</string>
     <string name="menu_details_button_name">GPS</string>
     <string name="details_name">COMMON NAME</string>
@@ -20,10 +17,6 @@
     <string name="details_symptoms">SYMPTOMS</string>
     <string name="details_toolbar_title">Details</string>
     <string name="species_list_toolbar_title">List of species</string>
-    <string name="contact_bite">Bite</string>
-    <string name="contact_stung">Stung</string>
-    <string name="contact_eaten">Eaten</string>
-    <string name="contact_contact">Skin contact</string>
     <string name="select_the_country">Country</string>
     <string name="open_drawer">open</string>
     <string name="close_drawer">close</string>
@@ -32,13 +25,8 @@
     <string name="symptoms_search_toolbar_title">Symptoms search</string>
     <string name="ask_permission">This app requires you to download some extra resources in order for it to work. You may also want to allow access to the device\'s location to use all of the functionalities. This app will never keep track of your position and does not require a GPS signal to function.</string>
     <string name="permissions_not_granted">Permission not granted</string>
-    <string name="italian">Italian</string>
-    <string name="english">English</string>
     <string name="download_dialog_message">Please select a country and image quality to download corresponding resources.</string>
     <string name="select_image_quality">Image quality</string>
-    <string name="low">Low</string>
-    <string name="medium">Medium</string>
-    <string name="high">High</string>
     <string name="update_location">Grant location permissions</string>
     <string name="remove_cache">Delete all resources</string>
     <string name="connection_alert_dialog_message">It seems you are currently using a metered connection. Before downloading more resources, we suggest you connect to a non-metered connection such as a WI-FI network. If you wish to continue anyway then press OK.</string>
@@ -111,5 +99,6 @@
     <string name="error_database_not_found">Could not open database. Try downloading resources again.</string>
     <string name="your_position">Your Position</string>
     <string name="symptoms_placeholder">%1$s: %2$s</string>
+    <string name="wow">Wow, such empty.</string>
 
 </resources>

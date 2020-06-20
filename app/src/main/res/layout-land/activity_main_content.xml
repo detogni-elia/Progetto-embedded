@@ -55,7 +55,7 @@
         <ImageView
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:src="@drawable/ic_animals_480"
+            android:src="@drawable/ic_animals"
             android:layout_weight="1"
             android:contentDescription="@string/animals" />
 
@@ -86,7 +86,7 @@
         <ImageView
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:src="@drawable/ic_insect_480"
+            android:src="@drawable/ic_insects"
             android:layout_weight="1"
             android:contentDescription="@string/insects" />
 
@@ -118,7 +118,7 @@
         <ImageView
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:src="@drawable/ic_plants_480"
+            android:src="@drawable/ic_plants"
             android:layout_weight="1"
             android:contentDescription="@string/plants" />
 
