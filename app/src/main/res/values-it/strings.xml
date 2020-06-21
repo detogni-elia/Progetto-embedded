@@ -25,7 +25,7 @@
     <string name="symptoms_search_toolbar_title">Ricerca sintomi</string>
     <string name="symptoms_search_query_hint">Ricerca sintomi specifici</string>
     <string name="ask_permission">Questa applicazione richiede il download di risorse extra per poter funzionare. Considera inoltre la possibilità di concedere l\'accesso alla posizione per usare tutte le funzionalità. Quest\'app non terrà mai traccia della tua posizione e non richiede un segnale GPS per funzionare.</string>
-    <string name="permissions_not_granted">Permessi non garantiti</string>
+    <string name="permissions_not_granted">Permessi di accesso alla posizione non garantiti. Puoi concederli in qualsiasi momento dalle impostazioni.</string>
     <string name="download_dialog_message">Prego selezionare paese e qualità delle immagini per scaricare le risorse corrispondenti.</string>
     <string name="select_image_quality">Qualità immagine</string>
     <string name="update_location">Concedi permessi posizione</string>

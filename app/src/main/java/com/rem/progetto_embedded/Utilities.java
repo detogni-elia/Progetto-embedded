@@ -20,7 +20,7 @@ public class Utilities {
     private final static String TAG = "Utilities";
     private static String lastLanguage = "en";
     public static void showToast(Context context, String message){
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
 
     /**

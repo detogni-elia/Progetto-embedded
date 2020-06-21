@@ -234,7 +234,7 @@ public class SettingsActivity extends AppCompatActivity implements ConnectionDia
             }
             else {
                 Log.i(TAG, "onRequestPermissionsResult: Permission not granted");
-                Toast.makeText(this, R.string.permissions_not_granted, Toast.LENGTH_SHORT).show();
+                Utilities.showToast(this, getString(R.string.permissions_not_granted));
             }
         }
     }

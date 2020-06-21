@@ -154,12 +154,10 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.gps_button) {
 
-
         if(checkPermissions()) {
             fusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
                 @Override
                 public void onSuccess(Location location) {
-
                     //update or fetch a location
                     if (location != null) {
                         String myLat = String.valueOf(location.getLatitude());
@@ -178,10 +176,11 @@ public class AnimalDetailsActivity extends AppCompatActivity implements Componen
                     } else {
                         startMap();
                     }
-
                 }
             });
-        }else{
+        }
+        else{
+            Utilities.showToast(this, getString(R.string.permissions_not_granted));
             //if location permission has not been accepted just display animal position
             startMap();
         }
