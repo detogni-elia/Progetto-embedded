@@ -20,7 +20,6 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.rem.progetto_embedded.Adapters.SpeciesListAdapter;
-import com.rem.progetto_embedded.Database.AppDatabase;
 import com.rem.progetto_embedded.Database.Entity.Creatures;
 import com.rem.progetto_embedded.R;
 import com.rem.progetto_embedded.SpeciesViewModel;
@@ -71,7 +70,6 @@ public class SpeciesListActivity extends AppCompatActivity implements SpeciesLis
         String category = getIntent().getStringExtra(Values.EXTRA_CATEGORY);
         List<String> symptoms = getIntent().getStringArrayListExtra(Values.EXTRA_SYMPTOMS);
         String contact = getIntent().getStringExtra(Values.EXTRA_CONTACT);
-        //viewModel.getData(country, category, null);
         adapter = new SpeciesListAdapter(getApplicationContext(), this);
         viewModel.getSpecies(country, category, symptoms, contact).observe(this, new Observer<List<Creatures>>() {
             @Override
@@ -144,6 +142,7 @@ public class SpeciesListActivity extends AppCompatActivity implements SpeciesLis
     public void onPause(){
         super.onPause();
         adapter.setClickListener(null);
+        //unregisterComponentCallbacks(viewModel);
         Log.v(TAG, "onPause");
     }
 

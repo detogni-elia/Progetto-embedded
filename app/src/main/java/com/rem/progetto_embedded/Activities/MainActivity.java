@@ -162,8 +162,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //Gestione delle callbacks legate alla memoria
     @Override
-    public void onTrimMemory(int level)
-    {
+    public void onTrimMemory(int level) {
         if(level >= ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN)
         {
             Log.d(TAG, "onTrimMemory called");
