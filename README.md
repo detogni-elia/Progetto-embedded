@@ -1,4 +1,4 @@
-<h1>DESCRIZIONE
+<h1>DESCRIZIONE</h1>
 
 viper.ly è un'applicazione pensata per i mercati emergenti che vuole fornire un aiuto nell'identificare specie di animali, insetti e piante
 pericolosi per l'uomo. Un utente può perciò scaricare uno o più pacchetti di risorse, ognuno corrispondente a una certa nazione, contenenti immagini e database di informazioni.
