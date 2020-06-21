@@ -6,10 +6,14 @@ pericolosi per l'uomo. Un utente può perciò scaricare uno o più pacchetti di 
 La prima funzionalità fornita è quella di visualizzare tutte le specie per una certa nazione, suddivise nelle 3 categorie Animali, Insetti, Piante.
 La lista riporta il nome comune della specie e l'utente può filtrare gli elementi per il loro nome, per poter trovare più in fretta l'elemento voluto.
 
+![](openApp.gif)
+
 Per ogni specie è inoltre presente una seconda schermata, relativa ai dettagli. Qui viene mostrata la foto con dimensioni maggiori, vengono riportate ulteriori
 informazioni come il nome latino, la dieta (per animali e insetti), i sintomi causati dal contatto (morso, puntura, ingestione o contatto con la pelle) e una
 descrizione approfondita della specie in questione. È inoltre possibile visualizzare in una mappa le aree in cui è più probabile incontrare la determinata specie,
 mostrando anche la posizione del dispositivo, se disponibile.
+
+![alt text](screenDettagli1.png)                                                ![alt text](screenMappa1.png)
 
 La seconda funzione importante fornita dall'app è la possibilità di ricercare una determinata specie in base ai sintomi. Poniamo per esempio di essere stati morsi
 da un serpente che non sappiamo riconoscere. Inserendo nella schermata la nazione in cui ci si trova, il tipo di contatto, la categoria e selezionando tutti i sintomi
@@ -62,3 +66,4 @@ PRESTAZIONI
 
 SUPPORTO PER SCHERMI DI VARIE DIMENSIONI
     1. I layout sono stati testati e adattati per schermi con un range abbastanza vario di dimensioni, senza però includere risorse diverse per ogni tipo di schermo.
+  ![alt text](screenLayout1.png)
