@@ -34,7 +34,6 @@ public class SpeciesViewModel extends AndroidViewModel implements ComponentCallb
         contact = null;
         //Listen to ComponentCallbacks to manage memory
         application.getApplicationContext().registerComponentCallbacks(this);
-
     }
 
     /**
