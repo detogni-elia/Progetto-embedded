@@ -42,6 +42,7 @@ public class SpeciesListAdapter extends RecyclerView.Adapter<SpeciesListItemView
 
     public SpeciesListAdapter(Context context, OnSpeciesSelectedListener listener){
         clickListener = listener;
+        //Base path to resources. Images paths are stored in the database with a relative path starting from the app's "files" folder
         ROOT_PATH = Utilities.getResourcesFolder(context).toString();
     }
 

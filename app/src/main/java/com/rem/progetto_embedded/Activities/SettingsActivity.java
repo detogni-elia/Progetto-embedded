@@ -200,6 +200,8 @@ public class SettingsActivity extends AppCompatActivity implements ConnectionDia
         countries = Utilities.getDownloadedCountries(this);
         if(countries == null || countries.length == 0){
             findViewById(R.id.update_image_quality_button).setEnabled(false);
+            downloadedCountriesSpinner.setAdapter(null);
+            imageQualitySpinner.setAdapter(null);
             return;
         }
         findViewById(R.id.update_image_quality_button).setEnabled(true);

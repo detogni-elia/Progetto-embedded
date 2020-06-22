@@ -103,7 +103,7 @@ public class FakeDownloadIntentService extends IntentService {
         }
         catch (IOException e){
             Utilities.showToast(getApplicationContext(),  getString(R.string.unexpected_error));
-            Log.e(TAG, "Could not copy assets to storage: " + e.toString());
+            Log.e(TAG, "Could not copy assets to storage: ", e);
         }
 
         //Notify bound client if there is one at the moment

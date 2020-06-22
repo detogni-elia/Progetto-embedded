@@ -26,6 +26,7 @@ public class SpeciesViewModel extends AndroidViewModel implements ComponentCallb
     private LiveData<List<Creatures>> species;
     private LiveData<List<Symptoms>> symptoms;
     private LiveData<Contacts> contact;
+    private final String TAG = getClass().getSimpleName();
 
     public SpeciesViewModel(Application application) {
         super(application);
@@ -54,6 +55,7 @@ public class SpeciesViewModel extends AndroidViewModel implements ComponentCallb
             //If database not found show error message and return empty List
             catch (FileNotFoundException e) {
                 Context c = getApplication().getApplicationContext();
+                Log.e(TAG, "Could not open database: ", e);
                 Utilities.showToast(c, c.getString(R.string.error_database_not_found));
                 return new MutableLiveData<>();
             }
@@ -85,6 +87,7 @@ public class SpeciesViewModel extends AndroidViewModel implements ComponentCallb
                 db = AppDatabase.getInstance(getApplication().getApplicationContext(), country);
             } catch (FileNotFoundException e) {
                 Context c = getApplication().getApplicationContext();
+                Log.e(TAG, "Could not open database: ", e);
                 Utilities.showToast(c, c.getString(R.string.error_database_not_found));
                 return new MutableLiveData<>();
             }
@@ -108,6 +111,7 @@ public class SpeciesViewModel extends AndroidViewModel implements ComponentCallb
                 db = AppDatabase.getInstance(getApplication().getApplicationContext(), country);
             } catch (FileNotFoundException e) {
                 Context c = getApplication().getApplicationContext();
+                Log.e(TAG, "Could not open database: ", e);
                 Utilities.showToast(c, c.getString(R.string.error_database_not_found));
                 return new MutableLiveData<>();
             }
