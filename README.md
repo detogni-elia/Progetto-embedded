@@ -27,9 +27,8 @@ Essendo un'applicazione realizzata secondo le linee guida Build for Billions, ve
 
 **DIMENSIONI DELL'APK**
 
-
 1. Abilitato code e resource shrinking.
-2. La maggiorparte delle icone utilizzate sono in formato vettoriale.
+2. Le icone utilizzate sono in formato vettoriale.
 3. Solo italiano e inglese sono incluse nei file di traduzione per le stringhe. Altre lingue potrebbero essere supportate dinamicamente attraverso gli App Bundle, ma ciò non
 viene realizzato dalla nostra app.
 4. L'applicazione arriva senza nessuna foto o database disponibile (sono presenti all'interno delle risorse solo per simulare il download).
